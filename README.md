@@ -32,5 +32,4 @@ Stores the country code of the concert
 String[] upcomingEvents (upcomingEvents)
 Stores a list of the upcoming concerts
 String artist
-The name of the artist 
 
