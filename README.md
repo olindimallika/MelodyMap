@@ -1,6 +1,6 @@
 # MelodyMap
 
-# Domain:
+# Domain
 The project domain our group will deal with is concert events. Our primary objective is to develop a user-friendly
 application which allows people to find upcoming dates for their favourite artists based on a specified location. 
 
@@ -16,19 +16,8 @@ As a user, my favourite artist isn’t performing, I would like to see if any si
 As a user, I want to view the artist’s concert, but the presale date has already passed. I must be redirected to the general sale. [user story 4] <br />
 
 # Proposed Entities for the Domain:
-... change this when finalized
-Concert
-String name
-Name of the concert/tour
-Integer[] priceRanges
-Gives a range of the prices of the tickets from lowest to highest
-String presale (preSaleDateTime)
-When presale starts
-String generalSale
-When presale is closed
-String location (country - countryCode eg. CA, US or city or address)
-Stores the country code of the concert
-String[] upcomingEvents (upcomingEvents)
-Stores a list of the upcoming concerts
-String artist
+... will fill in later when all methods to classes are finalized...
+
+# Core Use Case
+As a user, I wanted to be notified when my favourite artists are going on tour and receive the presale date for the tickets.
 
