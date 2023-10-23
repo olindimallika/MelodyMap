@@ -9,8 +9,8 @@ Initially, users pick their desired artist, a related genre artist with a show, 
 concert based on their location and receive notifications for presale or Ticketmaster ticket purchase.
 
 # User Stories:
-As a user, I want to be able to view the upcoming shows in my city. [team story]
-As a user, I wanted to be notified when my favourite artists are going on tour and receive the presale date for the tickets. [user story 1]
+As a user, I want to be able to view the upcoming shows in my city. [team story] <br />
+As a user, I wanted to be notified when my favourite artists are going on tour and receive the presale date for the tickets. [user story 1] <br />
 As a user, I noticed the artist I wanted to see was not playing in a venue near me (city/country), I want to be able to see the other closest venues.[user story 2]
 New:
 As a user, my favourite artist isn’t performing, I would like to see if any similar artists have any concert dates that are near me. [user story 3]
