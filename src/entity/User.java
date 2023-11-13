@@ -1,6 +1,6 @@
 package entity;
 
-public interface User {
+public interface User{
 
     String getName();
 
