@@ -19,5 +19,5 @@ As a user, I want to view the artist’s concert, but the presale date has alrea
 ... will fill in later when all methods to classes are finalized...
 
 # Core Use Case
-As a user, I wanted to be notified when my favourite artists are going on tour and receive the presale date for the tickets.
+As a user, I wanted to be notified when my favourite artists are going on tour and also receive the presale date for the tickets.
 
