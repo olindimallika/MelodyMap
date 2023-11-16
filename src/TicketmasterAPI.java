@@ -2,9 +2,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class TicketmasterAPI extends LocationFinder {
-    private final String apiKey;
-
+public class TicketmasterAPI extends LocationFinder{
 
     public TicketmasterAPI(String apiKey) {
         this.apiKey = apiKey;
@@ -85,8 +83,9 @@ public class TicketmasterAPI extends LocationFinder {
         // Search for Adele as an example artist.
         String artistName = "Adele";
         String dma = "527";
-        sendLat();
-        String latlong = sendLat();
+        LocationFinder lf = new LocationFinder();
+        String latlong = lf.latlongy();
+
 
         try {
             String artistData = ticketmasterAPI.searchArtist(artistName);
