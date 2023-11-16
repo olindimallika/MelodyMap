@@ -6,5 +6,8 @@ public interface User {
 
     String[] getFavArtist();
 
+    String getPostalCode();
+
     String getLocation();
+
 }
