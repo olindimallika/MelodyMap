@@ -6,11 +6,14 @@ class UserModel implements User {
 
     private final String[] favouriteArtist;
 
+    private final String postalCode;
+
     private final String location;
 
-    UserModel(String name, String[] favouriteArtist, String location) {
+    UserModel(String name, String[] favouriteArtist, String location, String postalCode) {
         this.name = name;
         this.favouriteArtist = favouriteArtist;
+        this.postalCode = postalCode;
         this.location = location;
     }
 
