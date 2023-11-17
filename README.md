@@ -18,34 +18,18 @@ As a user, I want to go to the general sale after the presale period is over. [u
 
 
 # Proposed Entities for the Domain:
-Note: descriptions will be added in later...
-- Interface Artist
+Interface Artist
+- String getName();
   - String getName()
   - String getGenre()
   - String getArtistId()
 <br />
-<br />
-- Class ArtistModel
-  - private String name
-  - private String genre;
-  - private String artistId
-<br />
-<br />
-- Interface User
-  - String getName()
-  - String[] getFavArtist()
-  - String getLocation()
-<br />
-<br />
-- Class UserModel
-  - private String name
-  - private String[] favouriteArtist
-  - private String postalCode
-  - private String location
+Class ArtistModel
+- private String name
+- private final String genre;
+
+private final String artistId;
 
 # Core Use Case
 As a user, I want to be presented with upcoming shows in my city.
-
-# UML Diagram
-![](/Users/olindimallika/Downloads/uml_so_far.jpeg)
 
