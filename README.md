@@ -9,15 +9,43 @@ Initially, users pick their desired artist, a related genre artist with a show, 
 concert based on their location and receive notifications for presale or Ticketmaster ticket purchase.
 
 # User Stories:
-As a user, I want to be able to view the upcoming shows in my city. [team story] <br />
-As a user, I wanted to be notified when my favourite artists are going on tour and receive the presale date for the tickets. [user story 1] <br />
-As a user, I noticed the artist I wanted to see was not playing in a venue near me (city/country), I want to be able to see the other closest venues.[user story 2] <br />
-As a user, my favourite artist isn’t performing, I would like to see if any similar artists have any concert dates that are near me. [user story 3] <br />
-As a user, I want to view the artist’s concert, but the presale date has already passed. I must be redirected to the general sale. [user story 4] <br />
+As a user, I want to see upcoming shows in a user’s city. [team story] <br />
+As a user, I wanted to be notified user when my favourite artists are going on tour. [user story 1] <br />
+As a user, I want to given the presale date for tickets.[user story 2] <br />
+As a user, I want to see other closest venues for my favourite artist, if they are not in the same city (but still in Canada). [user story 3] <br />
+As a user, I want to see other near concert dates for a similar artist. [user story 4] <br />
+As a user, I want to go to the general sale after the presale period is over. [user story 5] <br />
+
 
 # Proposed Entities for the Domain:
-... will fill in later when all methods to classes are finalized...
+Note: descriptions will be added in later...
+- Interface Artist
+  - String getName()
+  - String getGenre()
+  - String getArtistId()
+<br />
+<br />
+- Class ArtistModel
+  - private String name
+  - private String genre;
+  - private String artistId
+<br />
+<br />
+- Interface User
+  - String getName()
+  - String[] getFavArtist()
+  - String getLocation()
+<br />
+<br />
+- Class UserModel
+  - private String name
+  - private String[] favouriteArtist
+  - private String postalCode
+  - private String location
 
 # Core Use Case
-As a user, I wanted to be notified when my favourite artists are going on tour and also receive the presale date for the tickets.
+As a user, I want to be presented with upcoming shows in my city.
+
+# UML Diagram
+![](/Users/olindimallika/Downloads/uml_so_far.jpeg)
 
