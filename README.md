@@ -20,8 +20,6 @@ As a user, I want to see other near concert dates for a similar artist. [user st
 As a user, I want to go to the general sale after the presale period is over. [user story 5] <br />
 
 
-
-
 # Proposed Entities for the Domain:
 Note: descriptions will be added in later...
 - Interface Artist
