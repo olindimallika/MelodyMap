@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class TicketmasterAPI extends LocationFinder{
 
+    private final String apiKey;
     public TicketmasterAPI(String apiKey) {
         this.apiKey = apiKey;
     }
