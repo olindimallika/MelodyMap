@@ -1,4 +1,4 @@
-import org.json.JSONArray;
+import  org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -99,7 +99,7 @@ public class UpcomingShowsRough extends LocationFinder {
         // Replace 'YOUR_API_KEY' with your actual Ticketmaster API key.
         String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
-        TicketmasterAPI ticketmasterAPI = new TicketmasterAPI(apiKey);
+        UpcomingShowsRough ticketmasterAPI = new UpcomingShowsRough(apiKey);
 
         try {
             System.out.println("\n");
