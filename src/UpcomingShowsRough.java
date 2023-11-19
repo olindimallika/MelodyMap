@@ -99,11 +99,11 @@ public class UpcomingShowsRough extends LocationFinder {
         // Replace 'YOUR_API_KEY' with your actual Ticketmaster API key.
         String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
-        TicketmasterAPI ticketmasterAPI = new TicketmasterAPI(apiKey);
+        UpcomingShowsRough ticketmasterAPI = new UpcomingShowsRough(apiKey);
 
         try {
             System.out.println("\n");
-            int radius = 10;
+            int radius = 20;
             String unit = "miles";
             // Example: Get only music events based on geoPoint without specifying radius and unit
             List<JSONObject> eventL = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music");
