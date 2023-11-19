@@ -28,7 +28,16 @@ class UserModel implements User {
     }
 
     @Override
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    @Override
     public String getLocation() {
         return location;
     }
+
+
 }
+
+
