@@ -38,7 +38,7 @@ public class LocationFinder {
                     latlong.add(latitude);
                     latlong.add(longitude);
                     System.out.println(latlong);
-
+                    // comment
                 } else {
                     System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
                 }
