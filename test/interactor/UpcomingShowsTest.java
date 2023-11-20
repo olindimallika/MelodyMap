@@ -20,6 +20,11 @@ class UpcomingShowsTest {
                 assertNotNull(user.getUpcomingConcerts());
             }
 
+            @Override
+            public void prepareFailView(String error){
+                fail("Use case failure is unexpected");
+            }
+
         };
 
         UpcomingInputBoundary interactor = new UpcomingInteractor(userRepository, successPresenter, new UserModelFactory());
