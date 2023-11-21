@@ -97,6 +97,8 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         UpcomingState state = (UpcomingState) evt.getNewValue();
         if (state.getPostalCodeError() != null) {
             JOptionPane.showMessageDialog(this, state.getPostalCodeError());
+        } else {
+            JOptionPane.showMessageDialog(this, state.getUpcomingShows());
         }
     }
 }

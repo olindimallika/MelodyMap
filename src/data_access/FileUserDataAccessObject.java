@@ -1,6 +1,6 @@
 package data_access;
 
-import entity.Artist;
+import entity.User;
 import org.json.JSONArray;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
@@ -18,22 +18,14 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
     private static final double d2r = 3.141592653589793D / 180.0D;
     private static final double d2km = 111189.57696D * r2d;
 
-    private final Map<String, String> shows = new HashMap<>();
+    private final HashMap<String, String> shows = new HashMap<>();
 
     private static final String API_KEY = "0e7e66d3a7b44c6a8e5d7b6c7d61f4f7";
 
-    private final String apiKey;
-
-    public FileUserDataAccessObject(String apiKey) {
-        this.apiKey = apiKey;
-    }
-
     public static List<Double> geoPoint = new ArrayList<>();
 
-    public static List<Double> locationFinder(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter Canadian postal code (capital, no space): ");
-        String postalCode = scanner.nextLine();
+    public List<Double> locationFinder(User user){
+        String postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + API_KEY + "&q=" + postalCode + "&countrycode=CA";
@@ -53,7 +45,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
 
                     geoPoint.add(latitude);
                     geoPoint.add(longitude);
-                    System.out.println(geoPoint);
 
                 } else {
                     System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
@@ -62,12 +53,11 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(geoPoint);
         return geoPoint;
     }
 
-    public List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification) throws IOException {
-        List<Double> latlong = locationFinder();
+    public List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification, User user) throws IOException {
+        List<Double> latlong = locationFinder(user);
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
         String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
@@ -84,7 +74,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
             urlString += "&classificationName=" + classification;
         }
 
-        urlString += "&apikey=" + apiKey;
+        urlString += "&apikey=" + "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
@@ -112,9 +102,10 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
 
                 // Sort events based on distance
                 events.sort(Comparator.comparingDouble(event ->
-                        calculateDistance(latlong,
+                        calculateDistance(
                                 event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"))));
+                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"),
+                                user)));
             }
         }
 
@@ -122,7 +113,8 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
     }
 
     // Finds length between users location and the venue to sort it so closest venue is shown
-    public double calculateDistance(List<Double> latlong, double lat2, double lon2) {
+    public double calculateDistance(double lat2, double lon2, User user) {
+        List<Double> latlong = locationFinder(user);
         double lat1 = latlong.get(0);
         double lon1 = latlong.get(1);
         double x = lat1 * (Math.PI / 180);
@@ -131,13 +123,20 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
     }
 
-    public void printEventUrls(List<JSONObject> events) {
+    public ArrayList<String> printEventUrls(List<JSONObject> events) {
+        ArrayList<String> websites = new ArrayList<>();
         for (JSONObject event : events) {
             String url = event.getString("url");
-            System.out.println("Event URL: " + url);
+            websites.add("Event URL: " + url);
         }
+        return websites;
     }
 
-
+    public HashMap<String, String> getUpcomingShows(ArrayList<String> websites) {
+        for (String link : websites) {
+            shows.put("PUT ARTIST HERE (not implemented yet)", link);
+        }
+        return shows;
+    }
 
 }
