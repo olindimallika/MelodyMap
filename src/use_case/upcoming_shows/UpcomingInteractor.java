@@ -1,12 +1,17 @@
 package use_case.upcoming_shows;
 
+import data_access.FileUserDataAccessObject;
+import entity.ArtistModelFactory;
 import entity.User;
 import entity.UserFactory;
+import entity.ArtistFactory;
+import interface_adapter.upcoming_shows.UpcomingPresenter;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class UpcomingInteractor implements UpcomingInputBoundary{
@@ -31,9 +36,9 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
 
             User user = userFactory.create(upcomingInputData.getPostalCode());
             List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
-            ArrayList<String> websites = userDataAccessObject.printEventUrls(eventL);
 
-            HashMap<String, String> upcomingShows = userDataAccessObject.getUpcomingShows(websites);
+            LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
+            String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
             UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
             userPresenter.prepareSuccessView(upcomingOutputData);
 

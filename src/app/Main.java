@@ -1,13 +1,17 @@
 package app;
 
 import data_access.FileUserDataAccessObject;
+
 import interface_adapter.ViewManagerModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
+
 import view.UpcomingView;
 import view.ViewManager;
+import entity.ArtistModelFactory;
 
 import javax.swing.*;
 import java.awt.*;
+
 
 public class Main{
     public static void main(String[] args) {
@@ -26,7 +30,7 @@ public class Main{
         UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
-        userDataAccessObject = new FileUserDataAccessObject();
+        userDataAccessObject = new FileUserDataAccessObject(new ArtistModelFactory());
 
         UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, userDataAccessObject);
         views.add(upcomingShowsView, upcomingShowsView.viewName);

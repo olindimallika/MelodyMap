@@ -1,5 +1,7 @@
 package data_access;
 
+import entity.Artist;
+import entity.ArtistFactory;
 import entity.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,7 +22,9 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
 
     public static List<Double> geoPoint = new ArrayList<>();
 
-    private final HashMap<String, String> shows = new HashMap<>();
+    private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
+
+    private ArtistFactory artistFactory;
 
     /**
      * @param user the user's postal code
@@ -141,29 +145,59 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
     }
 
     /**
-     * @param events concert events from the ticket master api
-     * @return an array of links to ticket master websites with the closest concerts where user can purchase tickets
+     * @param event concert event from the ticket master api
+     * @return a link to ticketmaster website with the closest concert where user can purchase tickets
      */
     @Override
-    public ArrayList<String> printEventUrls(List<JSONObject> events) {
-        ArrayList<String> websites = new ArrayList<>();
-        for (JSONObject event : events) {
-            String url = event.getString("url");
-            websites.add("Event URL: " + url);
-        }
-        return websites;
+    public String getEventUrl(JSONObject event) {
+        String url = event.getString("url");
+        return url;
     }
 
     /**
-     * @param websites link to ticket master website
+     * @param event concert event from the ticketmaster api
+     * @return the name of the artist who is holding the given ticketmaster concert
+     */
+    @Override
+    public String getArtistName(JSONObject event) {
+        Artist artist = artistFactory.create(event.getString("name"));
+        return artist.getName();
+    }
+
+    /**
+     * @param events concert events from ticketmaster api
      * @return a hashmap of the artist and a link for the user to buy tickets
      */
     @Override
-    public HashMap<String, String> getUpcomingShows(ArrayList<String> websites) {
-        for (String link : websites) {
-            shows.put("PUT ARTIST HERE (not implemented yet)", link);
+    public LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events) {
+        for (JSONObject event : events) {
+            shows.put(getArtistName(event), getEventUrl(event));
         }
         return shows;
+    }
+
+    /**
+     * @param shows a hashmap of the artist and a link for the user to buy tickets
+     * @return a string listing the artist and the link to their upcoming concert
+     */
+    @Override
+    public String formatShows(LinkedHashMap<String, String> shows) {
+
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
     }
 
 

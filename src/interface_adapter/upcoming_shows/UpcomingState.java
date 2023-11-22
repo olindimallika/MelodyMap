@@ -7,7 +7,7 @@ import java.util.Map;
 public class UpcomingState {
     private String postalCode = "";
     private String postalCodeError = null;
-    private HashMap<String, String> upcomingShows = new HashMap<>();
+    private String upcomingShows = "";
 
     public UpcomingState(UpcomingState copy){
         postalCode = copy.postalCode;
@@ -33,11 +33,11 @@ public class UpcomingState {
         this.postalCodeError = postalCodeError;
     }
 
-    public HashMap<String, String> getUpcomingShows(){
+    public String getUpcomingShows(){
         return upcomingShows;
     }
 
-    public void setUpcomingShows(HashMap<String, String> upcomingShows) {
+    public void setUpcomingShows(String upcomingShows) {
         this.upcomingShows = upcomingShows;
     }
 

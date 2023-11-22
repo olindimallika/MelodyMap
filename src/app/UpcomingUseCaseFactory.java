@@ -36,12 +36,12 @@ public class UpcomingUseCaseFactory {
     private static UpcomingController createUserUpcomingUseCase(ViewManagerModel viewManagerModel, UpcomingViewModel upcomingViewModel, UpcomingDataAccess userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        UpcomingOutputBoundary signupOutputBoundary = new UpcomingPresenter(viewManagerModel, upcomingViewModel);
+        UpcomingOutputBoundary upcomingOutputBoundary = new UpcomingPresenter(viewManagerModel, upcomingViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 
         UpcomingInputBoundary userUpcomingInteractor = new UpcomingInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
+                userDataAccessObject, upcomingOutputBoundary, userFactory);
 
         return new UpcomingController(userUpcomingInteractor);
     }

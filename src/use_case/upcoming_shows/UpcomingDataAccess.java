@@ -13,7 +13,11 @@ public interface UpcomingDataAccess {
 
     double calculateDistance(double lat2, double lon2, User user);
 
-    ArrayList<String> printEventUrls(List<JSONObject> events);
+    String getEventUrl(JSONObject event);
 
-    HashMap<String, String> getUpcomingShows(ArrayList<String> websites);
+    String getArtistName(JSONObject event);
+
+    LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events);
+
+    String formatShows(LinkedHashMap<String, String> shows);
 }

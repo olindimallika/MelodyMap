@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 public class UpcomingOutputData {
 
-    private final HashMap<String, String> upcomingConcerts;
+    private final String upcomingConcerts;
 
-    public UpcomingOutputData(HashMap<String, String> upcomingConcerts){
+    public UpcomingOutputData(String upcomingConcerts){
         this.upcomingConcerts = upcomingConcerts;
     }
 
-    public HashMap<String, String> getUpcomingConcerts() {
+    public String getUpcomingConcerts() {
         return upcomingConcerts;
     }
 }

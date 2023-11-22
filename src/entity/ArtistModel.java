@@ -1,5 +1,6 @@
 package entity;
 
+
 class ArtistModel implements Artist {
 
     private final String name;

@@ -1,6 +1,6 @@
 package data_access;
 
-import entity.User;
+import entity.*;
 import org.json.JSONArray;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
@@ -9,20 +9,27 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 
+import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess{
     private static final double r2d = 180.0D / 3.141592653589793D;
     private static final double d2r = 3.141592653589793D / 180.0D;
     private static final double d2km = 111189.57696D * r2d;
 
-    private final HashMap<String, String> shows = new HashMap<>();
+    private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String API_KEY = "0e7e66d3a7b44c6a8e5d7b6c7d61f4f7";
+    private static final String API_KEY = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
     public static List<Double> geoPoint = new ArrayList<>();
+
+    private final ArtistFactory artistFactory;
+
+    public FileUserDataAccessObject(ArtistFactory artistFactory) {
+        this.artistFactory = artistFactory;
+    }
 
     public List<Double> locationFinder(User user){
         String postalCode = user.getPostalCode();
@@ -123,20 +130,40 @@ public class FileUserDataAccessObject implements UpcomingDataAccess {
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
     }
 
-    public ArrayList<String> printEventUrls(List<JSONObject> events) {
-        ArrayList<String> websites = new ArrayList<>();
-        for (JSONObject event : events) {
-            String url = event.getString("url");
-            websites.add("Event URL: " + url);
-        }
-        return websites;
+    public String getEventUrl(JSONObject event) {
+        String url = event.getString("url");
+        return url;
     }
 
-    public HashMap<String, String> getUpcomingShows(ArrayList<String> websites) {
-        for (String link : websites) {
-            shows.put("PUT ARTIST HERE (not implemented yet)", link);
+    public String getArtistName(JSONObject event) {
+        Artist artist = artistFactory.create(event.getString("name"));
+        return artist.getName();
+    }
+
+    public LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events) {
+        for (JSONObject event : events) {
+            shows.put(getArtistName(event), getEventUrl(event));
         }
         return shows;
+    }
+
+    public String formatShows(LinkedHashMap<String, String> shows) {
+
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
     }
 
 }
