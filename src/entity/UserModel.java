@@ -1,20 +1,18 @@
 package entity;
 
+import java.util.ArrayList;
+
 class UserModel implements User {
 
     private final String name;
 
-    private final String[] favouriteArtist;
+    private final ArrayList<TestArtist> favouriteArtist;
 
     private final String postalCode;
-
-    private final String location;
-
-    UserModel(String name, String[] favouriteArtist, String location, String postalCode) {
+    UserModel(String name, ArrayList<TestArtist> favouriteArtist, String postalCode) {
         this.name = name;
         this.favouriteArtist = favouriteArtist;
         this.postalCode = postalCode;
-        this.location = location;
     }
 
     @Override
@@ -23,20 +21,14 @@ class UserModel implements User {
     }
 
     @Override
-    public String[] getFavArtist() {
-        return favouriteArtist;
+    public ArrayList<TestArtist> getFavArtist() {
+            return favouriteArtist;
     }
 
     @Override
     public String getPostalCode() {
         return postalCode;
     }
-
-    @Override
-    public String getLocation() {
-        return location;
-    }
-
 
 }
 
