@@ -1,17 +1,16 @@
 package use_case.upcoming_shows;
 
-import java.util.Map;
 import java.util.HashMap;
 
 public class UpcomingOutputData {
 
-    private Map<String, String> upcomingConcerts = new HashMap<>();
+    private final String upcomingConcerts;
 
-    public UpcomingOutputData(HashMap<String, String> upcomingConcerts){
+    public UpcomingOutputData(String upcomingConcerts){
         this.upcomingConcerts = upcomingConcerts;
     }
 
-    public Map<String, String> getUpcomingConcerts() {
+    public String getUpcomingConcerts() {
         return upcomingConcerts;
     }
 }
