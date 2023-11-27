@@ -1,6 +1,7 @@
 package data_access;
 
-import entity.TestArtist;
+//import entity.TestArtist;
+import entity.Artist;
 import entity.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,6 +21,7 @@ import org.json.JSONArray;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Scanner;
+
 
 public class InMemoryUserDAO implements ArtistVenueDataAccess {
 
@@ -63,7 +65,7 @@ public class InMemoryUserDAO implements ArtistVenueDataAccess {
     }
 
     @Override
-    public List<List<JSONObject>> artistEvents(String postalCode, ArrayList<TestArtist> favArtists) throws IOException {
+    public List<List<JSONObject>> artistEvents(String postalCode, ArrayList<Artist> favArtists) throws IOException {
         String apiKey2 = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
         List<Double> latlong = getLatLong(postalCode);
@@ -79,7 +81,7 @@ public class InMemoryUserDAO implements ArtistVenueDataAccess {
 
         ArrayList<List<JSONObject>> favArtistEvents = new ArrayList<>();
 
-        for (TestArtist artist : favArtists) {
+        for (Artist artist : favArtists) {
             String artistName = artist.getName();
             String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
             String urlString = baseUrl + "?geoPoint=" + coordinates;

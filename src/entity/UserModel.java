@@ -6,10 +6,11 @@ class UserModel implements User {
 
     private final String name;
 
-    private final ArrayList<TestArtist> favouriteArtist;
+    private final ArrayList<Artist
+            > favouriteArtist;
 
     private final String postalCode;
-    UserModel(String name, ArrayList<TestArtist> favouriteArtist, String postalCode) {
+    UserModel(String name, ArrayList<Artist> favouriteArtist, String postalCode) {
         this.name = name;
         this.favouriteArtist = favouriteArtist;
         this.postalCode = postalCode;
@@ -21,7 +22,7 @@ class UserModel implements User {
     }
 
     @Override
-    public ArrayList<TestArtist> getFavArtist() {
+    public ArrayList<Artist> getFavArtist() {
             return favouriteArtist;
     }
 

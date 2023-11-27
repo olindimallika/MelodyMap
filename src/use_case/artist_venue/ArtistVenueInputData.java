@@ -1,15 +1,15 @@
 package use_case.artist_venue;
 
-import entity.TestArtist;
+import entity.Artist;
 
 import java.util.ArrayList;
 
 public class ArtistVenueInputData {
 
     final private String postalCode;
-    final private ArrayList<TestArtist> favouriteArtist;
+    final private ArrayList<Artist> favouriteArtist;
 
-    public ArtistVenueInputData(String postalCode, ArrayList<TestArtist> favouriteArtist) {
+    public ArtistVenueInputData(String postalCode, ArrayList<Artist> favouriteArtist) {
         this.postalCode = postalCode;
         this.favouriteArtist = favouriteArtist;
     }
@@ -19,7 +19,7 @@ public class ArtistVenueInputData {
         return postalCode;
     }
 
-    ArrayList<TestArtist> getFavouriteArtist() {
+    ArrayList<Artist> getFavouriteArtist() {
 
         return favouriteArtist;
     }

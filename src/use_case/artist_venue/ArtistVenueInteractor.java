@@ -1,6 +1,6 @@
 package use_case.artist_venue;
 
-import entity.TestArtist;
+import entity.Artist;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
     @Override
     public void execute(ArtistVenueInputData artistVenueInputData) throws IOException {
         String postalCode = artistVenueInputData.getPostalCode();
-        ArrayList<TestArtist> favouriteArtists = artistVenueInputData.getFavouriteArtist();
+        ArrayList<Artist> favouriteArtists = artistVenueInputData.getFavouriteArtist();
         List<Double> coordinates = new ArrayList<>();
         coordinates.add(0.0);
 
@@ -40,9 +40,8 @@ public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
                 ArtistVenueOutputData artistVenuesData = new ArtistVenueOutputData();
 
                 // Adding events for artists
-                artistVenuesData.addEvent("Artist1", new ArtistVenueOutputData.Event("Event1"));
+                //artistVenuesData.addEvent("Artist1", new ArtistVenueOutputData.Event("Event1"));
                 // ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(new);
-                artistPresenter.prepareSuccessView(artistVenueOutputData);
                 //THIS ISNT CORRECT
                 }
             }
