@@ -1,6 +1,6 @@
 package use_case.artist_venue;
 
-import entity.TestArtist;
+import entity.Artist;
 import entity.User;
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ public interface ArtistVenueDataAccess {
 
     List<Double> getLatLong(String postalCode);
 
-    List<List<JSONObject>> artistEvents(String postalCode, ArrayList<TestArtist> favArtists) throws IOException;
+    List<List<JSONObject>> artistEvents(String postalCode, ArrayList<Artist> favArtists) throws IOException;
 
 
 }
