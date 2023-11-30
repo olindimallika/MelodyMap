@@ -1,21 +1,50 @@
 package use_case.upcoming_shows;
 
+import data_access.FileUserDataAccessObject;
+import entity.ArtistModelFactory;
+import entity.User;
 import entity.UserFactory;
+import entity.ArtistFactory;
+import interface_adapter.upcoming_shows.UpcomingPresenter;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 public class UpcomingInteractor implements UpcomingInputBoundary{
     final UpcomingDataAccess userDataAccessObject;
-    final UpcomingOutputBoundary upcomingPresenter;
+    final UpcomingOutputBoundary userPresenter;
     final UserFactory userFactory;
 
     public UpcomingInteractor(UpcomingDataAccess userDataAccessInterface,
                               UpcomingOutputBoundary upcomingOutputBoundary,
                               UserFactory userFactory){
         this.userDataAccessObject = userDataAccessInterface;
-        this.upcomingPresenter = upcomingOutputBoundary;
+        this.userPresenter = upcomingOutputBoundary;
         this.userFactory = userFactory;
     }
 
     public void execute(UpcomingInputData upcomingInputData){
 
+        try {
+            System.out.println("\n");
+            int radius = 10;
+            String unit = "miles";
+
+            User user = userFactory.create(upcomingInputData.getPostalCode());
+            List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
+
+            LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
+            String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
+            UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
+            userPresenter.prepareSuccessView(upcomingOutputData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
