@@ -2,6 +2,7 @@ package data_access;
 
 import entity.Artist;
 import entity.ArtistFactory;
+import entity.ArtistModelFactory;
 import entity.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -15,16 +16,11 @@ import java.net.URL;
 import java.util.*;
 
 public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
-
-    private static final double r2d = 180.0D / 3.141592653589793D;
-
     private static final String API_KEY = "0e7e66d3a7b44c6a8e5d7b6c7d61f4f7";
 
     public static List<Double> geoPoint = new ArrayList<>();
 
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
-
-    private ArtistFactory artistFactory;
 
     /**
      * @param user the user's postal code
@@ -160,7 +156,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
      */
     @Override
     public String getArtistName(JSONObject event) {
-        Artist artist = artistFactory.create(event.getString("name"));
+        Artist artist = new ArtistModelFactory().create(event.getString("name"));
         return artist.getName();
     }
 
@@ -200,7 +196,14 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
         return formattedConcerts.toString();
     }
 
-
+    /**
+     * @param postalCode the user's postal code
+     * @return whether the coordinates of the user's postal code exists
+     */
+    @Override
+    public boolean existsInCoords(String postalCode) {
+        return !geoPoint.isEmpty();
+    }
 
 
 

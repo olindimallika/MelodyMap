@@ -30,18 +30,21 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
     public void execute(UpcomingInputData upcomingInputData){
 
         try {
-            System.out.println("\n");
-            int radius = 10;
-            String unit = "miles";
+            if (userDataAccessObject.existsInCoords(upcomingInputData.getPostalCode())){
+                userPresenter.prepareFailView("Unable to find coordinates for postal code.");
+            } else {
+                System.out.println("\n");
+                int radius = 10;
+                String unit = "miles";
 
-            User user = userFactory.create(upcomingInputData.getPostalCode());
-            List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
+                User user = userFactory.create(upcomingInputData.getPostalCode());
+                List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
 
-            LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
-            String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
-            UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
-            userPresenter.prepareSuccessView(upcomingOutputData);
-
+                LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
+                String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
+                UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
+                userPresenter.prepareSuccessView(upcomingOutputData);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
