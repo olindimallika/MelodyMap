@@ -9,18 +9,26 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
-    private static final String API_KEY = "0e7e66d3a7b44c6a8e5d7b6c7d61f4f7";
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
+    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+
+    String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     public static List<Double> geoPoint = new ArrayList<>();
 
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
+
+    public JSONObject artistInfo;
 
     /**
      * @param user the user's postal code
@@ -31,7 +39,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
         String postalCode = user.getPostalCode();
 
         try {
-            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + API_KEY + "&q=" + postalCode + "&countrycode=CA";
+            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
@@ -206,5 +214,64 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess {
     }
 
 
+    //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
+    /**
+     * @param artistName the user's favourite artist
+     * @return the JSONObject listing all the artist information, specifically if they have upcoming concerts
+     */
+    @Override
+    public JSONObject getPerformerInfo(String artistName){
+
+        try {
+            // Replace with your specific API endpoint and parameters
+            String baseUrl = "https://api.seatgeek.com/2/performers?";
+            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
+
+            // Create URL object
+            URL url = new URL(apiUrl);
+
+            // Open connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set request method
+            connection.setRequestMethod("GET");
+
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Pragma", "no-cache");
+            connection.setRequestProperty("Expires", "no-cache");
+
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // Parse the JSON response
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
+            artistInfo = artistArray.getJSONObject(0);
+
+            // Close the connection
+            connection.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return artistInfo;
+    }
+
+    public Integer getNumUpcomingConcerts(){
+        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
+        return numUpcomingEvents;
+    }
+
+    public String getTicketLink(){
+        return String.valueOf(artistInfo.get("url"));
+    }
 
 }
