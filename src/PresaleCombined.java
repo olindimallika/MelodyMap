@@ -188,7 +188,7 @@ public class PresaleCombined extends LocationFinder {
         // Inside the main method of user_enter_artists class
         //PresaleRoughHelper eventInfo = new PresaleRoughHelper();
 
-        // Replace 'YOUR_API_KEY' with your actual Ticketmaster API key.
+        //Ticketmaster API key.
         String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
 
@@ -204,13 +204,13 @@ public class PresaleCombined extends LocationFinder {
 
             // Example: Get only music events based on geoPoint without specifying radius and unit
             List<JSONObject> eventL = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music", artistName);
-            ticketmasterAPI.printEventUrls(eventL);
+            //ticketmasterAPI.printEventUrls(eventL);
 
 
             // Example: Get only music events based on geoPoint without specifying radius and unit
-            List<JSONObject> eventList = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music", artistName);
+            //List<JSONObject> eventList = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music", artistName);
 
-            for (JSONObject event : eventList) {
+            for (JSONObject event : eventL) {
                 // Add event information to the EventInfo object
                 ticketmasterAPI.addEventInfo(event);
             }
