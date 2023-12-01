@@ -1,10 +1,7 @@
 package use_case.upcoming_shows;
 
 import data_access.FileUserDataAccessObject;
-import entity.ArtistModelFactory;
-import entity.User;
-import entity.UserFactory;
-import entity.ArtistFactory;
+import entity.*;
 import interface_adapter.upcoming_shows.UpcomingPresenter;
 import org.json.JSONObject;
 
@@ -37,11 +34,13 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
                 int radius = 10;
                 String unit = "miles";
 
-                User user = userFactory.create(upcomingInputData.getPostalCode());
+                UserBuilder builder = new UserBuilder();
+                User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
                 List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
 
                 LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
                 String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
+
                 UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
                 userPresenter.prepareSuccessView(upcomingOutputData);
             }
