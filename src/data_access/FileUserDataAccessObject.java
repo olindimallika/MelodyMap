@@ -23,11 +23,11 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
-    String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
+    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
-    public static List<Double> geoPoint = new ArrayList<>();
+    private static final List<Double> geoPoint = new ArrayList<>();
 
-    public JSONObject artistInfo;
+    private JSONObject artistInfo;
 
     public FileUserDataAccessObject() {
     }
@@ -222,6 +222,15 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     public String getTicketLink(){
         return String.valueOf(artistInfo.get("url"));
+    }
+
+    /**
+     * @return whether the api call can be made to find the artist's information
+     */
+    @Override
+    public boolean existsInApi() {
+        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
+        return artistInfo != null;
     }
 
 }
