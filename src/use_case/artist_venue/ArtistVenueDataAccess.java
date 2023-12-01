@@ -10,9 +10,8 @@ import java.util.List;
 
 public interface ArtistVenueDataAccess {
 
-    List<Double> getLatLong(String postalCode);
+    List<Double> locationFinder(User user);
 
-    List<List<JSONObject>> artistEvents(String postalCode, ArrayList<Artist> favArtists) throws IOException;
-
+    List<JSONObject> getEvents(String User) throws Exception;
 
 }
