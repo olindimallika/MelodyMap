@@ -1,16 +1,9 @@
 package use_case.upcoming_shows;
 
-import data_access.FileUserDataAccessObject;
-import entity.ArtistModelFactory;
 import entity.User;
 import entity.UserFactory;
-import entity.ArtistFactory;
-import interface_adapter.upcoming_shows.UpcomingPresenter;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
