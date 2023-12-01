@@ -20,15 +20,15 @@ import java.net.URL;
 import java.util.*;
 
 public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
-    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
-
-    String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
-
-    public static List<Double> geoPoint = new ArrayList<>();
-
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    public JSONObject artistInfo;
+    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+
+    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
+
+    private static final List<Double> geoPoint = new ArrayList<>();
+
+    private JSONObject artistInfo;
 
     /**
      * @param user the user's postal code
@@ -272,6 +272,14 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     public String getTicketLink(){
         return String.valueOf(artistInfo.get("url"));
+    }
+
+    /**
+     * @return whether the api call can be made to find the artist's information
+     */
+    @Override
+    public boolean existsInApi() {
+        return artistInfo != null;
     }
 
 }

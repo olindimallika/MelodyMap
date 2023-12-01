@@ -6,4 +6,5 @@ public interface NotifyDataAccess {
     JSONObject getPerformerInfo(String artistName);
     Integer getNumUpcomingConcerts();
     String getTicketLink();
+    boolean existsInApi();
 }
