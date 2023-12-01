@@ -1,9 +1,13 @@
 package use_case.upcoming_shows;
 
-import entity.User;
-import entity.UserFactory;
+import data_access.FileUserDataAccessObject;
+import entity.*;
+import interface_adapter.upcoming_shows.UpcomingPresenter;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -23,18 +27,23 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
     public void execute(UpcomingInputData upcomingInputData){
 
         try {
-            System.out.println("\n");
-            int radius = 10;
-            String unit = "miles";
+            if (userDataAccessObject.existsInCoords(upcomingInputData.getPostalCode())){
+                userPresenter.prepareFailView("Unable to find coordinates for postal code.");
+            } else {
+                System.out.println("\n");
+                int radius = 10;
+                String unit = "miles";
 
-            User user = userFactory.create(upcomingInputData.getPostalCode());
-            List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
+                UserBuilder builder = new UserBuilder();
+                User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
+                List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
 
-            LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
-            String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
-            UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
-            userPresenter.prepareSuccessView(upcomingOutputData);
+                LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
+                String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
 
+                UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
+                userPresenter.prepareSuccessView(upcomingOutputData);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
