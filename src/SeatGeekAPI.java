@@ -46,10 +46,13 @@ public class SeatGeekAPI {
             JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
             JSONObject artistInfo = artistArray.getJSONObject(0);
 
-            System.out.println(artistInfo.get("has_upcoming_events"));
+            Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
 
-
-            System.out.println(jsonResponse.get("performers"));
+            if (artistInfo.get("has_upcoming_events").equals(true)) {
+                System.out.println("Your favourite artist has " + numUpcomingEvents + " upcoming concerts!\nPurchase tickets here: " +  artistInfo.get("url"));
+            } else {
+                System.out.println("Sorry! Your favourite artist doesn't have any upcoming concerts :(");
+            }
 
             // Close the connection
             connection.disconnect();
