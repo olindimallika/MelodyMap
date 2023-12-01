@@ -1,10 +1,13 @@
 package entity;
 
-import java.util.ArrayList;
-
 public interface User{
 
+    String getName();
+
+    String[] getFavArtist();
+
     String getPostalCode();
-    ArrayList<String> getFavArtist();
+
+    String getLocation();
 
 }
