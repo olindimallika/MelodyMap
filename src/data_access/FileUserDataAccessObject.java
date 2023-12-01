@@ -1,7 +1,9 @@
 package data_access;
 
 import entity.*;
+import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
+import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -9,53 +11,47 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 
-import java.io.FilterOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess{
-    private static final double r2d = 180.0D / 3.141592653589793D;
-    private static final double d2r = 3.141592653589793D / 180.0D;
-    private static final double d2km = 111189.57696D * r2d;
-
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String API_KEY = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+
+    String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     public static List<Double> geoPoint = new ArrayList<>();
 
-    private final ArtistFactory artistFactory;
+    public JSONObject artistInfo;
 
-    public FileUserDataAccessObject(ArtistFactory artistFactory) {
-        this.artistFactory = artistFactory;
+    public FileUserDataAccessObject() {
     }
 
     public List<Double> locationFinder(User user){
         String postalCode = user.getPostalCode();
 
         try {
-            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + API_KEY + "&q=" + postalCode + "&countrycode=CA";
+            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
 
             try (Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    JSONObject json = new JSONObject(responseBody);
-                    JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
+                String responseBody = response.body().string();
+                JSONObject json = new JSONObject(responseBody);
+                JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
 
-                    double latitude = location.getDouble("lat");
-                    double longitude = location.getDouble("lng");
+                double latitude = location.getDouble("lat");
+                double longitude = location.getDouble("lng");
 
-                    geoPoint.add(latitude);
-                    geoPoint.add(longitude);
-
-                } else {
-                    System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
-                }
+                geoPoint.add(latitude);
+                geoPoint.add(longitude);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,6 +81,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
+
         StringBuilder jsonContent = new StringBuilder();
 
         while (scanner.hasNext()) {
@@ -97,23 +94,20 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
         JSONObject obj = new JSONObject(jsonContent.toString());
 
         // Check if _embedded is a JSONArray
-        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject && obj.getJSONObject("_embedded").has("events")) {
             JSONObject embedded = obj.getJSONObject("_embedded");
+            JSONArray eventsArray = embedded.getJSONArray("events");
 
-            if (embedded.has("events")) {
-                JSONArray eventsArray = embedded.getJSONArray("events");
-
-                for (int i = 0; i < eventsArray.length(); i++) {
-                    events.add(eventsArray.getJSONObject(i));
-                }
-
-                // Sort events based on distance
-                events.sort(Comparator.comparingDouble(event ->
-                        calculateDistance(
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"),
-                                user)));
+            for (int i = 0; i < eventsArray.length(); i++) {
+                events.add(eventsArray.getJSONObject(i));
             }
+
+            // Sort events based on distance
+            events.sort(Comparator.comparingDouble(event ->
+                    calculateDistance(
+                            event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
+                            event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"),
+                            user)));
         }
 
         return events;
@@ -126,7 +120,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
         double lon1 = latlong.get(1);
         double x = lat1 * (Math.PI / 180);
         double y = lat2 * (Math.PI / 180);
-        // Equation - need to fix
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
     }
 
@@ -136,7 +129,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
     }
 
     public String getArtistName(JSONObject event) {
-        Artist artist = artistFactory.create(event.getString("name"));
+        Artist artist = new ArtistModelFactory().create(event.getString("name"));
         return artist.getName();
     }
 
@@ -164,6 +157,71 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
             formattedConcerts.append("\n");
         }
         return formattedConcerts.toString();
+    }
+
+    /**
+     * @param postalCode the user's postal code
+     * @return whether the coordinates of the user's postal code exists
+     */
+    @Override
+    public boolean existsInCoords(String postalCode) {
+        return !geoPoint.isEmpty();
+    }
+
+
+    //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
+    public JSONObject getPerformerInfo(String artistName){
+
+        try {
+            // Replace with your specific API endpoint and parameters
+            String baseUrl = "https://api.seatgeek.com/2/performers?";
+            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
+
+            // Create URL object
+            URL url = new URL(apiUrl);
+
+            // Open connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set request method
+            connection.setRequestMethod("GET");
+
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Pragma", "no-cache");
+            connection.setRequestProperty("Expires", "no-cache");
+
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // Parse the JSON response
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
+            artistInfo = artistArray.getJSONObject(0);
+
+            // Close the connection
+            connection.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return artistInfo;
+    }
+
+    public Integer getNumUpcomingConcerts(){
+        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
+        return numUpcomingEvents;
+    }
+
+    public String getTicketLink(){
+        return String.valueOf(artistInfo.get("url"));
     }
 
 }

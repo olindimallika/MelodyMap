@@ -1,9 +1,5 @@
 package interface_adapter.upcoming_shows;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 public class UpcomingState {
     private String postalCode = "";
     private String postalCodeError = null;
@@ -11,7 +7,7 @@ public class UpcomingState {
 
     public UpcomingState(UpcomingState copy){
         postalCode = copy.postalCode;
-        postalCodeError= copy.postalCodeError;
+        postalCodeError = copy.postalCodeError;
     }
 
     public UpcomingState(){
