@@ -1,61 +1,188 @@
+import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class SimilarArtistOutput{
+public class SimilarArtistOutput extends LocationFinder{
     private static final String CLIENT_ID = "d8de2f3b15464375938c514ed2e44270";
     private static final String CLIENT_SECRET = "f8fe086793894d13a54a778e1bad78e7";
     SimilarArtistInput in = new SimilarArtistInput();
     static ArrayList<String> userInput = SimilarArtistInput.similar_Artists();
-    String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    static String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
-    FavArtistsShow show = new FavArtistsShow(apiKey);
+    public SimilarArtistOutput(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    final static int radius = 20;
+    final static String unit = "miles";
+    final static String classification = "music";
+
 
     static HashMap<String, ArrayList<String>> map = new HashMap<>();
-
-
     public static void main(String[] args) throws Exception {
 
-            String token = getToken();
-            for (int i = 0; i < userInput.size(); i++) {
-                String list_artist = userInput.get(i);
-                JSONObject artist = searchForArtist(token, list_artist);
-                if (artist != null) {
-                    String artistId = artist.getString("id");
-                    JSONObject similarArtists = getSimilarArtists(token, artistId);
-                    if (similarArtists != null) {
-                        ArrayList<String> similarArtistNames = new ArrayList<>();
-                        JSONArray artists = similarArtists.getJSONArray("artists");
-                        for (int j = 0; j < Math.min(4, artists.length()) ; j++) {
-                            similarArtistNames.add(artists.getJSONObject(j).getString("name"));
-                            System.out.println(artists.getJSONObject(j).getString("name"));
-                        }
-                        map.put(userInput.get(i), similarArtistNames);
-                        System.out.println(map);
+        String token = getToken();
+        for (int i = 0; i < userInput.size(); i++) {
+            String list_artist = userInput.get(i);
+            JSONObject artist = searchForArtist(token, list_artist);
+            if (artist != null) {
+                String artistId = artist.getString("id");
+                JSONObject similarArtists = getSimilarArtists(token, artistId);
+                if (similarArtists != null) {
+                    ArrayList<String> similarArtistNames = new ArrayList<>();
+                    JSONArray artists = similarArtists.getJSONArray("artists");
+                    for (int j = 0; j < Math.min(4, artists.length()) ; j++) {
+                        similarArtistNames.add(artists.getJSONObject(j).getString("name"));
+                        System.out.println(artists.getJSONObject(j).getString("name"));
+                    }
+                    map.put(userInput.get(i), similarArtistNames);
+                    System.out.println(map);
+                } else {
+                    System.out.println("No similar artists found for " + list_artist);
+                }
+            } else {
+                System.out.println("No artist found with the name " + list_artist);
+            }
+        }
+        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
+            for (String artist : entry.getValue()) {
+                List<JSONObject> events = getEventsFromLatLong(latlong, radius, unit, classification, artist);
+//                List<JSONObject> events = getEventsFromArtistName(map);
 
+                System.out.println("Events for " + artist + ":");
+                printEventUrls(events);
+            }
+        }
+    }
 
-                    } else {
-                        System.out.println("No similar artists found for " + list_artist);
+    public static List<JSONObject> getEventsFromArtistName(HashMap<String, ArrayList<String>> map) throws Exception {
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        HttpClient client = HttpClient.newHttpClient();
+        List<JSONObject> eventList = new ArrayList<>();
+
+        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
+            for (String artist : entry.getValue()) {
+                String encodedArtistName = URLEncoder.encode(artist, StandardCharsets.UTF_8.toString());
+                String urlString = baseUrl + "?keyword=" + encodedArtistName + "&apikey=" + apiKey;
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI(urlString))
+                        .build();
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                JSONObject jsonResult = new JSONObject(response.body());
+
+                if (jsonResult.has("_embedded")) {
+                    JSONArray events = jsonResult.getJSONObject("_embedded").getJSONArray("events");
+                    for (int i = 0; i < events.length(); i++) {
+                        eventList.add(events.getJSONObject(i));
                     }
                 } else {
-                    System.out.println("No artist found with the name " + list_artist);
+                    System.out.println("No events found for " + artist);
                 }
-            }
-            for (int k = 0; k < map.size(); k++) {
-                String find_shows = show.printEventUrls();
+                System.out.println("Events for " + artist + ":");
+                printEventUrls(eventList);
 
             }
+        }
+        return eventList;
 
+    }
+
+        public static List<JSONObject> getEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException {
+        double lat1 = latlong.get(0);
+        double lat2 = latlong.get(1);
+        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
+
+
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        String urlString = baseUrl + "?geoPoint=" + strLatlong;
+
+
+        // Append radius, unit, classification, and artist name if provided
+        if (radius > 0 && unit != null) {
+            urlString += "&radius=" + radius + "&unit=" + unit;
         }
 
+
+        if (classification != null) {
+            urlString += "&classificationName=" + classification;
+        }
+
+
+        if (artistName != null) {
+            urlString += "&keyword=" + artistName;
+        }
+
+
+        urlString += "&apikey=" + apiKey;
+
+
+        URL url = new URL(urlString);
+        Scanner scanner = new Scanner(url.openStream());
+        StringBuilder jsonContent = new StringBuilder();
+
+
+        while (scanner.hasNext()) {
+            jsonContent.append(scanner.nextLine());
+        }
+        scanner.close();
+        // Parse the JSON response and return a list of events
+        List<JSONObject> events = new ArrayList<>();
+        JSONObject obj = new JSONObject(jsonContent.toString());
+
+
+        // Check if _embedded is a JSONArray
+        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+            JSONObject embedded = obj.getJSONObject("_embedded");
+
+
+            if (embedded.has("events")) {
+                JSONArray eventsArray = embedded.getJSONArray("events");
+
+
+                for (int i = 0; i < eventsArray.length(); i++) {
+                    events.add(eventsArray.getJSONObject(i));
+                }
+
+
+                // Sort events based on distance
+                events.sort(Comparator.comparingDouble(event ->
+                        calculateDistance(latlong,
+                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
+                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"))));
+            }
+        }
+
+        printEventUrls(events);
+        return events;
+    }
+
+    public static double calculateDistance(List<Double> latlong, double lat2, double lon2) {
+        double lat1 = latlong.get(0);
+        double lon1 = latlong.get(1);
+        double x = lat1 * (Math.PI / 180);
+        double y = lat2 * (Math.PI / 180);
+        // Equation - need to fix
+        return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
+    }
+
+    public static void printEventUrls(List<JSONObject> eventList) {
+        for (JSONObject event : eventList) {
+            if (event.has("url")) {
+                System.out.println(event.getString("url"));
+            } else {
+                System.out.println("No URL found for this event.");
+            }
+        }
+    }
 
 
     private static String getToken() throws Exception {
