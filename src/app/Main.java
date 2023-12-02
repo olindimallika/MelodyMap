@@ -42,7 +42,7 @@ public class Main {
         UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, showConcertsViewModel, userDataAccessObject);
         views.add(upcomingShowsView, upcomingShowsView.viewName);
 
-        ShowConcertsView showConcertsView = ShowConcertsUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject, showConcertsViewModel);
+        ShowConcertsView showConcertsView = ShowConcertsUseCaseFactory.create(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
         views.add(showConcertsView, showConcertsView.viewName);
 
         NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);

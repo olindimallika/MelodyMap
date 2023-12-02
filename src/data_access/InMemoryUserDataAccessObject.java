@@ -241,13 +241,6 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return artistInfo;
     }
 
-    public Integer getNumUpcomingConcerts(){
-        return (Integer) artistInfo.get("num_upcoming_events");
-    }
-    public String getTicketLink(){
-        return String.valueOf(artistInfo.get("url"));
-    }
-
     /**
      * @return whether the api call can be made to find the artist's information
      */

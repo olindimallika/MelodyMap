@@ -3,6 +3,7 @@ package data_access;
 import entity.*;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -17,10 +18,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -214,14 +215,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo;
     }
 
-    public Integer getNumUpcomingConcerts(){
-        return (Integer) artistInfo.get("num_upcoming_events");
-    }
-
-    public String getTicketLink(){
-        return String.valueOf(artistInfo.get("url"));
-    }
-
     /**
      * @return whether the api call can be made to find the artist's information
      */
@@ -230,5 +223,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
         return artistInfo != null;
     }
+
 
 }

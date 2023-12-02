@@ -3,6 +3,7 @@ package view;
 import interface_adapter.notify_user_tour.NotifyController;
 import interface_adapter.notify_user_tour.NotifyState;
 import interface_adapter.notify_user_tour.NotifyViewModel;
+import interface_adapter.show_concerts.ShowConcertsController;
 import interface_adapter.show_concerts.ShowConcertsState;
 import interface_adapter.show_concerts.ShowConcertsViewModel;
 
@@ -25,9 +26,7 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
 
     public final String viewName = "show concerts";
     private final ShowConcertsViewModel showConcertsViewModel;
-
-    private final NotifyController notifyController;
-    private final NotifyViewModel notifyViewModel;
+    private final ShowConcertsController showConcertsController;
 
     JLabel hyperlink;
     JLabel hyperlink2;
@@ -40,13 +39,12 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
     /**
      * A window with artists and their concert links.
      */
-    public ShowConcertsView(ShowConcertsViewModel showConcertsViewModel,
-                            NotifyController notifyController,
-                            NotifyViewModel notifyViewModel) {
+    public ShowConcertsView(ShowConcertsController controller, ShowConcertsViewModel showConcertsViewModel) {
+        this.showConcertsController = controller;
         this.showConcertsViewModel = showConcertsViewModel;
-        this.notifyController = notifyController;
-        this.notifyViewModel = notifyViewModel;
         this.showConcertsViewModel.addPropertyChangeListener(this);
+
+        this.setSize(1000, 400);
 
         JLabel title = new JLabel("Upcoming Shows Near You");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -67,16 +65,11 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource().equals(personalize)){
-                            NotifyState currentState = notifyViewModel.getState();
-
-                            notifyController.execute(
-                                    currentState.getFavouriteArtist()
-                            );
+                            showConcertsController.execute();
                         }
                     }
                 }
         );
-
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

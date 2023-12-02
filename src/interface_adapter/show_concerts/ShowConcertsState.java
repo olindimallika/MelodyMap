@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 public class ShowConcertsState {
     private LinkedHashMap<String, String> concerts = new LinkedHashMap<>();
+    private String concertsError = null;
     public ShowConcertsState(ShowConcertsState copy){
         concerts = copy.concerts;
     }
@@ -19,4 +20,7 @@ public class ShowConcertsState {
         this.concerts = concerts;
     }
 
+    public void setConcertsError(String concertsError){
+        this.concertsError = concertsError;
+    }
 }
