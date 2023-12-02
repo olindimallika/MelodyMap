@@ -3,9 +3,11 @@ package app;
 import data_access.FileUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
+import interface_adapter.presale.PresaleViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
 
 import view.NotifyView;
+import view.PresaleView;
 import view.UpcomingView;
 import view.ViewManager;
 
@@ -29,23 +31,28 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
-        UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
-        NotifyViewModel notifyViewModel = new NotifyViewModel();
+//        UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
+//        NotifyViewModel notifyViewModel = new NotifyViewModel();
+        PresaleViewModel presaleViewModel = new PresaleViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         userDataAccessObject = new FileUserDataAccessObject();
 
-        UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, userDataAccessObject);
-        views.add(upcomingShowsView, upcomingShowsView.viewName);
+//        UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, userDataAccessObject);
+//        views.add(upcomingShowsView, upcomingShowsView.viewName);
 
-        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
-        views.add(notifyView, notifyView.viewName);
+//        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
+//        views.add(notifyView, notifyView.viewName);
+
+        //presale
+        PresaleView presaleView = PresaleUseCaseFactory.create(viewManagerModel, presaleViewModel, userDataAccessObject);
+        views.add(presaleView, presaleView.viewName);
 
 //        viewManagerModel.setActiveView(upcomingShowsView.viewName);
 //        viewManagerModel.firePropertyChanged();
 
-        viewManagerModel.setActiveView(notifyView.viewName);
-        viewManagerModel.firePropertyChanged();
+//        viewManagerModel.setActiveView(notifyView.viewName);
+//        viewManagerModel.firePropertyChanged();
 
         application.pack();
         application.setVisible(true);

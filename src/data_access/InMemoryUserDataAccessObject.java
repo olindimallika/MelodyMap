@@ -30,6 +30,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     private JSONObject artistInfo;
 
+
     /**
      * @param user the user's postal code
      * @return the user's geoPoint as a list of 2 doubles, latitude and longitude.
@@ -212,6 +213,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     public boolean existsInCoords(String postalCode) {
         return !geoPoint.isEmpty();
     }
+
 
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////

@@ -4,6 +4,7 @@ import entity.*;
 import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.presale_date.PresaleDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -16,18 +17,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, PresaleDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
+
+    private List<String> presaleDates = new ArrayList<>();
+    private List<String> eventUrls = new ArrayList<>();
 
     public FileUserDataAccessObject() {
     }
@@ -113,6 +119,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return events;
     }
 
+
     // Finds length between users location and the venue to sort it so closest venue is shown
     public double calculateDistance(double lat2, double lon2, User user) {
         List<Double> latlong = locationFinder(user);
@@ -167,6 +174,58 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public boolean existsInCoords(String postalCode) {
         return !geoPoint.isEmpty();
     }
+
+    //--------------- FOR PRESALE USE CASE ----------
+    public void addEventInfo(JSONObject event) {
+        // Extract and store the URL
+        String url = event.getString("url");
+        eventUrls.add(url);
+
+        // Extract and store presale date if available
+        if (event.has("sales") && event.getJSONObject("sales").has("presales")) {
+            JSONArray presalesArray = event.getJSONObject("sales").getJSONArray("presales");
+            for (int j = 0; j < presalesArray.length(); j++) {
+                JSONObject presale = presalesArray.getJSONObject(j);
+                String startPresaleDate = presale.getString("startDateTime");
+                String endPresaleDate = presale.getString("endDateTime");
+
+                if (isPastPresale(endPresaleDate)) {
+                    presaleDates.add("You missed the presale. Go to general sale by clicking link");
+                } else {
+                    String intervalPresale = "Presale is happening now until "+ endPresaleDate + " click the link to go to presale.";
+                    presaleDates.add(intervalPresale);
+                }
+            }
+        } else {
+            // If no presale date is available, add a placeholder or handle it as needed
+            presaleDates.add("No presale date available, click to see if theres tix available");
+        }
+    }
+
+    public boolean isPastPresale(String presaleEndDate){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            Date endDate = sdf.parse(presaleEndDate);
+            Date currentDate = new Date();
+
+            return currentDate.after(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Handle the parse exception as needed
+            return false;
+        }
+
+    }
+
+
+    public List<String> getEventUrls() {
+        return eventUrls;
+    }
+
+    public List<String> getPresaleDates() {
+        return presaleDates;
+    }
+
 
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////

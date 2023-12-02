@@ -108,7 +108,6 @@ public class PresaleMine extends PresaleBrittany {
             // Handle the IOException as needed
         }
 
-
     }
 
     public List<String> getEventUrls() {

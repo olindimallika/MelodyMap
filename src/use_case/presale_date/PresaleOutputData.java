@@ -9,4 +9,15 @@ import java.util.HashMap;
 
 
 public class PresaleOutputData {
+    private final List<String> presaleDates;
+
+    public PresaleOutputData(List<String> presaleDates){
+        this.presaleDates = presaleDates;
+    }
+
+    public List<String> getPresaleDates(){
+        return presaleDates;
+    }
+
+
 }
