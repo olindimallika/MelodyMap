@@ -64,6 +64,8 @@
 //        return coordinates;
 //    }
 //
+//    // but you guys went to show
+//
 //    @Override
 //    public List<List<JSONObject>> artistEvents(String postalCode, ArrayList<Artist> favArtists) throws IOException {
 //        String apiKey2 = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";

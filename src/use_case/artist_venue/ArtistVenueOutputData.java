@@ -8,20 +8,16 @@ import java.util.HashMap;
 
 public class ArtistVenueOutputData {
 
-    private Map<String, List<JSONObject>> artistVenues = new HashMap<>();
+    private final String upcomingConcerts;
 
-    public ArtistVenueOutputData(){
+    public ArtistVenueOutputData(String upcomingConcerts){
 
-        this.artistVenues = artistVenues;
+        this.upcomingConcerts = upcomingConcerts;
     }
 
-    public Map<String, List<JSONObject>> getArtistVenues() {
+    public String getUpcomingConcerts() {
 
-        return artistVenues;
-    }
-
-    public void addEvent(String artistName, JSONObject event) {
-        artistVenues.computeIfAbsent(artistName, k -> new ArrayList<>()).add(event);
+        return upcomingConcerts;
     }
 
 }
