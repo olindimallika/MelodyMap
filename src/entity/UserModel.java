@@ -1,11 +1,13 @@
 package entity;
 
+import java.util.ArrayList;
+
 class UserModel implements User {
 
     private final String postalCode;
-    private final String favouriteArtist;
+    private final ArrayList<Artist> favouriteArtist;
 
-    UserModel(String postalCode, String favouriteArtist) {
+    UserModel(String postalCode, ArrayList<Artist> favouriteArtist) {
         this.postalCode = postalCode;
         this.favouriteArtist = favouriteArtist;
     }
@@ -16,7 +18,7 @@ class UserModel implements User {
     }
 
     @Override
-    public String getFavouriteArtist() {
+    public ArrayList<Artist> getFavouriteArtist() {
         return favouriteArtist;
     }
 
