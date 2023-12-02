@@ -15,7 +15,7 @@ public class UpcomingViewModel extends ViewModel{
     private UpcomingState state = new UpcomingState();
 
     public UpcomingViewModel(){
-        super("enter");
+        super("upcoming shows");
     }
 
     public void setState(UpcomingState state){

@@ -8,6 +8,4 @@ public interface User{
 
     String getPostalCode();
 
-    String getLocation();
-
 }

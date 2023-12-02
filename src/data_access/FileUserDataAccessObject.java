@@ -1,7 +1,9 @@
 package data_access;
 
 import entity.*;
+import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
+import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -9,16 +11,23 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess{
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String API_KEY = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
-    public static List<Double> geoPoint = new ArrayList<>();
+    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
+
+    private static final List<Double> geoPoint = new ArrayList<>();
+
+    private JSONObject artistInfo;
 
     public FileUserDataAccessObject() {
     }
@@ -27,7 +36,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
         String postalCode = user.getPostalCode();
 
         try {
-            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + API_KEY + "&q=" + postalCode + "&countrycode=CA";
+            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
@@ -157,6 +166,71 @@ public class FileUserDataAccessObject implements UpcomingDataAccess{
     @Override
     public boolean existsInCoords(String postalCode) {
         return !geoPoint.isEmpty();
+    }
+
+
+    //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
+    public JSONObject getPerformerInfo(String artistName){
+
+        try {
+            // Replace with your specific API endpoint and parameters
+            String baseUrl = "https://api.seatgeek.com/2/performers?";
+            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
+
+            // Create URL object
+            URL url = new URL(apiUrl);
+
+            // Open connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set request method
+            connection.setRequestMethod("GET");
+
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Pragma", "no-cache");
+            connection.setRequestProperty("Expires", "no-cache");
+
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            // Parse the JSON response
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
+            artistInfo = artistArray.getJSONObject(0);
+
+            // Close the connection
+            connection.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return artistInfo;
+    }
+
+    public Integer getNumUpcomingConcerts(){
+        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
+        return numUpcomingEvents;
+    }
+
+    public String getTicketLink(){
+        return String.valueOf(artistInfo.get("url"));
+    }
+
+    /**
+     * @return whether the api call can be made to find the artist's information
+     */
+    @Override
+    public boolean existsInApi() {
+        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
+        return artistInfo != null;
     }
 
 }
