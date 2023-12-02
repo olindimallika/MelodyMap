@@ -181,30 +181,6 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     }
 
     /**
-     * @param shows a hashmap of the artist and a link for the user to buy tickets
-     * @return a string listing the artist and the link to their upcoming concert
-     */
-    @Override
-    public String formatShows(LinkedHashMap<String, String> shows) {
-
-        StringBuilder formattedConcerts = new StringBuilder();
-
-        ArrayList<String> concerts = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : shows.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            concerts.add(key + ": " + value);
-        }
-
-        for (int i = 0; i < 5; i++){
-            formattedConcerts.append(concerts.get(i));
-            formattedConcerts.append("\n");
-        }
-        return formattedConcerts.toString();
-    }
-
-    /**
      * @param postalCode the user's postal code
      * @return whether the coordinates of the user's postal code exists
      */
@@ -266,10 +242,8 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     }
 
     public Integer getNumUpcomingConcerts(){
-        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
-        return numUpcomingEvents;
+        return (Integer) artistInfo.get("num_upcoming_events");
     }
-
     public String getTicketLink(){
         return String.valueOf(artistInfo.get("url"));
     }

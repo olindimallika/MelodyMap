@@ -1,13 +1,16 @@
 package interface_adapter.upcoming_shows;
 
+import java.util.LinkedHashMap;
+
 public class UpcomingState {
     private String postalCode = "";
     private String postalCodeError = null;
-    private String upcomingShows = "";
+    private LinkedHashMap<String, String> upcomingShows = new LinkedHashMap<>();
 
     public UpcomingState(UpcomingState copy){
         postalCode = copy.postalCode;
         postalCodeError = copy.postalCodeError;
+        upcomingShows = copy.upcomingShows;
     }
 
     public UpcomingState(){
@@ -29,11 +32,11 @@ public class UpcomingState {
         this.postalCodeError = postalCodeError;
     }
 
-    public String getUpcomingShows(){
+    public LinkedHashMap<String, String> getUpcomingShows(){
         return upcomingShows;
     }
 
-    public void setUpcomingShows(String upcomingShows) {
+    public void setUpcomingShows(LinkedHashMap<String, String> upcomingShows) {
         this.upcomingShows = upcomingShows;
     }
 

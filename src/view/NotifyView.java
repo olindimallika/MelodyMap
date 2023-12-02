@@ -27,7 +27,6 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
         this.notifyController = controller;
         this.notifyViewModel = notifyViewModel;
         notifyViewModel.addPropertyChangeListener(this);
-        notifyViewModel.addPropertyChangeListener(this::notifyPropertyChange);
 
         JLabel title = new JLabel(NotifyViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -97,29 +96,29 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
             JOptionPane.showMessageDialog(this, state.getFavouriteArtistError());
         }
     }
-
-    public void notifyPropertyChange(PropertyChangeEvent evt){
-        NotifyState state = (NotifyState) evt.getNewValue();
-
-        String hyperlinkText = state.getConcertLink();
-
-        // making the link clickable for user
-        JLabel hyperlink = new JLabel(state.getFavouriteArtistUpcoming() + hyperlinkText);
-        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        hyperlink.addMouseListener(new MouseAdapter() {
-
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(hyperlinkText));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-        });
-
-        JOptionPane.showMessageDialog(this, hyperlink);
-    }
+//
+//    public void notifyPropertyChange(PropertyChangeEvent evt){
+//        NotifyState state = (NotifyState) evt.getNewValue();
+//
+//        String hyperlinkText = state.getConcertLink();
+//
+//        // making the link clickable for user
+//        JLabel hyperlink = new JLabel(state.getFavouriteArtistUpcoming() + hyperlinkText);
+//        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        hyperlink.addMouseListener(new MouseAdapter() {
+//
+//            public void mouseClicked(MouseEvent e) {
+//                try {
+//                    Desktop.getDesktop().browse(new URI(hyperlinkText));
+//                } catch (IOException | URISyntaxException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
+//
+//        });
+//
+//        JOptionPane.showMessageDialog(this, hyperlink);
+//    }
 
 }
 

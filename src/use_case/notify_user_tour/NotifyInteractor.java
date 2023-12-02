@@ -3,13 +3,7 @@ package use_case.notify_user_tour;
 import entity.UserFactory;
 import org.json.JSONObject;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.InputMismatchException;
 
 public class NotifyInteractor implements NotifyInputBoundary {
     final NotifyDataAccess userDataAccessObject;
@@ -54,7 +48,8 @@ public class NotifyInteractor implements NotifyInputBoundary {
            userPresenter.prepareSuccessView(notifyOutputData);
 
        } catch (Exception e){
-           System.out.println("We were unable to find your favourite artist. Please exit and try again.");
+           // if user enters an artist name that cannot be entered into the seat geek api
+           throw new InputMismatchException();
        }
     }
 }

@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.*;
-import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
@@ -63,7 +62,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         List<Double> latlong = locationFinder(user);
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
-        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
+        String strLatlong = lat1 + "," + lat2;
 
         String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
         String urlString = baseUrl + "?geoPoint=" + strLatlong;
@@ -140,24 +139,24 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return shows;
     }
 
-    public String formatShows(LinkedHashMap<String, String> shows) {
-
-        StringBuilder formattedConcerts = new StringBuilder();
-
-        ArrayList<String> concerts = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : shows.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            concerts.add(key + ": " + value);
-        }
-
-        for (int i = 0; i < 5; i++){
-            formattedConcerts.append(concerts.get(i));
-            formattedConcerts.append("\n");
-        }
-        return formattedConcerts.toString();
-    }
+//    public String formatShows(LinkedHashMap<String, String> shows) {
+//
+//        StringBuilder formattedConcerts = new StringBuilder();
+//
+//        ArrayList<String> concerts = new ArrayList<>();
+//
+//        for (Map.Entry<String, String> entry : shows.entrySet()) {
+//            String key = entry.getKey();
+//            String value = entry.getValue();
+//            concerts.add(key + ": " + value);
+//        }
+//
+//        for (int i = 0; i < 5; i++){
+//            formattedConcerts.append(concerts.get(i));
+//            formattedConcerts.append("\n");
+//        }
+//        return formattedConcerts.toString();
+//    }
 
     /**
      * @param postalCode the user's postal code
@@ -216,8 +215,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     }
 
     public Integer getNumUpcomingConcerts(){
-        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
-        return numUpcomingEvents;
+        return (Integer) artistInfo.get("num_upcoming_events");
     }
 
     public String getTicketLink(){
