@@ -1,19 +1,19 @@
 package interface_adapter.notify_user_tour;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class NotifyState {
+
+    //user input
     private String favouriteArtist = "";
-    private String favouriteArtistError = null;
-    private String favouriteArtistUpcoming = "";
-    private String concertLink = "";
-    private String concertLinkError = null;
+    private ArrayList<String> artistOnTour = new ArrayList<>();
+    private String artistOnTourError = null;
 
     public NotifyState(NotifyState copy){
         favouriteArtist = copy.favouriteArtist;
-        favouriteArtistError = copy.favouriteArtistError;
-        concertLink = copy.concertLink;
-        concertLinkError = copy.concertLinkError;
+        artistOnTour = copy.artistOnTour;
+        artistOnTourError = copy.artistOnTourError;
     }
 
     public NotifyState(){
@@ -23,37 +23,24 @@ public class NotifyState {
     public String getFavouriteArtist(){
         return favouriteArtist;
     }
-
-    public String getFavouriteArtistError(){
-        return favouriteArtistError;
-    }
-
-    public void setFavouriteArtist(String favouriteArtist) {
+    public void setFavouriteArtist(String favouriteArtist){
         this.favouriteArtist = favouriteArtist;
     }
 
-    public String getFavouriteArtistUpcoming(){
-        return favouriteArtistUpcoming;
+    public ArrayList<String> getArtistOnTour(){
+        return artistOnTour;
     }
 
-    public void setFavouriteArtistUpcoming(String favouriteArtistUpcoming){
-        this.favouriteArtistUpcoming = favouriteArtistUpcoming;
+    public String getArtistOnTourError(){
+        return artistOnTourError;
     }
 
-    public void setFavouriteArtistUpcomingError(String favouriteArtistError){
-        this.favouriteArtistError = favouriteArtistError;
+    public void setArtistOnTour(ArrayList<String> artistOnTour) {
+        this.artistOnTour = artistOnTour;
     }
 
-    public String getConcertLink(){
-        return concertLink;
-    }
-
-    public void setConcertLink(String concertLink){
-        this.concertLink = concertLink;
-    }
-
-    public void setConcertLinkError(String concertLinkError){
-        this.concertLinkError = concertLinkError;
+    public void setArtistOnTourError(String artistOnTourError){
+        this.artistOnTourError = artistOnTourError;
     }
 
 }

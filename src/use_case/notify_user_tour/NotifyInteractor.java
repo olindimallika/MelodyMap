@@ -2,7 +2,9 @@ package use_case.notify_user_tour;
 
 import entity.UserFactory;
 import org.json.JSONObject;
+import org.w3c.dom.ls.LSOutput;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 public class NotifyInteractor implements NotifyInputBoundary {
@@ -23,28 +25,31 @@ public class NotifyInteractor implements NotifyInputBoundary {
 
        try {
            // converting user input, so it will fit what the api expects
-           String artistNameInput = notifyInputData.getFavouriteArtistName();
-           String lowerArtistName = artistNameInput.toLowerCase();
+           String artistNameInput = notifyInputData.getFavouriteArtistNames();
+           String lowerArtistNames = artistNameInput.toLowerCase();
 
-           String artistName;
-           if (lowerArtistName.contains(" ")){
-               artistName = lowerArtistName.replace(' ', '-');
-           } else {
-               artistName = lowerArtistName;
+           String[] artistNameList = lowerArtistNames.split(",");
+           ArrayList<String> hasFavouriteArtistConcert = new ArrayList<>();
+
+           for(String str : artistNameList){
+
+               String artistNames;
+               if (str.contains(" ")){
+                   artistNames = str.replace(' ', '-');
+               } else {
+                   artistNames = str;
+               }
+               JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistNames);
+
+               if (artistInfo.get("has_upcoming_events").equals(true)) {
+                   hasFavouriteArtistConcert.add("Your favourite artist is on tour!");
+               } else {
+                   hasFavouriteArtistConcert.add("Sorry, your favourite artist doesn't have any upcoming concerts :(");
+               }
+
            }
-           JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistName);
 
-           String favouriteArtistConcert;
-           if (artistInfo.get("has_upcoming_events").equals(true)) {
-               favouriteArtistConcert = "Your favourite artist has " + userDataAccessObject.getNumUpcomingConcerts() +
-                       " upcoming concerts! Purchase tickets here (click on link): ";
-           } else {
-               favouriteArtistConcert = "Sorry, your favourite artist doesn't have any upcoming concerts :(";
-           }
-
-           String hyperlink = userDataAccessObject.getTicketLink();
-
-           NotifyOutputData notifyOutputData = new NotifyOutputData(favouriteArtistConcert, hyperlink);
+           NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);
 
        } catch (Exception e){
@@ -52,4 +57,6 @@ public class NotifyInteractor implements NotifyInputBoundary {
            throw new InputMismatchException();
        }
     }
+
+
 }
