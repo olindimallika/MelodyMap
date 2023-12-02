@@ -54,44 +54,44 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
         return favArtistsEvents;
 
     }
-
-    public static void main(String[] args) {
-        // Checking to see if i get an output
-
-
-        try {
-            // Create a sample user
-            UserFactory userFactory = new UserModelFactory();
-            ArtistFactory artistFactory = new ArtistModelFactory();
-            Artist artist1 = artistFactory.create("Taylor Swift");
-            Artist artist2 = artistFactory.create("Olivia Rodrigo");
-            ArrayList<Artist> artists = new ArrayList<>();
-            artists.add(artist1);
-            artists.add(artist2);
-            String postal = "L1C0K1";
-            User user = userFactory.create(postal, artists);
-
-            // Create an instance of ArtistStrategy
-            ArtistStrategy artistStrategy = new ArtistStrategy();
-
-            // Call the getEvents method
-            List<List<JSONObject>> eventsList = artistStrategy.getEvents(user);
-
-            // Display or process the fetched events
-            printArtistEvents(eventsList);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void printArtistEvents(List<List<JSONObject>> eventsList) {
-        for (List<JSONObject> events : eventsList) {
-            for (JSONObject event : events) {
-                String url = event.getString("url");
-                System.out.println("Event URL: " + url);
-            }
-            System.out.println("----"); // Separate events from different artists
-        }
-    }
 }
+//    public static void main(String[] args) {
+//        // Checking to see if i get an output
+//
+//
+//        try {
+//            // Create a sample user
+//            UserFactory userFactory = new UserModelFactory();
+//            ArtistFactory artistFactory = new ArtistModelFactory();
+//            Artist artist1 = artistFactory.create("Taylor Swift");
+//            Artist artist2 = artistFactory.create("Olivia Rodrigo");
+//            ArrayList<Artist> artists = new ArrayList<>();
+//            artists.add(artist1);
+//            artists.add(artist2);
+//            String postal = "L1C0K1";
+//            User user = userFactory.create(postal, artists);
+//
+//            // Create an instance of ArtistStrategy
+//            ArtistStrategy artistStrategy = new ArtistStrategy();
+//
+//            // Call the getEvents method
+//            List<List<JSONObject>> eventsList = artistStrategy.getEvents(user);
+//
+//            // Display or process the fetched events
+//            printArtistEvents(eventsList);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public static void printArtistEvents(List<List<JSONObject>> eventsList) {
+//        for (List<JSONObject> events : eventsList) {
+//            for (JSONObject event : events) {
+//                String url = event.getString("url");
+//                System.out.println("Event URL: " + url);
+//            }
+//            System.out.println("----"); // Separate events from different artists
+//        }
+//    }
+//}
 
