@@ -6,12 +6,17 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface ArtistVenueDataAccess {
+    String getEventUrl(JSONObject event);
 
-    List<Double> locationFinder(User user);
+    String getArtistName(JSONObject event);
 
-    List<JSONObject> getEvents(String User) throws Exception;
+    LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events);
+
+    String formatShows(LinkedHashMap<String, String> shows);
+    boolean existsInCoords(String postalCode);
 
 }
