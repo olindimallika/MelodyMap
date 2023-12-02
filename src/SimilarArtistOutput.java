@@ -26,10 +26,27 @@ public class SimilarArtistOutput extends LocationFinder{
     final static String unit = "miles";
     final static String classification = "music";
 
-
     static HashMap<String, ArrayList<String>> map = new HashMap<>();
-    public static void main(String[] args) throws Exception {
 
+//    public static void main(String[] args) throws Exception {
+//        // Define your postal code and favorite artists here
+//        String postalCode = "Your postal code";
+//        ArrayList<Artist> favArtists = new ArrayList<>(); // Add your favorite artists to this list
+//
+//        // Call the artistEvents method to get the events for each artist
+//        List<List<JSONObject>> allArtistEvents = artistEvents(postalCode, favArtists);
+//
+//        // Print the events for each artist
+//        for (List<JSONObject> artistEvents : allArtistEvents) {
+//            printEventUrls(artistEvents);
+//        }
+//    }
+
+
+    public static void main(String[] args) throws Exception {
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        HttpClient client = HttpClient.newHttpClient();
+        List<JSONObject> eventList = new ArrayList<>();
         String token = getToken();
         for (int i = 0; i < userInput.size(); i++) {
             String list_artist = userInput.get(i);
@@ -55,115 +72,134 @@ public class SimilarArtistOutput extends LocationFinder{
         }
         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
             for (String artist : entry.getValue()) {
-                List<JSONObject> events = getEventsFromLatLong(latlong, radius, unit, classification, artist);
-//                List<JSONObject> events = getEventsFromArtistName(map);
-
+                List<JSONObject> events = getEventUrlsFromLatLong(latlong, radius, unit, classification, artist);
                 System.out.println("Events for " + artist + ":");
                 printEventUrls(events);
             }
         }
     }
 
-    public static List<JSONObject> getEventsFromArtistName(HashMap<String, ArrayList<String>> map) throws Exception {
-        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-        HttpClient client = HttpClient.newHttpClient();
-        List<JSONObject> eventList = new ArrayList<>();
-
-        for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-            for (String artist : entry.getValue()) {
-                String encodedArtistName = URLEncoder.encode(artist, StandardCharsets.UTF_8.toString());
-                String urlString = baseUrl + "?keyword=" + encodedArtistName + "&apikey=" + apiKey;
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(new URI(urlString))
-                        .build();
-                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                JSONObject jsonResult = new JSONObject(response.body());
-
-                if (jsonResult.has("_embedded")) {
-                    JSONArray events = jsonResult.getJSONObject("_embedded").getJSONArray("events");
-                    for (int i = 0; i < events.length(); i++) {
-                        eventList.add(events.getJSONObject(i));
-                    }
-                } else {
-                    System.out.println("No events found for " + artist);
-                }
-                System.out.println("Events for " + artist + ":");
-                printEventUrls(eventList);
-
-            }
-        }
-        return eventList;
-
-    }
-
-        public static List<JSONObject> getEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException {
-        double lat1 = latlong.get(0);
-        double lat2 = latlong.get(1);
-        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
-
-
-        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-        String urlString = baseUrl + "?geoPoint=" + strLatlong;
-
-
-        // Append radius, unit, classification, and artist name if provided
-        if (radius > 0 && unit != null) {
-            urlString += "&radius=" + radius + "&unit=" + unit;
-        }
-
-
-        if (classification != null) {
-            urlString += "&classificationName=" + classification;
-        }
-
-
-        if (artistName != null) {
-            urlString += "&keyword=" + artistName;
-        }
-
-
-        urlString += "&apikey=" + apiKey;
-
-
-        URL url = new URL(urlString);
-        Scanner scanner = new Scanner(url.openStream());
-        StringBuilder jsonContent = new StringBuilder();
-
-
-        while (scanner.hasNext()) {
-            jsonContent.append(scanner.nextLine());
-        }
-        scanner.close();
-        // Parse the JSON response and return a list of events
-        List<JSONObject> events = new ArrayList<>();
-        JSONObject obj = new JSONObject(jsonContent.toString());
-
-
-        // Check if _embedded is a JSONArray
-        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
-            JSONObject embedded = obj.getJSONObject("_embedded");
-
-
-            if (embedded.has("events")) {
-                JSONArray eventsArray = embedded.getJSONArray("events");
-
-
-                for (int i = 0; i < eventsArray.length(); i++) {
-                    events.add(eventsArray.getJSONObject(i));
-                }
-
-
-                // Sort events based on distance
-                events.sort(Comparator.comparingDouble(event ->
-                        calculateDistance(latlong,
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"))));
-            }
-        }
-
-        printEventUrls(events);
-        return events;
-    }
+//    public static List<JSONObject> getEventUrlsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException {
+//        double userLat = latlong.get(0);
+//        double userLong = latlong.get(1);
+//        String strLatlong = Double.toString(userLat) + "," + Double.toString(userLong);
+//
+//        StringBuilder urlString = new StringBuilder("https://app.ticketmaster.com/discovery/v2/events.json");
+//        urlString.append("?geoPoint=").append(strLatlong);
+//
+//        // Append radius, unit, classification, and artist name if provided
+//        if (radius > 0 && unit != null) {
+//            urlString.append("&radius=").append(radius).append("&unit=").append(unit);
+//        }
+//
+//        if (classification != null) {
+//            urlString.append("&classificationName=").append(classification);
+//        }
+//
+//        if (artistName != null) {
+//            urlString.append("&keyword=").append(artistName);
+//        }
+//
+//        urlString.append("&apikey=").append(apiKey);
+//
+//        URL url = new URL(urlString.toString());
+//        Scanner scanner = new Scanner(url.openStream());
+//        StringBuilder jsonContent = new StringBuilder();
+//
+//        while (scanner.hasNext()) {
+//            jsonContent.append(scanner.nextLine());
+//        }
+//        scanner.close();
+//
+//        // Parse the JSON response and return a list of event URLs
+//        List<JSONObject> events = new ArrayList<>();
+//        JSONObject obj = new JSONObject(jsonContent.toString());
+//
+//        // Check if _embedded is a JSONArray
+//        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+//            JSONObject embedded = obj.getJSONObject("_embedded");
+//
+//            if (embedded.has("events")) {
+//                JSONArray eventsArray = embedded.getJSONArray("events");
+//
+//                for (int i = 0; i < eventsArray.length(); i++) {
+//                    JSONObject event = eventsArray.getJSONObject(i);
+//                    if (event.has("_embedded") && event.getJSONObject("_embedded").has("venues")) {
+//                        JSONArray venues = event.getJSONObject("_embedded").getJSONArray("venues");
+//                        for (int j = 0; j < venues.length(); j++) {
+//                            JSONObject venue = venues.getJSONObject(j);
+//                            if (venue.has("location")) {
+//                                double venueLat = venue.getJSONObject("location").getDouble("latitude");
+//                                double venueLong = venue.getJSONObject("location").getDouble("longitude");
+//                                double distance = calculateDistance(latlong, venueLat, venueLong);
+//                                event.put("distance", distance);
+//                            }
+//                        }
+//                    }
+//                    events.add(event);
+//                }
+//            }
+//        }
+//
+//        // Sort events by distance
+//        Collections.sort(events, Comparator.comparingDouble(o -> o.getDouble("distance")));
+//
+//        return events;
+//    }
+//    public static List<JSONObject> getEventUrlsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException {
+//        double lat1 = latlong.get(0);
+//        double lat2 = latlong.get(1);
+//        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
+//
+//        StringBuilder urlString = new StringBuilder("https://app.ticketmaster.com/discovery/v2/events.json");
+//        urlString.append("?geoPoint=").append(strLatlong);
+//
+//        // Append radius, unit, classification, and artist name if provided
+//        if (radius > 0 && unit != null) {
+//            urlString.append("&radius=").append(radius).append("&unit=").append(unit);
+//        }
+//
+//        if (classification != null) {
+//            urlString.append("&classificationName=").append(classification);
+//        }
+//
+//        if (artistName != null) {
+//            urlString.append("&keyword=").append(artistName);
+//        }
+//
+//        urlString.append("&apikey=").append(apiKey);
+//
+//        System.out.println(urlString);
+//        URL url = new URL(urlString.toString());
+//        Scanner scanner = new Scanner(url.openStream());
+//        StringBuilder jsonContent = new StringBuilder();
+//
+//        while (scanner.hasNext()) {
+//            jsonContent.append(scanner.nextLine());
+//        }
+//        scanner.close();
+//
+//        // Parse the JSON response and return a list of event URLs
+//        List<JSONObject> events = new ArrayList<>();
+//        JSONObject obj = new JSONObject(jsonContent.toString());
+//
+//        // Check if _embedded is a JSONArray
+//        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+//            JSONObject embedded = obj.getJSONObject("_embedded");
+//
+//            if (embedded.has("events")) {
+//                JSONArray eventsArray = embedded.getJSONArray("events");
+//
+//                for (int i = 0; i < eventsArray.length(); i++) {
+//                    JSONObject event = eventsArray.getJSONObject(i);
+//                    String eventUrl = event.getString("url");
+//                    events.add(eventUrl);
+//                }
+//            }
+//        }
+//
+//        return events;
+//    }
 
     public static double calculateDistance(List<Double> latlong, double lat2, double lon2) {
         double lat1 = latlong.get(0);
