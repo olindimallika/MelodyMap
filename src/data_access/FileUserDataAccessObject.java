@@ -21,7 +21,7 @@ import java.util.*;
 public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "6d23eef602cc4b218db79d85609ddbfe";
+    private static final String locationFinderApiKey = "a92bf901a11c452583fe43f4f02ad7ce";
     private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
     public static final List<Double> geoPoint = new ArrayList<>();
