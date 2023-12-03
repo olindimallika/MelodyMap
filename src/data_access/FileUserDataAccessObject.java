@@ -25,7 +25,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
-    private static final List<Double> geoPoint = new ArrayList<>();
+    public static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
 
