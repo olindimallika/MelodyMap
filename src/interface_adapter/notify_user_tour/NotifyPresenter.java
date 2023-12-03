@@ -6,6 +6,11 @@ import interface_adapter.artist_menu_tour.ArtistMenuViewModel;
 import use_case.notify_user_tour.NotifyOutputBoundary;
 import use_case.notify_user_tour.NotifyOutputData;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 public class NotifyPresenter implements NotifyOutputBoundary {
     private final NotifyViewModel notifyViewModel;
     private final ViewManagerModel viewManagerModel;
@@ -22,30 +27,28 @@ public class NotifyPresenter implements NotifyOutputBoundary {
     @Override
     public void prepareSuccessView(NotifyOutputData response) {
         ArtistMenuState artistMenuState = artistMenuViewModel.getState();
-        artistMenuState.setArtistOnTour(response.getArtistOnTour());
-        // artistMenuState.setArtistNotOnTour(response.getArtistOnTour()); want method for not on tour
+
+        LinkedHashMap<String, String> favArtist = response.getFavouriteArtists();
+        ArrayList<String> artistOnTour = new ArrayList<>();
+        ArrayList<String> artistNotOnTour = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : favArtist.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            if (value.equals("has a tour")) {
+                artistOnTour.add(key);
+            } else {
+                artistNotOnTour.add(key);
+            }
+        }
+        artistMenuState.setArtistOnTour(artistOnTour);
+        artistMenuState.setArtistNotOnTour(artistNotOnTour);
         this.artistMenuViewModel.setState(artistMenuState);
         this.artistMenuViewModel.firePropertyChanged();
-
-        viewManagerModel.setActiveView(artistMenuViewModel.getViewName());
+        viewManagerModel.setActiveView(notifyViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
-//        NotifyState notifyState = notifyViewModel.getState();
-//        notifyState.setArtistOnTour(response.getArtistOnTour());
-//        this.notifyViewModel.setState(notifyState);
-//        this.notifyViewModel.firePropertyChanged();
-//
-//        viewManagerModel.setActiveView(notifyViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
-
-
-        // ShowConcertsState showConcertsState = showConcertsViewModel.getState();
-        //        showConcertsState.setConcerts(response.getUpcomingConcerts());
-        //        this.showConcertsViewModel.setState(showConcertsState);
-        //        this.showConcertsViewModel.firePropertyChanged();
-        //
-        //        viewManagerModel.setActiveView(showConcertsViewModel.getViewName());
-        //        viewManagerModel.firePropertyChanged();
 
 
     @Override
