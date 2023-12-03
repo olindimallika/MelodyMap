@@ -32,19 +32,14 @@ public class NotifyInteractor implements NotifyInputBoundary {
 
            for(String str : artistNameList){
 
-               String artistNames;
+               String artistName;
                if (str.contains(" ")){
-                   artistNames = str.replace(' ', '-');
+                   artistName = str.strip();
                } else {
-                   artistNames = str;
+                   artistName = str;
                }
-               JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistNames);
-
-               if (artistInfo.get("has_upcoming_events").equals(true)) {
-                   hasFavouriteArtistConcert.add("Your favourite artist is on tour!");
-               } else {
-                   hasFavouriteArtistConcert.add("Sorry, your favourite artist doesn't have any upcoming concerts :(");
-               }
+               String tourInfo = userDataAccessObject.hasATour(artistName, "music");
+               hasFavouriteArtistConcert.add(tourInfo);
 
            }
 

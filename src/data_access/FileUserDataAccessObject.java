@@ -22,12 +22,10 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
     private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
-
-    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
+    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
     public static final List<Double> geoPoint = new ArrayList<>();
 
-    private JSONObject artistInfo;
     private String postalCode;
 
     public FileUserDataAccessObject() {
@@ -78,7 +76,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
             urlString += "&classificationName=" + classification;
         }
 
-        urlString += "&apikey=" + "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+        urlString += "&apikey=" + ticketmasterApiKey;
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
@@ -171,59 +169,55 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
-    public JSONObject getPerformerInfo(String artistName){
+    public String hasATour(String artistName, String classification) throws IOException, InterruptedException {
 
-        try {
-            // Replace with your specific API endpoint and parameters
-            String baseUrl = "https://api.seatgeek.com/2/performers?";
-            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        String urlString = baseUrl + "?keyword=" + artistName;
 
-            // Create URL object
-            URL url = new URL(apiUrl);
-
-            // Open connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // Set request method
-            connection.setRequestMethod("GET");
-
-            connection.setRequestProperty("Cache-Control", "no-cache");
-            connection.setRequestProperty("Pragma", "no-cache");
-            connection.setRequestProperty("Expires", "no-cache");
-
-            // Read the response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
-            StringBuilder response = new StringBuilder();
-
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-
-            // Parse the JSON response
-            JSONObject jsonResponse = new JSONObject(response.toString());
-
-            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
-            artistInfo = artistArray.getJSONObject(0);
-
-            // Close the connection
-            connection.disconnect();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (classification != null) {
+            urlString += "&classificationName=" + classification;
         }
-        return artistInfo;
+
+        urlString += "&apikey=" + ticketmasterApiKey;
+
+        URL url = new URL(urlString);
+        Scanner scanner = new Scanner(url.openStream());
+        StringBuilder jsonContent = new StringBuilder();
+
+        while (scanner.hasNext()) {
+            jsonContent.append(scanner.nextLine());
+        }
+
+        scanner.close();
+
+        JSONObject obj = new JSONObject(jsonContent.toString());
+
+        String output = "";
+        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+            JSONObject embedded = obj.getJSONObject("_embedded");
+
+            if (embedded.has("events")) {
+                output = "has a tour";
+            }
+
+        } else {
+            output = "doesn't have a tour";
+        }
+
+        // Introduce a 0.2 second delay to avoid hitting the rate limit
+        Thread.sleep(200); // Adjust the sleep duration as needed
+
+        return output;
     }
 
-    /**
-     * @return whether the api call can be made to find the artist's information
-     */
-    @Override
-    public boolean existsInApi() {
-        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
-        return artistInfo != null;
-    }
+//    /**
+//     * @return whether the api call can be made to find the artist's information
+//     */
+//    @Override
+//    public boolean existsInApi() {
+//        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
+//        return artistInfo != null;
+//    }
 
     public String getPostalCode(){
         return postalCode;
