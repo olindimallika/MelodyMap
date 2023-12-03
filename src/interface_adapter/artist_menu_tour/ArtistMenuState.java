@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ArtistMenuState {
 
+
     private String favouriteArtist = "";
     private ArrayList<String> artistOnTour = new ArrayList<>();
 
@@ -17,6 +18,7 @@ public class ArtistMenuState {
         artistNotOnTour = new ArrayList<>();
         artistMenuError = null;
     }
+    //LIBKED STRING TO STRING METHID GET ARTIST ONTOUR, CALL METHOD IN VIEW
 
     public ArtistMenuState(){
 
