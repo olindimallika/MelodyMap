@@ -16,27 +16,46 @@ public class SimilarInteractor implements SimilarInputBoundary {
 
     final SimilarDataAccess similarDataAccessObject;
     final SimilarOutputBoundary similarPresenter;
-//    final User user = new User();
+    final UserFactory userFactory;
 
     final InMemoryUserDataAccessObject im = new InMemoryUserDataAccessObject();
     private List<Artist> favouriteArtists;
 
 
-    public SimilarInteractor(SimilarDataAccess similarDataAccess, SimilarOutputBoundary similarPresenter) {
+    public SimilarInteractor(SimilarDataAccess similarDataAccess, SimilarOutputBoundary similarPresenter, UserFactory userFactory) {
         this.similarDataAccessObject = similarDataAccess;
         this.similarPresenter = similarPresenter;
+        this.userFactory = userFactory;
     }
 
 
     @Override
-    public void execute(SimilarInputData similarInputData) throws IOException {
+    public void execute(SimilarInputData similarInputData) {
 
         try {
+            // converting user input, so it will fit what the api expects
+            String artistNameInput = similarInputData.getFavArtists().toString();
+            String lowerArtistNames = artistNameInput.toLowerCase();
+
+            String[] artistNameList = lowerArtistNames.split(",");
+            ArrayList<String> hasFavouriteArtistConcert = new ArrayList<>();
+
+            for(String str : artistNameList){
+
+                String favouriteArtists;
+                if (str.contains(" ")){
+                    favouriteArtists = str.replace(' ', '-');
+                } else {
+                    favouriteArtists = str;
+                }
+
+            }
+
             UserBuilder builder = new UserBuilder();
             User user = builder.addPostalCode(similarInputData.getPostalCode()).build();
 
             // Get the user's favorite artists and postal code from the input data
-            List<String> favouriteArtists = similarInputData.getFavArtists();
+//            String favouriteArtists = similarInputData.getFavArtists();
             String postalCode = similarInputData.getPostalCode();
 
             // Use the data access object to get the similar artists
@@ -53,7 +72,7 @@ public class SimilarInteractor implements SimilarInputBoundary {
             String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
             String token = im.getToken();
             Set<String> addedArtists = new HashSet<>();
-            for (String artist : similarInputData.getFavArtists()) {
+            for (favouriteArtists) {
                 addedArtists.add(artist.toLowerCase());
             }
             try {

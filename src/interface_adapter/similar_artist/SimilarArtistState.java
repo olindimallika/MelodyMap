@@ -1,8 +1,5 @@
 package interface_adapter.similar_artist;
 
-import entity.Artist;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,6 +7,8 @@ public class SimilarArtistState {
     private String postalCode = "";
     private HashMap<String, List<String>> similarArtists = new HashMap<>();
     private String similarArtistError = null;
+    private String favouriteArtists;
+
     public SimilarArtistState(SimilarArtistState copy) {
         similarArtists = copy.similarArtists;
         similarArtistError = copy.similarArtistError;
@@ -30,4 +29,19 @@ public class SimilarArtistState {
         return similarArtistError;
     }
 
+    public void setPostalCode(String text) {
+        this.postalCode = text;
+    }
+
+    public void setFavouriteArtists(String favouriteArtists) {
+        this.favouriteArtists = favouriteArtists;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public String getFavouriteArtists() {
+        return favouriteArtists;
+    }
 }

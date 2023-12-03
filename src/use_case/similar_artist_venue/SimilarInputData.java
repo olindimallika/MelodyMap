@@ -3,16 +3,16 @@ package use_case.similar_artist_venue;
 import java.util.List;
 
 public class SimilarInputData {
-    private final List<String> favArtists;
+    private final String favArtists;
     private final String postalCode;
 
-    public SimilarInputData(String postalCode, List<String> favArtists) {
+    public SimilarInputData(String postalCode, String favArtists) {
         this.postalCode = postalCode;
         this.favArtists = favArtists;
     }
 
     String getPostalCode(){ return postalCode;}
-    List<String> getFavArtists() {
+    String getFavArtists() {
         return favArtists;
     }
 }

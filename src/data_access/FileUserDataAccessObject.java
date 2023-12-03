@@ -4,6 +4,7 @@ import entity.*;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.show_concerts.ShowConcertsDataAccess;
+import use_case.similar_artist_venue.SimilarDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -18,7 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, SimilarDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
     private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
@@ -57,6 +58,11 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
             e.printStackTrace();
         }
         return geoPoint;
+    }
+
+    @Override
+    public boolean existsInCoord(String postalCode) {
+        return false;
     }
 
     public List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification, User user) throws IOException {
@@ -122,6 +128,11 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         double x = lat1 * (Math.PI / 180);
         double y = lat2 * (Math.PI / 180);
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
+    }
+
+    @Override
+    public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
+        return null;
     }
 
     public String getEventUrl(JSONObject event) {

@@ -22,7 +22,7 @@ public class SimilarArtistViewModel extends ViewModel {
     public void setState(SimilarArtistState state) {
         this.state = state;
     }
-    private final PropertyChangeSupport support = new PropertyChangeSupport();
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);

@@ -5,10 +5,11 @@ import use_case.similar_artist_venue.SimilarInputData;
 import use_case.similar_artist_venue.SimilarOutputBoundary;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class SimilarArtistController {
-    final SimilarInputBoundary userSimilarUseCaseInteractor;
+    static SimilarInputBoundary userSimilarUseCaseInteractor;
     private SimilarOutputBoundary userSimilarUseCaseOutputBoundary;
 
     public SimilarArtistController(SimilarInputBoundary userSimilarUseCaseInteractor) {
@@ -16,7 +17,7 @@ public class SimilarArtistController {
 //        this.userSimilarUseCaseOutputBoundary = userSimilarUseCaseOutputBoundary;
     }
 
-    public void execute(String postalCode, ArrayList<String> favouriteArtists){
+    public static void execute(String postalCode, String favouriteArtists){
         SimilarInputData similarInputData = new SimilarInputData(postalCode, favouriteArtists);
         userSimilarUseCaseInteractor.execute(similarInputData);
 //        userSimilarUseCaseOutputBoundary.displaySimilarArtists();
