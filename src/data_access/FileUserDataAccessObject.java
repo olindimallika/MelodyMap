@@ -36,6 +36,8 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     private List<String> listFormatOutputPresale = new ArrayList<>();
     private String finalFormatOutputPresale = "";
 
+    private String postalCode;
+
 
     //private String idkFormatOutputPresale = "";
 
@@ -47,7 +49,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     }
 
     public List<Double> locationFinder(User user){
-        String postalCode = user.getPostalCode();
+        postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -312,6 +314,11 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public boolean existsInApi() {
         // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
         return artistInfo != null;
+    }
+
+
+    public String getPostalCode(){
+        return postalCode;
     }
 
 }
