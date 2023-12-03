@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface SimilarDataAccess {
-    HashMap<String, ArrayList<String>> getSimilarArtists(List<String> favouriteArtists);
+    HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists);
     String getEventUrl(JSONObject event);
     String getArtistName(JSONObject event);
     List<Double> locationFinder(User user);
+    boolean existsInCoord(String postalCode);
 }

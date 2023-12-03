@@ -113,6 +113,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return events;
     }
 
+
     // Finds length between users location and the venue to sort it so closest venue is shown
     public double calculateDistance(double lat2, double lon2, User user) {
         List<Double> latlong = locationFinder(user);

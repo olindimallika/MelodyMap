@@ -4,7 +4,6 @@ import entity.User;
 import org.json.JSONObject;
 import use_case.similar_artist_venue.SimilarOutputBoundary;
 import use_case.similar_artist_venue.SimilarDataAccess;
-import use_case.similar_artist_venue.SimilarOutputData;
 
 import java.util.ArrayList;
 import java.util.HashMap;

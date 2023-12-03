@@ -1,40 +1,26 @@
 package entity;
 
+import java.util.List;
+
 class UserModel implements User {
 
-    private final String name;
-
-    private final String[] favouriteArtist;
-
+    private final List<Artist> favouriteArtists;
     private final String postalCode;
 
-    private final String location;
-
-    UserModel(String name, String[] favouriteArtist, String location, String postalCode) {
-        this.name = name;
-        this.favouriteArtist = favouriteArtist;
+    public UserModel(String postalCode, List<Artist> favouriteArtists) {
         this.postalCode = postalCode;
-        this.location = location;
+        this.favouriteArtists = favouriteArtists;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
 
     @Override
-    public String[] getFavArtist() {
-        return favouriteArtist;
+    public List<Artist> getFavouriteArtists() {
+        return favouriteArtists;
     }
 
     @Override
     public String getPostalCode() {
         return postalCode;
-    }
-
-    @Override
-    public String getLocation() {
-        return location;
     }
 
 
