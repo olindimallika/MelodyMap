@@ -2,12 +2,8 @@ package use_case.similar_artist_venue;
 
 import data_access.FileUserDataAccessObject;
 import entity.*;
-import interface_adapter.similar_artist.SimilarArtistPresenter;
 import org.json.JSONArray;
-import org.w3c.dom.ls.LSOutput;
-import use_case.similar_artist_venue.SimilarInputData;
 import org.json.JSONObject;
-import data_access.InMemoryUserDataAccessObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -59,9 +55,6 @@ public class SimilarInteractor implements SimilarInputBoundary {
     @Override
     public void execute(SimilarInputData similarInputData) throws Exception {
 
-        try {
-
-            try {
                 String strFavArtists = similarInputData.getFavArtists();
                 String[] artistsArray = strFavArtists.split(", ");
                 List<String> artistList = Arrays.asList(artistsArray);
@@ -97,17 +90,17 @@ public class SimilarInteractor implements SimilarInputBoundary {
 //                }
 
                 String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
-                String token = im.getToken();
+                String token = FileUserDataAccessObject.getToken();
                 Set<String> addedArtists = new HashSet<>();
                 for (Artist artist : favArtists) {
                     addedArtists.add(artist.getName().toLowerCase());
                 }
 
                 for (String artistName : favouriteArtists) {
-                    JSONObject artist = im.searchForArtist(token, artistName);
+                    JSONObject artist = FileUserDataAccessObject.searchForArtist(token, artistName);
                     if (artist != null) {
                         String artistId = artist.getString("id");
-                        JSONObject simArtists = im.getSimilarArtists(token, artistId);
+                        JSONObject simArtists = FileUserDataAccessObject.getSimilarArtists(token, artistId);
                         if (simArtists != null) {
                             ArrayList<String> similarArtistNames = new ArrayList<>();
                             JSONArray artists = simArtists.getJSONArray("artists");
@@ -140,7 +133,7 @@ public class SimilarInteractor implements SimilarInputBoundary {
                             try {
                                 String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8.toString());
                                 List<JSONObject> events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
-                                if (count == 1) {
+                                if (count < 3) {
                                     System.out.println("Similar artist for " + entry.getKey() + ": " + artistName);
                                     System.out.println(im.getEventUrls(events));
                                     count++;
@@ -161,24 +154,17 @@ public class SimilarInteractor implements SimilarInputBoundary {
                 }
                 if (similarArtistsMap != null && !similarArtistsMap.isEmpty()) {
                     // If similar artists were found, prepare the success view
-                    SimilarOutputData outputData = new SimilarOutputData(similarArtistsMap);
+                    String output = im.formatSimilarArtists(similarArtistsMap);
+                    SimilarOutputData outputData = new SimilarOutputData(output);
                     similarPresenter.prepareSuccessView(outputData);
                 } else {
                     // If no similar artists were found, prepare the fail view
                     similarPresenter.prepareFailView("No similar artists found.");
-                }
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
 
     }
-}
+}}
 
 
 //    public static void main(String[] args) throws Exception {

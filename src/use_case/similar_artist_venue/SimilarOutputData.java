@@ -9,19 +9,19 @@ import java.util.List;
 public class SimilarOutputData {
     private String finalFormatOutputSimilarArtist = "";
 
-    private HashMap<String, List<String>> similarArtists = new HashMap<>();
+    private String similarArtists = "";
 
     public SimilarOutputData() {
         this.similarArtists = similarArtists;
     }
-    public SimilarOutputData(HashMap<String, List<String>> similarArtists) {
+    public SimilarOutputData(String similarArtists) {
         this.similarArtists = similarArtists;
     }
-    public HashMap<String, List<String>> getSimilarArtists() {
+    public String getSimilarArtists() {
         return similarArtists;
     }
 
-    public String getFormatOutputSimilarArtist() {
+    public String getFinalFormatSimilarArtist() {
         return finalFormatOutputSimilarArtist;
     }
 }

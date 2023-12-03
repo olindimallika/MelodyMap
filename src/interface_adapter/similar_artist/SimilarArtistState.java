@@ -14,7 +14,6 @@ public class SimilarArtistState {
     private HashMap<String, List<String>> similarArtists = new HashMap<>();
     private String similarArtistError = null;
     private String favouriteArtists = "";
-    private String finalFormatOutputSimilarArtist = "";
 
     public SimilarArtistState(SimilarArtistState copy) {
         postalCode = copy.postalCode;
@@ -79,13 +78,6 @@ public class SimilarArtistState {
 
     public void setFavouriteArtistsError(String error) {
         this.favouriteArtistError = favouriteArtistError;
-    }
-
-    public String getFormatOutputPresale() {
-        return finalFormatOutputSimilarArtist;
-    }
-    public void setFinalFormat(String finalFormatOutputSimilarArtist) {
-        this.finalFormatOutputSimilarArtist = finalFormatOutputSimilarArtist;
     }
 
 }

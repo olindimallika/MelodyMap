@@ -156,22 +156,16 @@ JLabel hyperlink;
         buttons.add(enter);
 
         enter.addActionListener(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (e.getSource().equals(enter)){
-                            SimilarArtistState currentState = similarArtistViewModel.getState();
+                e -> {
+                    if (e.getSource().equals(enter)){
+                        SimilarArtistState currentState = similarArtistViewModel.getState();
 
-                            //presaleController.execute();
-
-
-                            try {
-                                similarArtistController.execute(currentState.getPostalCode(), currentState.getFavouriteArtists());
-                            } catch (Exception ex) {
-                                throw new RuntimeException(ex);
-                            }
-
+                        try {
+                            similarArtistController.execute(currentState.getPostalCode(), currentState.getFavouriteArtists());
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
                         }
+
                     }
                 }
         );
