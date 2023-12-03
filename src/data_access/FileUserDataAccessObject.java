@@ -21,7 +21,10 @@ import java.util.*;
 public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
+    private final LinkedHashMap<String, List<String>> artistShows = new LinkedHashMap<>();
+
+
+    private static final String locationFinderApiKey = "6d23eef602cc4b218db79d85609ddbfe";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -140,24 +143,50 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return shows;
     }
 
-//    public String formatShows(LinkedHashMap<String, String> shows) {
-//
-//        StringBuilder formattedConcerts = new StringBuilder();
-//
-//        ArrayList<String> concerts = new ArrayList<>();
-//
-//        for (Map.Entry<String, String> entry : shows.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//            concerts.add(key + ": " + value);
-//        }
-//
-//        for (int i = 0; i < 5; i++){
-//            formattedConcerts.append(concerts.get(i));
-//            formattedConcerts.append("\n");
-//        }
-//        return formattedConcerts.toString();
-//    }
+    public LinkedHashMap<String, List<String>> getArtistShows(List<List<JSONObject>> eventsList) {
+//        LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
+
+        for (List<JSONObject> events : eventsList) {
+            LinkedHashMap<String, String> shows = getUpcomingShows(events);
+
+            for (Map.Entry<String, String> entry : shows.entrySet()) {
+                String artistName = entry.getKey();
+                String eventUrl = entry.getValue();
+
+                // If the artist is already in the map, add the URL to their list
+                // Otherwise, create a new list with the URL
+                artistShows.compute(artistName, (key, urlList) -> {
+                    if (urlList == null) {
+                        urlList = new ArrayList<>();
+                    }
+                    urlList.add(eventUrl);
+                    return urlList;
+                });
+            }
+        }
+
+        return artistShows;
+    }
+
+
+    public String formatShows(LinkedHashMap<String, String> shows) {
+
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
+    }
 
     /**
      * @param postalCode the user's postal code
