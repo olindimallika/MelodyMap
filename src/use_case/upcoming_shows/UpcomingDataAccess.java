@@ -18,7 +18,5 @@ public interface UpcomingDataAccess {
     String getArtistName(JSONObject event);
 
     LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events);
-
-    String formatShows(LinkedHashMap<String, String> shows);
     boolean existsInCoords(String postalCode);
 }

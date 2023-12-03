@@ -1,9 +1,9 @@
 package data_access;
 
 import entity.*;
-import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -18,10 +18,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -63,7 +63,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         List<Double> latlong = locationFinder(user);
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
-        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
+        String strLatlong = lat1 + "," + lat2;
 
         String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
         String urlString = baseUrl + "?geoPoint=" + strLatlong;
@@ -141,24 +141,24 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return shows;
     }
 
-    public String formatShows(LinkedHashMap<String, String> shows) {
-
-        StringBuilder formattedConcerts = new StringBuilder();
-
-        ArrayList<String> concerts = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : shows.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            concerts.add(key + ": " + value);
-        }
-
-        for (int i = 0; i < 5; i++){
-            formattedConcerts.append(concerts.get(i));
-            formattedConcerts.append("\n");
-        }
-        return formattedConcerts.toString();
-    }
+//    public String formatShows(LinkedHashMap<String, String> shows) {
+//
+//        StringBuilder formattedConcerts = new StringBuilder();
+//
+//        ArrayList<String> concerts = new ArrayList<>();
+//
+//        for (Map.Entry<String, String> entry : shows.entrySet()) {
+//            String key = entry.getKey();
+//            String value = entry.getValue();
+//            concerts.add(key + ": " + value);
+//        }
+//
+//        for (int i = 0; i < 5; i++){
+//            formattedConcerts.append(concerts.get(i));
+//            formattedConcerts.append("\n");
+//        }
+//        return formattedConcerts.toString();
+//    }
 
     /**
      * @param postalCode the user's postal code
@@ -216,15 +216,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo;
     }
 
-    public Integer getNumUpcomingConcerts(){
-        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
-        return numUpcomingEvents;
-    }
-
-    public String getTicketLink(){
-        return String.valueOf(artistInfo.get("url"));
-    }
-
     /**
      * @return whether the api call can be made to find the artist's information
      */
@@ -233,5 +224,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
         return artistInfo != null;
     }
+
 
 }
