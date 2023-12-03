@@ -2,7 +2,6 @@ package use_case.notify_user_tour;
 
 import entity.UserFactory;
 import org.json.JSONObject;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -48,6 +47,9 @@ public class NotifyInteractor implements NotifyInputBoundary {
                }
 
            }
+
+           // testing get postal code method
+           // System.out.println(userDataAccessObject.getPostalCode());
 
            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);
