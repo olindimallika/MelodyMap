@@ -3,6 +3,7 @@ package app;
 import entity.UserFactory;
 import entity.UserModelFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingController;
 import interface_adapter.upcoming_shows.UpcomingPresenter;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
@@ -21,10 +22,13 @@ public class UpcomingUseCaseFactory {
     private UpcomingUseCaseFactory() {}
 
     public static UpcomingView create(
-            ViewManagerModel viewManagerModel, UpcomingViewModel upcomingViewModel, UpcomingDataAccess userDataAccessObject) {
+            ViewManagerModel viewManagerModel,
+            UpcomingViewModel upcomingViewModel,
+            ShowConcertsViewModel showConcertsViewModel,
+            UpcomingDataAccess userDataAccessObject) {
 
         try {
-            UpcomingController upcomingController = createUserUpcomingUseCase(viewManagerModel, upcomingViewModel, userDataAccessObject);
+            UpcomingController upcomingController = createUserUpcomingUseCase(viewManagerModel, upcomingViewModel, showConcertsViewModel, userDataAccessObject);
             return new UpcomingView(upcomingController, upcomingViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -33,10 +37,13 @@ public class UpcomingUseCaseFactory {
         return null;
     }
 
-    private static UpcomingController createUserUpcomingUseCase(ViewManagerModel viewManagerModel, UpcomingViewModel upcomingViewModel, UpcomingDataAccess userDataAccessObject) throws IOException {
+    private static UpcomingController createUserUpcomingUseCase(ViewManagerModel viewManagerModel,
+                                                                UpcomingViewModel upcomingViewModel,
+                                                                ShowConcertsViewModel showConcertsViewModel,
+                                                                UpcomingDataAccess userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        UpcomingOutputBoundary upcomingOutputBoundary = new UpcomingPresenter(viewManagerModel, upcomingViewModel);
+        UpcomingOutputBoundary upcomingOutputBoundary = new UpcomingPresenter(viewManagerModel, showConcertsViewModel, upcomingViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 

@@ -6,10 +6,7 @@ import interface_adapter.upcoming_shows.UpcomingViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -30,7 +27,6 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         this.upcomingShowsController = controller;
         this.upcomingShowsViewModel = upcomingShowsViewModel;
         upcomingShowsViewModel.addPropertyChangeListener(this);
-        upcomingShowsViewModel.addPropertyChangeListener(this::showsPropertyChange);
 
         JLabel title = new JLabel(UpcomingViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -99,11 +95,6 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         if (state.getPostalCodeError() != null) {
             JOptionPane.showMessageDialog(this, state.getPostalCodeError());
         }
-    }
-
-    public void showsPropertyChange(PropertyChangeEvent evt){
-        UpcomingState state = (UpcomingState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getUpcomingShows());
     }
 
 }

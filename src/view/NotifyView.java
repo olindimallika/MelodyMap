@@ -93,32 +93,16 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         NotifyState state = (NotifyState) evt.getNewValue();
-        if (state.getFavouriteArtistError() != null) {
-            JOptionPane.showMessageDialog(this, state.getFavouriteArtistError());
+        if (state.getArtistOnTourError() != null) {
+            JOptionPane.showMessageDialog(this, state.getArtistOnTourError());
         }
     }
 
     public void notifyPropertyChange(PropertyChangeEvent evt){
         NotifyState state = (NotifyState) evt.getNewValue();
-
-        String hyperlinkText = state.getConcertLink();
-
-        // making the link clickable for user
-        JLabel hyperlink = new JLabel(state.getFavouriteArtistUpcoming() + hyperlinkText);
-        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        hyperlink.addMouseListener(new MouseAdapter() {
-
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(hyperlinkText));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-        });
-
-        JOptionPane.showMessageDialog(this, hyperlink);
+        if (!state.getArtistOnTour().isEmpty()) {
+            JOptionPane.showMessageDialog(this, state.getArtistOnTour());
+        }
     }
 
 }

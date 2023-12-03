@@ -1,16 +1,22 @@
 package interface_adapter.upcoming_shows;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.show_concerts.ShowConcertsState;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
 import use_case.upcoming_shows.UpcomingOutputBoundary;
 import use_case.upcoming_shows.UpcomingOutputData;
 
 public class UpcomingPresenter implements UpcomingOutputBoundary {
 
     private final UpcomingViewModel upcomingViewModel;
+    private final ShowConcertsViewModel showConcertsViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public UpcomingPresenter(ViewManagerModel viewManagerModel, UpcomingViewModel upcomingViewModel){
+    public UpcomingPresenter(ViewManagerModel viewManagerModel,
+                             ShowConcertsViewModel showConcertsViewModel,
+                             UpcomingViewModel upcomingViewModel){
         this.viewManagerModel = viewManagerModel;
+        this.showConcertsViewModel = showConcertsViewModel;
         this.upcomingViewModel = upcomingViewModel;
     }
 
@@ -18,12 +24,12 @@ public class UpcomingPresenter implements UpcomingOutputBoundary {
     public void prepareSuccessView(UpcomingOutputData response) {
         // On success, display a message box in upcoming view
 
-        UpcomingState upcomingState = upcomingViewModel.getState();
-        upcomingState.setUpcomingShows(response.getUpcomingConcerts());
-        this.upcomingViewModel.setState(upcomingState);
-        this.upcomingViewModel.firePropertyChanged();
+        ShowConcertsState showConcertsState = showConcertsViewModel.getState();
+        showConcertsState.setConcerts(response.getUpcomingConcerts());
+        this.showConcertsViewModel.setState(showConcertsState);
+        this.showConcertsViewModel.firePropertyChanged();
 
-        viewManagerModel.setActiveView(upcomingViewModel.getViewName());
+        viewManagerModel.setActiveView(showConcertsViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 
