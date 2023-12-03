@@ -20,10 +20,6 @@ public class UpcomingShowsRough extends LocationFinder {
         this.apiKey = apiKey;
     }
 
-//    public List<JSONObject> getEventsFromLatLong(List<Double> latlong) throws IOException {
-//        return getEventsFromLatLong(latlong, 0, null, "music");
-//    }
-    //...
     public List<JSONObject> getEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification) throws IOException {
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
@@ -103,8 +99,7 @@ public class UpcomingShowsRough extends LocationFinder {
 
         try {
             System.out.println("\n");
-
-            int radius = 10;
+            int radius = 20;
             String unit = "miles";
             // Example: Get only music events based on geoPoint without specifying radius and unit
             List<JSONObject> eventL = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music");
