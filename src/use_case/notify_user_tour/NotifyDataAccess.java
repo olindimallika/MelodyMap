@@ -1,8 +1,11 @@
 package use_case.notify_user_tour;
 
+import entity.User;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public interface NotifyDataAccess {
-    JSONObject getPerformerInfo(String artistName);
-    boolean existsInApi();
+    String hasATour(String artistName, String classification) throws IOException, InterruptedException;
+    String getPostalCode();
 }

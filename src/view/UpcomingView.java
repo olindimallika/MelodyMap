@@ -16,7 +16,7 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
 
     private final UpcomingViewModel upcomingShowsViewModel;
 
-    private final JTextField postalCodeInputField = new JTextField(15);
+    private final JTextField postalCodeInputField = new JTextField(45);
 
     private final UpcomingController upcomingShowsController;
 
@@ -28,11 +28,16 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         this.upcomingShowsViewModel = upcomingShowsViewModel;
         upcomingShowsViewModel.addPropertyChangeListener(this);
 
-        JLabel title = new JLabel(UpcomingViewModel.TITLE_LABEL);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        LabelTextPanel userPostalCode = new LabelTextPanel(
-                new JLabel(UpcomingViewModel.POSTALCODE_LABEL), postalCodeInputField);
+        JLabel title = new JLabel(UpcomingViewModel.TITLE_LABEL);
+        title.setFont(new Font("Arial", Font.PLAIN,15));
+
+        JLabel postalCodeLabel = new JLabel(UpcomingViewModel.POSTALCODE_LABEL);
+        postalCodeLabel.setFont(new Font("Arial", Font.PLAIN,15));
+
+        LabelTextPanel userPostalCode = new LabelTextPanel(postalCodeInputField);
+        userPostalCode.setFont(new Font("Arial", Font.PLAIN,15));
 
         JPanel buttons = new JPanel();
         enter = new JButton(UpcomingViewModel.ENTER_BUTTON_LABEL);
@@ -73,9 +78,9 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
                 }
                 );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
+        this.add(postalCodeLabel);
         this.add(userPostalCode);
         this.add(buttons);
 

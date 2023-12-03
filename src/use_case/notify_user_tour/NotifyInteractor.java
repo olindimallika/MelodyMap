@@ -2,10 +2,10 @@ package use_case.notify_user_tour;
 
 import entity.UserFactory;
 import org.json.JSONObject;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 
 public class NotifyInteractor implements NotifyInputBoundary {
     final NotifyDataAccess userDataAccessObject;
@@ -26,28 +26,26 @@ public class NotifyInteractor implements NotifyInputBoundary {
        try {
            // converting user input, so it will fit what the api expects
            String artistNameInput = notifyInputData.getFavouriteArtistNames();
-           String lowerArtistNames = artistNameInput.toLowerCase();
 
-           String[] artistNameList = lowerArtistNames.split(",");
-           ArrayList<String> hasFavouriteArtistConcert = new ArrayList<>();
+           String[] artistNameList = artistNameInput.split(",");
+           LinkedHashMap<String, String> hasFavouriteArtistConcert = new LinkedHashMap<>();
 
            for(String str : artistNameList){
 
-               String artistNames;
+               String artistName;
+               String lowerArtistName;
                if (str.contains(" ")){
-                   artistNames = str.replace(' ', '-');
+                   artistName = str.strip();
+                   lowerArtistName = artistName.toLowerCase();
                } else {
-                   artistNames = str;
+                   artistName = str;
+                   lowerArtistName = artistName.toLowerCase();
                }
-               JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistNames);
-
-               if (artistInfo.get("has_upcoming_events").equals(true)) {
-                   hasFavouriteArtistConcert.add("Your favourite artist is on tour!");
-               } else {
-                   hasFavouriteArtistConcert.add("Sorry, your favourite artist doesn't have any upcoming concerts :(");
-               }
+               String tourInfo = userDataAccessObject.hasATour(lowerArtistName, "music");
+               hasFavouriteArtistConcert.put(artistName, tourInfo);
 
            }
+
 
            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);

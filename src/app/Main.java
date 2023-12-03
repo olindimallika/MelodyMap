@@ -23,6 +23,9 @@ public class Main {
         JFrame application = new JFrame("Melody Map");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        ImageIcon icon = new ImageIcon("src/logo.png");
+        application.setIconImage(icon.getImage());
+
         CardLayout cardLayout = new CardLayout();
 
         JPanel views = new JPanel(cardLayout);
