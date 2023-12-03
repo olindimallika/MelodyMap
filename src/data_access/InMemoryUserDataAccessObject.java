@@ -29,6 +29,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
+    private String postalCode;
 
     /**
      * @param user the user's postal code
@@ -36,7 +37,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
      */
     @Override
     public List<Double> locationFinder(User user){
-        String postalCode = user.getPostalCode();
+        postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -248,5 +249,10 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     public boolean existsInApi() {
         return artistInfo != null;
     }
+
+    public String getPostalCode(){
+        return postalCode;
+    }
+
 
 }

@@ -28,12 +28,13 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
+    private String postalCode;
 
     public FileUserDataAccessObject() {
     }
 
     public List<Double> locationFinder(User user){
-        String postalCode = user.getPostalCode();
+        postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -222,6 +223,10 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public boolean existsInApi() {
         // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
         return artistInfo != null;
+    }
+
+    public String getPostalCode(){
+        return postalCode;
     }
 
 
