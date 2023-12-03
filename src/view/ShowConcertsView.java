@@ -88,7 +88,7 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
         this.add(hyperlink4);
         this.add(hyperlink5);
         this.add(buttons);
-        this.setPreferredSize(new Dimension(1200, 150));
+        this.setPreferredSize(new Dimension(1200, 250));
     }
 
     /**
