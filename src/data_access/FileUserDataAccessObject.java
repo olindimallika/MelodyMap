@@ -28,6 +28,9 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     private static final String CLIENT_ID = "d8de2f3b15464375938c514ed2e44270";
     private static final String CLIENT_SECRET = "f8fe086793894d13a54a778e1bad78e7";
 
+    private List<String> listFormatSimilarArtists = new ArrayList<>();
+    private String finalFormatSimilarArtists = "";
+
     static String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
@@ -158,24 +161,24 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return shows;
     }
 
-//    public String formatShows(LinkedHashMap<String, String> shows) {
-//
-//        StringBuilder formattedConcerts = new StringBuilder();
-//
-//        ArrayList<String> concerts = new ArrayList<>();
-//
-//        for (Map.Entry<String, String> entry : shows.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//            concerts.add(key + ": " + value);
-//        }
-//
-//        for (int i = 0; i < 5; i++){
-//            formattedConcerts.append(concerts.get(i));
-//            formattedConcerts.append("\n");
-//        }
-//        return formattedConcerts.toString();
-//    }
+    public String formatShows(LinkedHashMap<String, String> shows) {
+
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
+    }
 
     /**
      * @param postalCode the user's postal code
@@ -242,7 +245,31 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo != null;
     }
 
+    public String formatSimilarArtists(HashMap<String, List<String>> similarArtistsMap) {
 
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        List<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, List<String>> entry : similarArtistsMap.entrySet()) {
+
+            String key = entry.getKey();
+            String value = entry.getValue().toString();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
+    }
+
+    public String getFormatSimilarArtists() {
+        finalFormatSimilarArtists = String.join("", listFormatSimilarArtists);
+        return finalFormatSimilarArtists;
+        //return listFormatOutputPresale;
+    }
     @Override
     public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
         return null;

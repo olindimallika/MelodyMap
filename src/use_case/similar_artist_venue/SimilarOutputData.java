@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimilarOutputData {
+    private String finalFormatOutputSimilarArtist = "";
+
     private HashMap<String, List<String>> similarArtists = new HashMap<>();
 
     public SimilarOutputData() {
@@ -19,4 +21,7 @@ public class SimilarOutputData {
         return similarArtists;
     }
 
+    public String getFormatOutputSimilarArtist() {
+        return finalFormatOutputSimilarArtist;
+    }
 }

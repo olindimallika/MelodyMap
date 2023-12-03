@@ -3,7 +3,6 @@ package app;
 import entity.UserFactory;
 import entity.UserModelFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.similar_artist.SimilarArtistController;
 import interface_adapter.similar_artist.SimilarArtistPresenter;
 import interface_adapter.similar_artist.SimilarArtistViewModel;
@@ -47,6 +46,6 @@ public class SimilarArtistUseCaseFactory {
         SimilarInputBoundary userSimilarInteractor = new SimilarInteractor(
                 userDataAccessObject, similarOutputBoundary, userFactory);
 
-        return new SimilarArtistController(userSimilarInteractor, similarOutputBoundary);
+        return new SimilarArtistController(userSimilarInteractor);
     }
 }

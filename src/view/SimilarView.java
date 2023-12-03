@@ -236,7 +236,7 @@ JLabel hyperlink;
     }
     public void similarPropertyChange(PropertyChangeEvent evt){
         SimilarArtistState state = (SimilarArtistState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getFormatOutputPresale());
+        JOptionPane.showMessageDialog(this, state.getFinalFormatSimilarArtist());
     }
 
 

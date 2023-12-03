@@ -77,7 +77,7 @@ public class SimilarArtistState {
                 '}';
     }
 
-    public void setFavouriteArtistsErrro(String error) {
+    public void setFavouriteArtistsError(String error) {
         this.favouriteArtistError = favouriteArtistError;
     }
 
