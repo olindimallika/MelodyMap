@@ -46,7 +46,8 @@ public class NotifyPresenter implements NotifyOutputBoundary {
         artistMenuState.setArtistNotOnTour(artistNotOnTour);
         this.artistMenuViewModel.setState(artistMenuState);
         this.artistMenuViewModel.firePropertyChanged();
-        viewManagerModel.setActiveView(notifyViewModel.getViewName());
+
+        viewManagerModel.setActiveView(artistMenuViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 

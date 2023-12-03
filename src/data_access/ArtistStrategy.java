@@ -17,13 +17,6 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
     @Override
     public List<List<JSONObject>> getEvents(User user) throws IOException {
 
-        //LocationFinder helper = new LocationFinder();
-        //        List<Double> latlong = helper.locationFinder(user);
-        //
-        //        double lat1 = latlong.get(0);
-        //        double lat2 = latlong.get(1);
-        //        String strLatlong = lat1 + "," + lat2;
-
         String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
         String classification = "music";
 

@@ -3,6 +3,7 @@ package app;
 import entity.UserFactory;
 import entity.UserModelFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.artist_menu_tour.ArtistMenuViewModel;
 import interface_adapter.notify_user_tour.NotifyController;
 import interface_adapter.notify_user_tour.NotifyPresenter;
 import interface_adapter.notify_user_tour.NotifyViewModel;
@@ -20,10 +21,12 @@ public class NotifyUseCaseFactory {
     private NotifyUseCaseFactory() {}
 
     public static NotifyView create(
-            ViewManagerModel viewManagerModel, NotifyViewModel notifyViewModel, NotifyDataAccess userDataAccessObject) {
+            ViewManagerModel viewManagerModel, NotifyViewModel notifyViewModel, NotifyDataAccess userDataAccessObject,
+            ArtistMenuViewModel artistMenuViewModel) {
 
         try {
-            NotifyController notifyController = createUserNotifyUseCase(viewManagerModel, notifyViewModel, userDataAccessObject);
+            NotifyController notifyController = createUserNotifyUseCase(viewManagerModel, notifyViewModel,
+                    userDataAccessObject, artistMenuViewModel);
             return new NotifyView(notifyController, notifyViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -34,10 +37,11 @@ public class NotifyUseCaseFactory {
 
     private static NotifyController createUserNotifyUseCase(ViewManagerModel viewManagerModel,
                                                             NotifyViewModel notifyViewModel,
-                                                            NotifyDataAccess userDataAccessObject) throws IOException {
+                                                            NotifyDataAccess userDataAccessObject,
+                                                            ArtistMenuViewModel artistMenuViewModel) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        NotifyOutputBoundary notifyOutputBoundary = new NotifyPresenter(viewManagerModel, notifyViewModel);
+        NotifyOutputBoundary notifyOutputBoundary = new NotifyPresenter(viewManagerModel, notifyViewModel, artistMenuViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 

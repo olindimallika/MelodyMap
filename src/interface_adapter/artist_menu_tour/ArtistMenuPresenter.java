@@ -10,45 +10,26 @@ import use_case.artist_menu_tour.ArtistMenuTourOutputData;
 public class ArtistMenuPresenter implements ArtistMenuTourOutputBoundary {
 
     private final ArtistMenuViewModel artistMenuViewModel;
-    private final ArtistViewModel artistViewModel;
+//    private final ArtistViewModel artistViewModel;
 
     private ViewManagerModel viewManagerModel;
 
-    public ArtistMenuPresenter(ViewManagerModel viewManagerModel, ArtistMenuViewModel artistMenuViewModel,
-                               ArtistViewModel artistViewModel){
+    public ArtistMenuPresenter(ViewManagerModel viewManagerModel, ArtistMenuViewModel artistMenuViewModel){
         this.viewManagerModel = viewManagerModel;
-        this.artistViewModel = artistViewModel;
+//        this.artistViewModel = artistViewModel;
         this.artistMenuViewModel = artistMenuViewModel;
     }
 
-    //
-    //    @Override
-    //    public void prepareSuccessView(ShowConcertsOutputData response) {
-    //        // On success, we want to switch to the notify view
-    //
-    //        NotifyState notifyState = notifyViewModel.getState();
-    //        this.notifyViewModel.setState(notifyState);
-    //        this.notifyViewModel.firePropertyChanged();
-    //
-    //        viewManagerModel.setActiveView(notifyViewModel.getViewName());
-    //        viewManagerModel.firePropertyChanged();
-    //    }
-    //
-    //    @Override
-    //    public void prepareFailView(String error) {
-    //        ShowConcertsState showConcertsState = showConcertsViewModel.getState();
-    //        showConcertsState.setConcertsError(error);
-    //        showConcertsViewModel.firePropertyChanged();
-    //    }
+
     @Override
     public void prepareSuccessView(ArtistMenuTourOutputData response) {
 
         // on success we want to switch to artist view or similar artist view
-        ArtistState artistState = artistViewModel.getState();
-        this.artistViewModel.setState(artistState);
-        this.artistViewModel.firePropertyChanged();
+        ArtistMenuState artistState = artistMenuViewModel.getState();
+        this.artistMenuViewModel.setState(artistState);
+        this.artistMenuViewModel.firePropertyChanged();
 
-        viewManagerModel.setActiveView(artistViewModel.getViewName());
+        viewManagerModel.setActiveView(artistMenuViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 

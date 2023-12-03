@@ -2,6 +2,7 @@ package data_access;
 
 import entity.*;
 import org.json.JSONArray;
+import use_case.artist_menu_tour.ArtistMenuTourDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
@@ -18,10 +19,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistMenuTourDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "6d23eef602cc4b218db79d85609ddbfe";
+    private static final String locationFinderApiKey = "feaad5daa48247fd8ecaa9b3983c9383";
     private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
     public static final List<Double> geoPoint = new ArrayList<>();
