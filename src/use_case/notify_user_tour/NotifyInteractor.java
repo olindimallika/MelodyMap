@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 
 public class NotifyInteractor implements NotifyInputBoundary {
     final NotifyDataAccess userDataAccessObject;
@@ -25,25 +26,27 @@ public class NotifyInteractor implements NotifyInputBoundary {
        try {
            // converting user input, so it will fit what the api expects
            String artistNameInput = notifyInputData.getFavouriteArtistNames();
-           String lowerArtistNames = artistNameInput.toLowerCase();
 
-           String[] artistNameList = lowerArtistNames.split(",");
-           ArrayList<String> hasFavouriteArtistConcert = new ArrayList<>();
+           String[] artistNameList = artistNameInput.split(",");
+           LinkedHashMap<String, String> hasFavouriteArtistConcert = new LinkedHashMap<>();
 
            for(String str : artistNameList){
 
                String artistName;
+               String lowerArtistName;
                if (str.contains(" ")){
                    artistName = str.strip();
+                   lowerArtistName = artistName.toLowerCase();
                } else {
                    artistName = str;
+                   lowerArtistName = artistName.toLowerCase();
                }
-               String tourInfo = userDataAccessObject.hasATour(artistName, "music");
-               hasFavouriteArtistConcert.add(tourInfo);
+               String tourInfo = userDataAccessObject.hasATour(lowerArtistName, "music");
+               hasFavouriteArtistConcert.put(artistName, tourInfo);
 
            }
 
-           
+
            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);
 

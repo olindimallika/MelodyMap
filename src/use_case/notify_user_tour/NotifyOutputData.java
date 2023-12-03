@@ -2,14 +2,15 @@ package use_case.notify_user_tour;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class NotifyOutputData {
-    private final ArrayList<String> artistOnTour;
-    public NotifyOutputData(ArrayList<String> artistOnTour){
+    private final LinkedHashMap<String, String> artistOnTour;
+    public NotifyOutputData(LinkedHashMap<String, String> artistOnTour){
         this.artistOnTour = artistOnTour;
     }
 
-    public ArrayList<String> getArtistOnTour(){
+    public LinkedHashMap<String, String> getArtistOnTour(){
         return artistOnTour;
     }
 
