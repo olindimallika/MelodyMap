@@ -7,21 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimilarOutputData {
-    private String finalFormatOutputSimilarArtist = "";
+        private String finalFormatOutputSimilarArtist = "";
 
-    private String similarArtists = "";
 
-    public SimilarOutputData() {
-        this.similarArtists = similarArtists;
-    }
-    public SimilarOutputData(String similarArtists) {
-        this.similarArtists = similarArtists;
-    }
-    public String getSimilarArtists() {
-        return similarArtists;
-    }
+        public SimilarOutputData(String finalFormatOutputSimilarArtist) {
+            this.finalFormatOutputSimilarArtist = finalFormatOutputSimilarArtist;
+        }
 
-    public String getFinalFormatSimilarArtist() {
-        return finalFormatOutputSimilarArtist;
-    }
+
+        public String getFormatOutputSimilarArtist() {
+            return finalFormatOutputSimilarArtist;
+        }
+
 }

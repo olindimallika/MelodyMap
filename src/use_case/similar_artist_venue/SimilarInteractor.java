@@ -38,6 +38,7 @@ public class SimilarInteractor implements SimilarInputBoundary {
         }
     };
     final UserFactory userFactory;
+    public List<String> eventURL;
     static SimilarInputData similarInputData = new SimilarInputData();
 
     static FileUserDataAccessObject im = new FileUserDataAccessObject();
@@ -55,76 +56,104 @@ public class SimilarInteractor implements SimilarInputBoundary {
     @Override
     public void execute(SimilarInputData similarInputData) throws Exception {
 
-                String strFavArtists = similarInputData.getFavArtists();
-                String[] artistsArray = strFavArtists.split(", ");
-                List<String> artistList = Arrays.asList(artistsArray);
-                ArtistFactory artistFactory = new ArtistModelFactory();
-                List<Artist> favArtists = new ArrayList<>();
+        String strFavArtists = similarInputData.getFavArtists();
+        String[] artistsArray = strFavArtists.split(", ");
+        List<String> artistList = Arrays.asList(artistsArray);
+        ArtistFactory artistFactory = new ArtistModelFactory();
+        List<Artist> favArtists = new ArrayList<>();
 
-                for (String artistString : artistList) {
-                    Artist artist = artistFactory.create(artistString);
-                    favArtists.add(artist);
-                }
+        for (String artistString : artistList) {
+            Artist artist = artistFactory.create(artistString);
+            favArtists.add(artist);
+        }
 
-                // converting user input, so it will fit what the api expects
-                List<String> favouriteArtists = new ArrayList<>();
-                for (String str : artistList) {
-                    if (str.contains(" ")) {
-                        favouriteArtists.add(str.replace(' ', '-'));
-                    } else {
-                        favouriteArtists.add(str);
-                    }
-                }
-                UserBuilder builder = new UserBuilder();
-                User user = builder.addPostalCode(similarInputData.getPostalCode()).build();
-                // Use the data access object to get the similar artists
-                HashMap<String, List<String>> similarArtistsMap = new HashMap<>();
+        // converting user input, so it will fit what the api expects
+        List<String> favouriteArtists = new ArrayList<>();
+        for (String str : artistList) {
+            if (str.contains(" ")) {
+                favouriteArtists.add(str.replace(' ', '-'));
+            } else {
+                favouriteArtists.add(str);
+            }
+        }
+        UserBuilder builder = new UserBuilder();
+        User user = builder.addPostalCode(similarInputData.getPostalCode()).build();
+        HashMap<String, List<String>> similarArtistsMap = new HashMap<>();
 
-//                if (similarArtistsMap != null && !similarArtistsMap.isEmpty()) {
-//                    // If similar artists were found, prepare the success view
-//                    SimilarOutputData outputData = new SimilarOutputData(similarArtistsMap);
-//                    similarPresenter.prepareSuccessView(outputData);
-//                } else {
-//                    // If no similar artists were found, prepare the fail view
-//                    similarPresenter.prepareFailView("No similar artists found.");
-//                }
-
-                String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
-                String token = FileUserDataAccessObject.getToken();
-                Set<String> addedArtists = new HashSet<>();
-                for (Artist artist : favArtists) {
-                    addedArtists.add(artist.getName().toLowerCase());
-                }
-
-                for (String artistName : favouriteArtists) {
-                    JSONObject artist = FileUserDataAccessObject.searchForArtist(token, artistName);
-                    if (artist != null) {
-                        String artistId = artist.getString("id");
-                        JSONObject simArtists = FileUserDataAccessObject.getSimilarArtists(token, artistId);
-                        if (simArtists != null) {
-                            ArrayList<String> similarArtistNames = new ArrayList<>();
-                            JSONArray artists = simArtists.getJSONArray("artists");
-                            for (int j = 0; j < artists.length(); j++) {
-                                String similarArtistName = artists.getJSONObject(j).getString("name");
-                                if (!addedArtists.contains(similarArtistName.toLowerCase())) {
-                                    // Check if the similar artist has any events
-                                    String encodedArtistName = URLEncoder.encode(similarArtistName, StandardCharsets.UTF_8);
-                                    List<JSONObject> events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
-                                    if (!events.isEmpty()) {
-                                        similarArtistNames.add(similarArtistName);
-                                        addedArtists.add(similarArtistName.toLowerCase());
-                                    }
-                                }
+        List<JSONObject> events = new ArrayList<>();
+        String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+        String token = FileUserDataAccessObject.getToken();
+        Set<String> addedArtists = new HashSet<>();
+        for (Artist artist : favArtists) {
+            addedArtists.add(artist.getName().toLowerCase());
+        }
+        Iterator<String> iterator = favouriteArtists.iterator();
+        while (iterator.hasNext()) {
+            String artistName = iterator.next();
+            JSONObject artist = FileUserDataAccessObject.searchForArtist(token, artistName);
+            if (artist != null) {
+                String artistId = artist.getString("id");
+                JSONObject simArtists = FileUserDataAccessObject.getSimilarArtists(token, artistId);
+                if (simArtists != null) {
+                    ArrayList<String> similarArtistNames = new ArrayList<>();
+                    JSONArray artists = simArtists.getJSONArray("artists");
+                    for (int j = 0; j < artists.length(); j++) {
+                        String similarArtistName = artists.getJSONObject(j).getString("name");
+                        if (!addedArtists.contains(similarArtistName.toLowerCase())) {
+                            // Check if the similar artist has any events
+                            String encodedArtistName = URLEncoder.encode(similarArtistName, StandardCharsets.UTF_8);
+                            events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
+                            if (!events.isEmpty()) {
+                                similarArtistNames.add(similarArtistName);
+                                addedArtists.add(similarArtistName.toLowerCase());
                             }
-                            similarArtistsMap.put(artistName, similarArtistNames);
-                            System.out.println(similarArtistsMap);
-                        } else {
-                            System.out.println("No similar artists found for " + artistName);
                         }
-                    } else {
-                        System.out.println("No artist found with the name " + artistName);
                     }
+                    if (!similarArtistNames.isEmpty()) {
+                        similarArtistsMap.put(artistName, similarArtistNames);
+                        System.out.println(similarArtistsMap);
+                    } else {
+                        // Remove the artist from favouriteArtists if they don't have any events
+                        iterator.remove();
+                        System.out.println("No events found for " + artistName);
+                    }
+                } else {
+                    System.out.println("No similar artists found for " + artistName);
                 }
+            } else {
+                System.out.println("No artist found with the name " + artistName);
+            }
+        }
+
+//                for (String artistName : favouriteArtists) {
+//                    JSONObject artist = FileUserDataAccessObject.searchForArtist(token, artistName);
+//                    if (artist != null) {
+//                        String artistId = artist.getString("id");
+//                        JSONObject simArtists = FileUserDataAccessObject.getSimilarArtists(token, artistId);
+//                        if (simArtists != null) {
+//                            ArrayList<String> similarArtistNames = new ArrayList<>();
+//                            JSONArray artists = simArtists.getJSONArray("artists");
+//                            for (int j = 0; j < artists.length(); j++) {
+//                                String similarArtistName = artists.getJSONObject(j).getString("name");
+//                                if (!addedArtists.contains(similarArtistName.toLowerCase())) {
+//                                    // Check if the similar artist has any events
+//                                    String encodedArtistName = URLEncoder.encode(similarArtistName, StandardCharsets.UTF_8);
+//                                    events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
+//                                    if (!events.isEmpty()) {
+//                                        similarArtistNames.add(similarArtistName);
+//                                        addedArtists.add(similarArtistName.toLowerCase());
+//                                    }
+//                                }
+//                            }
+//                            similarArtistsMap.put(artistName, similarArtistNames);
+//                            System.out.println(similarArtistsMap);
+//                        } else {
+//                            System.out.println("No similar artists found for " + artistName);
+//                        }
+//                    } else {
+//                        System.out.println("No artist found with the name " + artistName);
+//                    }
+
                 for (Map.Entry<String, List<String>> entry : similarArtistsMap.entrySet()) {
                     int count = 0;
                     for (String artistName : entry.getValue()) {
@@ -132,12 +161,12 @@ public class SimilarInteractor implements SimilarInputBoundary {
                         while (!done) {
                             try {
                                 String encodedArtistName = URLEncoder.encode(artistName, StandardCharsets.UTF_8.toString());
-                                List<JSONObject> events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
+                                events = im.findEventsFromLatLong(im.locationFinder(user), 10, "miles", "music", encodedArtistName);
                                 if (count < 3) {
-                                    System.out.println("Similar artist for " + entry.getKey() + ": " + artistName);
-                                    System.out.println(im.getEventUrls(events));
+                                    eventURL.add("Similar artist for " + entry.getKey() + ": " + artistName + " " + im.getEventUrls(events);
                                     count++;
                                 }
+                                System.out.println(eventURL);
                                 done = true;
                             } catch (IOException e) {
                                 if (e.getMessage().contains("HTTP response code: 429")) {
@@ -154,8 +183,8 @@ public class SimilarInteractor implements SimilarInputBoundary {
                 }
                 if (similarArtistsMap != null && !similarArtistsMap.isEmpty()) {
                     // If similar artists were found, prepare the success view
-                    String output = im.formatSimilarArtists(similarArtistsMap);
-                    SimilarOutputData outputData = new SimilarOutputData(output);
+                    System.out.println(eventURL);
+                    SimilarOutputData outputData = new SimilarOutputData(eventURL);
                     similarPresenter.prepareSuccessView(outputData);
                 } else {
                     // If no similar artists were found, prepare the fail view

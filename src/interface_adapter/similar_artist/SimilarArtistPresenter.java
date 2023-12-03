@@ -17,7 +17,7 @@ public class SimilarArtistPresenter implements SimilarOutputBoundary {
     @Override
     public void prepareSuccessView(SimilarOutputData response) {
         SimilarArtistState similarArtistState = similarViewModel.getState();
-        similarArtistState.setFinalFormatSimilarArtist(response.getFinalFormatSimilarArtist());
+        similarArtistState.setFinalFormatSimilarArtist(response.getFormatOutputSimilarArtist());
         this.similarViewModel.setState(similarArtistState);
         this.similarViewModel.firePropertyChanged();
         viewManagerModel.setActiveView(similarViewModel.getViewName());

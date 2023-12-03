@@ -39,7 +39,7 @@ JLabel hyperlink;
     /**
      * A window with artists and their concert links.
      */
-    public SimilarView(SimilarArtistController controller, SimilarArtistViewModel similarArtistViewModel) {
+    public SimilarView(SimilarArtistController controller, SimilarArtistViewModel similarArtistViewModel) throws Exception{
         this.similarArtistController = controller;
         this.similarArtistViewModel = similarArtistViewModel;
         similarArtistViewModel.addPropertyChangeListener(this);

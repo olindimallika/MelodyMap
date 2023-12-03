@@ -35,7 +35,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "feaad5daa48247fd8ecaa9b3983c9383";
+    private static final String locationFinderApiKey = "d121a538d4924ef0a8951e8463b063e7";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -265,11 +265,17 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return formattedConcerts.toString();
     }
 
-    public String getFormatSimilarArtists() {
+    public String formatOutputSimilarArtist(String favArtist, String similarArtist, String artUrl){
+        String result = (favArtist + "\n" + ": "+ similarArtist +"\n"+ " Event Link: "+ artUrl + "\n"+ "\n");
+        listFormatSimilarArtists.add(result);
+        return result;
+    };
+    public String getFormatOutputPresale() {
         finalFormatSimilarArtists = String.join("", listFormatSimilarArtists);
         return finalFormatSimilarArtists;
         //return listFormatOutputPresale;
     }
+
     @Override
     public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
         return null;
