@@ -5,7 +5,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import interface_adapter.presale.PresaleViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
-
 import view.NotifyView;
 import view.PresaleView;
 import view.UpcomingView;
@@ -53,6 +52,11 @@ public class Main {
 
 //        viewManagerModel.setActiveView(notifyView.viewName);
 //        viewManagerModel.firePropertyChanged();
+
+
+        //presale
+        viewManagerModel.setActiveView(presaleView.viewName);
+        viewManagerModel.firePropertyChanged();
 
         application.pack();
         application.setVisible(true);

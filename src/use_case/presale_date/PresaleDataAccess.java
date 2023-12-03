@@ -1,11 +1,8 @@
 package use_case.presale_date;
 
-import entity.Artist;
 import entity.User;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,6 +18,12 @@ public interface PresaleDataAccess {
     boolean isPastPresale(String presaleEndDate);
 
     List<String> getEventUrls();
+
+    String getArtistName(JSONObject event);
+
+    String formatOutputPresale(String artName, String artUrl, String artPresale);
+
+    String getFormatOutputPresale();
 
 
     //List<Double> getLatLong(String postalCode);

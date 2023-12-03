@@ -35,7 +35,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         this.presaleController = controller;
         this.presaleViewModel = presaleViewModel;
         presaleViewModel.addPropertyChangeListener(this);
-        presaleViewModel.addPropertyChangeListener(this::showsPropertyChange);
+        presaleViewModel.addPropertyChangeListener(this::presalePropertyChange);
 
 
         JLabel title = new JLabel(PresaleViewModel.TITLE_LABEL);
@@ -60,13 +60,15 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
                         if (e.getSource().equals(enter)){
                             PresaleState currentState = presaleViewModel.getState();
 
+                            //presaleController.execute();
+
+
                             try {
-                                presaleController.execute(
-                                        currentState.getPostalCode(), currentState.getFavouriteArtist()
-                                );
+                                presaleController.execute(currentState.getPostalCode(), currentState.getFavArtists());
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
+
                         }
                     }
                 }
@@ -100,7 +102,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
                     public void keyTyped(KeyEvent e) {
                         PresaleState currentState = presaleViewModel.getState();
                         String text = favouriteArtistInputField.getText() + e.getKeyChar();
-                        currentState.setFavouriteArtist(text); //
+                        currentState.setFavArtists(text); //
                         presaleViewModel.setState(currentState);
                     }
 
@@ -138,9 +140,9 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         }
     }
 
-    public void showsPropertyChange(PropertyChangeEvent evt){
+    public void presalePropertyChange(PropertyChangeEvent evt){
         PresaleState state = (PresaleState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getPresaleDates());
+        JOptionPane.showMessageDialog(this, state.getFormatOutputPresale());
     }
 
 //    public void notifyPropertyChange(PropertyChangeEvent evt){

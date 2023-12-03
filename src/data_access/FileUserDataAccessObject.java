@@ -1,7 +1,6 @@
 package data_access;
 
 import entity.*;
-import okhttp3.internal.cache.CacheInterceptor;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.presale_date.PresaleDataAccess;
@@ -24,7 +23,7 @@ import java.util.*;
 public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, PresaleDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
+    private static final String locationFinderApiKey = "6d23eef602cc4b218db79d85609ddbfe";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -34,6 +33,15 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private List<String> presaleDates = new ArrayList<>();
     private List<String> eventUrls = new ArrayList<>();
+    private List<String> listFormatOutputPresale = new ArrayList<>();
+    private String finalFormatOutputPresale = "";
+
+
+    //private String idkFormatOutputPresale = "";
+
+
+
+    //private List<String> artName = new ArrayList<>();
 
     public FileUserDataAccessObject() {
     }
@@ -198,7 +206,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
             }
         } else {
             // If no presale date is available, add a placeholder or handle it as needed
-            presaleDates.add("No presale date available, click to see if theres tix available");
+            presaleDates.add("No presale date available. Click to see if theres tix available");
         }
     }
 
@@ -217,6 +225,12 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     }
 
+    public String formatOutputPresale(String artName, String artUrl, String artPresale){
+        String result = (artName + "\n" + "Event URL: "+artUrl +"\n"+ "Presale Status: "+ artPresale + "\n"+ "\n");
+        listFormatOutputPresale.add(result);
+        return result;
+    }
+
 
     public List<String> getEventUrls() {
         return eventUrls;
@@ -225,6 +239,14 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public List<String> getPresaleDates() {
         return presaleDates;
     }
+
+    public String getFormatOutputPresale() {
+        finalFormatOutputPresale = String.join("", listFormatOutputPresale);
+        return finalFormatOutputPresale;
+        //return listFormatOutputPresale;
+    }
+
+
 
 
 

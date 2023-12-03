@@ -41,7 +41,7 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 
             String artistName = artist.getName();
             String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-            String urlString = baseUrl + "?geoPoint=" + coordinates + "&classificationName=" + classification
+            String urlString = baseUrl + "?geoPoint=" + coordinates + "&radius=" + 50 + "&classificationName=" + classification
                     + "&keyword=" + artistName + "&apikey=" + apiKey;
 //            List<JSONObject> events = fetchEvents(urlString, latlong);
             ////            favArtistEvents.add(events);

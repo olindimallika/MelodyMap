@@ -10,7 +10,8 @@ public class PresalePresenter implements PresaleOutputBoundary {
 
 
 
-    public PresalePresenter(ViewManagerModel viewManagerModel,PresaleViewModel presaleViewModel) {
+    public PresalePresenter(ViewManagerModel viewManagerModel,
+                            PresaleViewModel presaleViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.presaleViewModel = presaleViewModel;
 
@@ -20,7 +21,8 @@ public class PresalePresenter implements PresaleOutputBoundary {
     @Override
     public void prepareSuccessView(PresaleOutputData response) {
         PresaleState presaleState = presaleViewModel.getState();
-        presaleState.setPresale(response.getPresaleDates());
+        presaleState.setFinalFormat(response.getFormatOutputPresale());
+        //presaleState.setPresale(response.getPresaleDates());
         this.presaleViewModel.setState(presaleState);
         this.presaleViewModel.firePropertyChanged();
 
