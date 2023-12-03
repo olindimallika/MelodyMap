@@ -26,6 +26,8 @@ public class SimilarArtistPresenter implements SimilarOutputBoundary {
 
     public void prepareFailView(String error) {
         SimilarArtistState similarArtistState = similarViewModel.getState();
+        similarArtistState.setPostalCodeError(error);
+        similarArtistState.setFavouriteArtistsErrro(error);
         similarArtistState.setSimilarArtistError(error);
         similarViewModel.firePropertyChanged();
     }

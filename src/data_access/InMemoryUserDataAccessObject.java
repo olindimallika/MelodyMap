@@ -10,6 +10,7 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.similar_artist_venue.SimilarDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import java.io.BufferedReader;
@@ -23,7 +24,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
 
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess {
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, SimilarDataAccess {
     private static final String CLIENT_ID = "d8de2f3b15464375938c514ed2e44270";
     private static final String CLIENT_SECRET = "f8fe086793894d13a54a778e1bad78e7";
 
@@ -256,6 +257,11 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     @Override
     public boolean existsInApi() {
         return artistInfo != null;
+    }
+
+    @Override
+    public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
+        return null;
     }
 
     //////////////////////// FOR SIMILAR ARTIST USE CASE /////////////////////////////

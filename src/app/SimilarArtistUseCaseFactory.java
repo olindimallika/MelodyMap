@@ -3,6 +3,7 @@ package app;
 import entity.UserFactory;
 import entity.UserModelFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.similar_artist.SimilarArtistController;
 import interface_adapter.similar_artist.SimilarArtistPresenter;
 import interface_adapter.similar_artist.SimilarArtistViewModel;
@@ -16,12 +17,13 @@ import javax.swing.*;
 import java.io.IOException;
 
 public class SimilarArtistUseCaseFactory {
-    private SimilarArtistUseCaseFactory() {}
+    private SimilarArtistUseCaseFactory() {
+    }
 
     public static SimilarView create(
             ViewManagerModel viewManagerModel,
             SimilarArtistViewModel similarArtistViewModel,
-            SimilarDataAccess userDataAccessObject) {
+             SimilarDataAccess userDataAccessObject) {
 
         try {
             SimilarArtistController similarArtistController = createUserUpcomingUseCase(viewManagerModel, similarArtistViewModel, userDataAccessObject);
@@ -45,7 +47,6 @@ public class SimilarArtistUseCaseFactory {
         SimilarInputBoundary userSimilarInteractor = new SimilarInteractor(
                 userDataAccessObject, similarOutputBoundary, userFactory);
 
-        return new SimilarArtistController(userSimilarInteractor);
+        return new SimilarArtistController(userSimilarInteractor, similarOutputBoundary);
     }
-
 }

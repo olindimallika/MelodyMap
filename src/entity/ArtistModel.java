@@ -13,4 +13,9 @@ class ArtistModel implements Artist {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toLowerCase() {
+        return null;
+    }
 }

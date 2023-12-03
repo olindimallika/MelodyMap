@@ -16,17 +16,28 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, SimilarDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess,
+        SimilarDataAccess {
+    private static final String CLIENT_ID = "d8de2f3b15464375938c514ed2e44270";
+    private static final String CLIENT_SECRET = "f8fe086793894d13a54a778e1bad78e7";
+
+    static String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
+    private static final String locationFinderApiKey = "feaad5daa48247fd8ecaa9b3983c9383";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     private static final List<Double> geoPoint = new ArrayList<>();
+    private String postalCode;
 
     private JSONObject artistInfo;
 
@@ -34,7 +45,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     }
 
     public List<Double> locationFinder(User user){
-        String postalCode = user.getPostalCode();
+        postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -60,7 +71,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return geoPoint;
     }
 
-    @Override
+//    @Override
     public boolean existsInCoord(String postalCode) {
         return false;
     }
@@ -128,11 +139,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         double x = lat1 * (Math.PI / 180);
         double y = lat2 * (Math.PI / 180);
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
-    }
-
-    @Override
-    public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
-        return null;
     }
 
     public String getEventUrl(JSONObject event) {
@@ -237,4 +243,133 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     }
 
 
+    @Override
+    public HashMap<String, List<String>> getSimilarArtists(List<String> favouriteArtists) {
+        return null;
+    }
+
+    //////////////////////// FOR SIMILAR ARTIST USE CASE /////////////////////////////
+    public List<JSONObject> findEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException, InterruptedException {
+        double lat1 = latlong.get(0);
+        double long2 = latlong.get(1);
+        String strLatlong = Double.toString(lat1) + "," + Double.toString(long2);
+
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        String urlString = baseUrl + "?geoPoint=" + strLatlong;
+
+        // Append radius, unit, classification, and artist name if provided
+        if (radius > 0 && unit != null) {
+            urlString += "&radius=" + radius + "&unit=" + unit;
+        }
+
+        if (classification != null) {
+            urlString += "&classificationName=" + classification;
+        }
+
+        if (artistName != null) {
+            urlString += "&keyword=" + artistName;
+        }
+        urlString += "&apikey=" + apiKey;
+        URL url = new URL(urlString);
+        Scanner scanner = new Scanner(url.openStream());
+        StringBuilder jsonContent = new StringBuilder();
+        while (scanner.hasNext()) {
+            jsonContent.append(scanner.nextLine());
+        }
+
+        scanner.close();
+        List<JSONObject> events = new ArrayList<>();
+
+        JSONObject obj = new JSONObject(jsonContent.toString());
+
+        // Check if _embedded is a JSONArray
+        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+            JSONObject embedded = obj.getJSONObject("_embedded");
+
+            if (embedded.has("events")) {
+                JSONArray eventsArray = embedded.getJSONArray("events");
+
+
+                for (int i = 0; i < eventsArray.length(); i++) {
+                    events.add(eventsArray.getJSONObject(i));
+                }
+                // Sort events based on distance
+                events.sort(Comparator.comparingDouble(event ->
+                        calculateDistance(latlong,
+                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
+                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"))));
+            }
+        }
+        return events;
+    }
+    public static double calculateDistance(List<Double> latlong, double lat2, double lon2) {
+        double lat1 = latlong.get(0);
+        double lon1 = latlong.get(1);
+        double x = lat1 * (Math.PI / 180);
+        double y = lat2 * (Math.PI / 180);
+        // Equation - need to fix
+        return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
+    }
+    public String getEventUrls(List<JSONObject> eventList) {
+        for (JSONObject event : eventList) {
+            if (event.has("url")) {
+                return event.getString("url");
+            } else {
+                return ("No URL found for this event.");
+            }
+        }
+        return "";
+    }
+    public static String getToken() throws Exception {
+        String authString = CLIENT_ID + ":" + CLIENT_SECRET;
+        String authBase64 = Base64.getEncoder().encodeToString(authString.getBytes());
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://accounts.spotify.com/api/token"))
+                .header("Authorization", "Basic " + authBase64)
+                .header("Content-Type", "application/x-www-form-urlencoded")
+                .POST(HttpRequest.BodyPublishers.ofString("grant_type=client_credentials"))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject jsonResult = new JSONObject(response.body());
+        return jsonResult.getString("access_token");
+    }
+    public static JSONObject searchForArtist(String token, String artistName) throws Exception {
+        artistName = artistName.replace(" ", "%20");  // replace spaces with %20
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://api.spotify.com/v1/search?q=" + artistName + "&type=artist&limit=1"))
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject jsonResult = new JSONObject(response.body());
+        JSONArray items = jsonResult.getJSONObject("artists").getJSONArray("items");
+        if (items.length() == 0) {
+            System.out.println("No artist with this name exists");
+            return null;
+        }
+        return items.getJSONObject(0);
+    }
+
+
+    public static JSONObject getSimilarArtists(String token, String artistId) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(new URI("https://api.spotify.com/v1/artists/" + artistId + "/related-artists"))
+                .header("Authorization", "Bearer " + token)
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject jsonResult = new JSONObject(response.body());
+        if (jsonResult.getJSONArray("artists").length() == 0) {
+            System.out.println("No similar artists");
+            return null;
+        }
+        return jsonResult;
+    }
 }
