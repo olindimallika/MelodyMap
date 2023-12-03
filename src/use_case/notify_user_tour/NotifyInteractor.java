@@ -43,9 +43,7 @@ public class NotifyInteractor implements NotifyInputBoundary {
 
            }
 
-           // testing get postal code method
-           // System.out.println(userDataAccessObject.getPostalCode());
-
+           
            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);
 

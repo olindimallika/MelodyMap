@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 public class NotifyView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "notify user tour";
     private final NotifyViewModel notifyViewModel;
-    private final JTextField favouriteArtistInputField = new JTextField(15);
+    private final JTextField favouriteArtistInputField = new JTextField(50);
 
     private final NotifyController notifyController;
 
@@ -31,9 +31,11 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
 
         JLabel title = new JLabel(NotifyViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial Bold", Font.PLAIN,15));
 
-        LabelTextPanel userFavouriteArtist = new LabelTextPanel(
-                new JLabel(NotifyViewModel.ARTIST_LABEL), favouriteArtistInputField);
+        JLabel favouriteArtistLabel = new JLabel(NotifyViewModel.ARTIST_LABEL);
+
+        LabelTextPanel favouriteArtist = new LabelTextPanel(favouriteArtistInputField);
 
         JPanel buttons = new JPanel();
         check = new JButton(NotifyViewModel.CHECK_BUTTON_LABEL);
@@ -74,10 +76,10 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
-        this.add(userFavouriteArtist);
+        this.add(favouriteArtistLabel);
+        this.add(favouriteArtist);
         this.add(buttons);
 
     }
