@@ -33,7 +33,6 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
         double lat1 = helper.locationFinder(user).get(0);
         double lat2 = helper.locationFinder(user).get(1);
         String coordinates = lat1 + "," + lat2;
-
         List<Artist> favArtists = user.getFavouriteArtist();
         List<List<JSONObject>> favArtistsEvents = new ArrayList<>();
 
@@ -41,7 +40,7 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 
             String artistName = artist.getName();
             String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-            String urlString = baseUrl + "?geoPoint=" + coordinates + "&classificationName=" + classification
+            String urlString = baseUrl + "?geoPoint=" + coordinates + "&radius=" + 50 + "&classificationName=" + classification
                     + "&keyword=" + artistName + "&apikey=" + apiKey;
 //            List<JSONObject> events = fetchEvents(urlString, latlong);
             ////            favArtistEvents.add(events);

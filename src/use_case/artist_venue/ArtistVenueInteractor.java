@@ -1,16 +1,14 @@
 package use_case.artist_venue;
 
 import data_access.ArtistStrategy;
+import data_access.EventProcesser;
 import entity.*;
 import org.json.JSONObject;
 import use_case.EventStrategy;
 import use_case.upcoming_shows.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 
 public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
@@ -30,130 +28,47 @@ public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
     @Override
     public void execute(ArtistVenueInputData artistVenueInputData) throws IOException {
         try {
-            UserFactory userFactory = new UserModelFactory();
+            String strFavArtists = artistVenueInputData.getFavouriteArtist();
+            String[] artistsArray = strFavArtists.split(", ");
+            List<String> artistList = Arrays.asList(artistsArray);
             ArtistFactory artistFactory = new ArtistModelFactory();
+            ArrayList<Artist> favArtists = new ArrayList<>();
 
-            List<String> artists = artistVenueInputData.getFavouriteArtist();
 
-            for (String string : artists) {
-                artistFactory.create(string);
+            for (String artistString : artistList) {
+                Artist artist = artistFactory.create(artistString);
+                favArtists.add(artist);
+            }
+
+            UserFactory userFactory = new UserModelFactory();
+            User user = userFactory.create(artistVenueInputData.getPostalCode(), favArtists);
+
+            ArtistStrategy artistStrategy = new ArtistStrategy();
+
+            EventProcesser<List<List<JSONObject>>> eventProcesser = new EventProcesser(artistStrategy);
+            List<List<JSONObject>> events = eventProcesser.processEvent(user);
+
+            if (events.isEmpty()) {
+                artistPresenter.prepareFailView("Sorry none of your favourite artists have shows playing near you");
+            } else {
+                System.out.println("\n");
+
+                LinkedHashMap<String, String> allShows = new LinkedHashMap<>();
+                for (List<JSONObject> artistEvents : events) {
+                    LinkedHashMap<String, String> shows = artistVenueDataAccessObject.getUpcomingShows(artistEvents);
+                    allShows.putAll(shows);
+                }
+
+                String upcomingShows = artistVenueDataAccessObject.formatShows(allShows);
+                ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(upcomingShows);
+                artistPresenter.prepareSuccessView(artistVenueOutputData);
 
             }
-//            UserBuilder builder = new UserBuilder();
-//            User user = builder.addPostalCode(artistVenueInputData.getPostalCode()).build();
-//            ArtistFactory artistFactory = new A
-//            ArrayList<Artist> favArtists = artistVenueInputData.getFavouriteArtist();
-//            UserFactory factory = new UserFactory() {
-//                @Override
-//                public User create(String postalCode, ArrayList<Artist> favouriteArtist) {
-//                    return null;
-//                }
-//            };
-//            User user = builder.addPostalCode(artistVenueInputData.getPostalCode()).build();
-//            ArrayList<Artist> favArtists = artistVenueInputData.getFavouriteArtist();
-
-//
-//            for (Artist artist : favArtists) {
-//                ArtistFactory artistFactory = new ArtistModelFactory();
-//                Artist recentArtist = artistFactory.create(artist.getName());
-//            }
-            EventStrategy artistStrategy = new ArtistStrategy();
-//            artistStrategy.getEvents(artist)
-            List<List<JSONObject>> events = artistStrategy.getEvents();
-
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
-//             if (artistVenueDataAccessObject.artistEvents(postalCode, favouriteArtists).isEmpty()) {
-////                artistPresenter.prepareFailView("Sorry none of your favourite artists have shows playing near you.");
-//                    if (userDataAccessObject.existsInCoords(upcomingInputData.getPostalCode())){
-//                        userPresenter.prepareFailView("Unable to find coordinates for postal code.");
-//                    } else {
-//                        System.out.println("\n");
-//                        int radius = 10;
-//                        String unit = "miles";
-//
-//                        UserBuilder builder = new UserBuilder();
-//                        User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
-//                        List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
-//
-//                        LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
-//                        String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
-//
-//                        UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
-//                        userPresenter.prepareSuccessView(upcomingOutputData);
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }
-//
-//
-////        public class UpcomingInteractor implements UpcomingInputBoundary {
-////            final UpcomingDataAccess userDataAccessObject;
-////            final UpcomingOutputBoundary userPresenter;
-////            final UserFactory userFactory;
-////
-////            public UpcomingInteractor(UpcomingDataAccess userDataAccessInterface,
-////                                      UpcomingOutputBoundary upcomingOutputBoundary,
-////                                      UserFactory userFactory){
-////                this.userDataAccessObject = userDataAccessInterface;
-////                this.userPresenter = upcomingOutputBoundary;
-////                this.userFactory = userFactory;
-////            }
-////
-////            public void execute(UpcomingInputData upcomingInputData){
-////
-////                try {
-////                    if (userDataAccessObject.existsInCoords(upcomingInputData.getPostalCode())){
-////                        userPresenter.prepareFailView("Unable to find coordinates for postal code.");
-////                    } else {
-////                        System.out.println("\n");
-////                        int radius = 10;
-////                        String unit = "miles";
-////
-////                        UserBuilder builder = new UserBuilder();
-////                        User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
-////                        List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
-////
-////                        LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
-////                        String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
-////
-////                        UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
-////                        userPresenter.prepareSuccessView(upcomingOutputData);
-////                    }
-////                } catch (Exception e) {
-////                    e.printStackTrace();
-////                    throw new RuntimeException(e);
-////                }
-////            }
-////        }
-//
-//
-////        if (artistVenueDataAccessObject.getLatLong(postalCode) == coordinates) {
-////            artistPresenter.prepareFailView("This is an invalid Canadian Postal Code. Please try again.");
-////        } else {
-////            if (artistVenueDataAccessObject.artistEvents(postalCode, favouriteArtists).isEmpty()) {
-////                artistPresenter.prepareFailView("Sorry none of your favourite artists have shows playing near you.");
-////            } else { //There are upcoming events
-//////                for (TestArtist artist : favouriteArtists) {
-//////                    String artistName = artist.getName();
-//////                iterate through artistVenueDataAccessObject.artistEvents(postalCode, favouriteArtists)
-////                // get artist name, and get their events create hashmap with artist name as key, value is an array list of events
-////                ArtistVenueOutputData artistVenuesData = new ArtistVenueOutputData();
-////
-////                // Adding events for artists
-////                //artistVenuesData.addEvent("Artist1", new ArtistVenueOutputData.Event("Event1"));
-////                // ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(new);
-////                //THIS ISNT CORRECT
-////                }
-////            }
-////        }
-////    }
-//
-//
-//
+
+

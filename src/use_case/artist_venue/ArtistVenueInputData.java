@@ -8,9 +8,9 @@ import java.util.List;
 public class ArtistVenueInputData {
 
     final private String postalCode;
-    final private List<String> favouriteArtist;
+    final private String favouriteArtist;
 
-    public ArtistVenueInputData(String postalCode, List<String> favouriteArtist) {
+    public ArtistVenueInputData(String postalCode, String favouriteArtist) {
         this.postalCode = postalCode;
         this.favouriteArtist = favouriteArtist;
     }
@@ -20,7 +20,7 @@ public class ArtistVenueInputData {
         return postalCode;
     }
 
-    List<String> getFavouriteArtist() {
+    String getFavouriteArtist() {
 
         return favouriteArtist;
     }

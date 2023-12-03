@@ -5,14 +5,14 @@ import use_case.EventStrategy;
 
 import java.io.IOException;
 
-public class EventProcesser {
-    private EventStrategy eventStrategy;
+public class EventProcesser<T> {
+    private final EventStrategy<T> eventStrategy;
 
-    public EventProcesser(EventStrategy eventStrategy) {
+    public EventProcesser(EventStrategy<T> eventStrategy) {
         this.eventStrategy = eventStrategy;
     }
 
-    public Object processEvent(User user) throws IOException {
+    public T processEvent(User user) throws IOException {
         return eventStrategy.getEvents(user);
     }
 

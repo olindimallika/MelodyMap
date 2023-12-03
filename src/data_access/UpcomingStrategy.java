@@ -24,9 +24,9 @@ public class UpcomingStrategy implements EventStrategy<List<JSONObject>> {
 
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
-        String strLatlong = lat1 + "," + lat2;
+        String coordinates = lat1 + "," + lat2;
         String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-        String urlString = baseUrl + "?geoPoint=" + strLatlong + "&classificationName=" + classification + "&apikey=" + apiKey;
+        String urlString = baseUrl + "?geoPoint=" + coordinates + "&radius=" + 50 + "&classificationName=" + classification + "&apikey=" + apiKey;
 
         EventsByUrl findEvents = new EventsByUrl();
         List<JSONObject> upcomingEvents = findEvents.fetchEvents(urlString, user);
