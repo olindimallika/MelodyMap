@@ -7,6 +7,7 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.artist_venue.ArtistController;
 import interface_adapter.artist_venue.ArtistPresenter;
 import interface_adapter.artist_venue.ArtistViewModel;
+import interface_adapter.notify_user_tour.NotifyViewModel;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.artist_venue.ArtistVenueInputBoundary;
 import use_case.artist_venue.ArtistVenueInteractor;
@@ -26,11 +27,10 @@ public class ArtistVenueUseCaseFactory {
     public static ArtistVenueView create(
             ViewManagerModel viewManagerModel,
             ArtistViewModel artistViewModel,
-            ArtistVenueDataAccess userDataAccessObject
-    ) {
+            ArtistVenueDataAccess userDataAccessObject, NotifyViewModel notifyViewModel) {
 
         try {
-            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAccessObject);
+            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAccessObject, notifyViewModel);
             return new ArtistVenueView(artistController, artistViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -42,10 +42,10 @@ public class ArtistVenueUseCaseFactory {
     private static ArtistController createArtistVenueUseCase(
             ViewManagerModel viewManagerModel,
             ArtistViewModel artistViewModel,
-            ArtistVenueDataAccess userDataAccessObject) throws IOException {
+            ArtistVenueDataAccess userDataAccessObject, NotifyViewModel notifyViewModel) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel);
+        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel, notifyViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 
@@ -57,25 +57,7 @@ public class ArtistVenueUseCaseFactory {
 }
 
 
-//public class ArtistVenueUseCaseFactory {
-//
-//    private ArtistVenueUseCaseFactory() {
-//
-//    }
-//    public static ArtistVenueView create(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel, ArtistVenueDataAccess
-//            userDataAcessObject) {
-//        try {
-//        ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAcessObject);
-//        return new ArtistVenueView(artistController, artistViewModel);
-//    }
-//
-//    private static ArtistController createArtistVenueUseCase(ViewManagerModel viewManagerModel,
-//                                                             ArtistViewModel artistViewModel,
-//                                                             ArtistVenueDataAccess userDataAccessObject) {
-//
-//        }
-//
-//    }
+
         
     
     // private ShowConcertsUseCaseFactory() {}
