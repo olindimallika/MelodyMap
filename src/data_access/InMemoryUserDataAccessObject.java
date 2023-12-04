@@ -1,35 +1,45 @@
 package data_access;
 
-import entity.Artist;
-import entity.ArtistFactory;
-import entity.ArtistModelFactory;
-import entity.User;
+import entity.*;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.testng.annotations.Test;
+import use_case.EventStrategy;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.presale_date.*;
 import use_case.upcoming_shows.UpcomingDataAccess;
+import use_case.presale_date.PresaleDataAccess;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ArtistVenueDataAccess {
+import static org.testng.Assert.*;
+
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ArtistVenueDataAccess, PresaleDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String locationFinderApiKey = "d121a538d4924ef0a8951e8463b063e7";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
+
+    private List<String> presaleDates = new ArrayList<>();
+    private List<String> eventUrls = new ArrayList<>();
+    private List<String> listFormatOutputPresale = new ArrayList<>();
+    private String finalFormatOutputPresale = "";
 
 
     /**
@@ -133,6 +143,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return events;
     }
 
+
     /**
      * @param lat2 the user's latitude coordinate from their postal code
      * @param lon2 the user's longitude coordinate from their postal code
@@ -164,11 +175,6 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
      * @param event concert event from the ticketmaster api
      * @return the name of the artist who is holding the given ticketmaster concert
      */
-    @Override
-    public String getArtistName(JSONObject event) {
-        Artist artist = new ArtistModelFactory().create(event.getString("name"));
-        return artist.getName();
-    }
 
     /**
      * @param events concert events from ticketmaster api
@@ -284,5 +290,134 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     public boolean existsInApi() {
         return artistInfo != null;
     }
+
+    //////////////////////// FOR PRESALE USER TOUR USE CASE /////////////////////////////
+//    ----List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification, User user) throws Exception;
+//
+//    //List<String> getEventUrls();
+//    List<String> getPresaleDates();
+
+
+    @Override
+    public List<String> getPresaleDates() {
+        return presaleDates;
+    }
+
+    @Override
+    public void addEventInfo(JSONObject event) {
+        // Extract and store the URL
+        String url = event.getString("url");
+        eventUrls.add(url);
+
+        // Extract and store presale date if available
+        if (event.has("sales") && event.getJSONObject("sales").has("presales")) {
+            JSONArray presalesArray = event.getJSONObject("sales").getJSONArray("presales");
+            for (int j = 0; j < presalesArray.length(); j++) {
+                JSONObject presale = presalesArray.getJSONObject(j);
+                String startPresaleDate = presale.getString("startDateTime");
+                String endPresaleDate = presale.getString("endDateTime");
+
+                if (isPastPresale(endPresaleDate)) {
+                    presaleDates.add("You missed the presale. Go to general sale by clicking link");
+                } else {
+                    String intervalPresale = "Presale is happening now until "+ endPresaleDate + " click the link to go to presale.";
+                    presaleDates.add(intervalPresale);
+                }
+            }
+        } else {
+            // If no presale date is available, add a placeholder or handle it as needed
+            presaleDates.add("No presale date available. Click to see if theres tix available");
+        }
+    }
+
+    @Override
+    public boolean isPastPresale(String presaleEndDate){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            Date endDate = sdf.parse(presaleEndDate);
+            Date currentDate = new Date();
+
+            return currentDate.after(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Handle the parse exception as needed
+            return false;
+        }
+    }
+
+    @Override
+    public List<String> getEventUrls() {
+        return eventUrls;
+    }
+
+    @Override
+    public String formatOutputPresale(String artName, String artUrl, String artPresale){
+        String result = (artName + "\n" + "Event URL: "+artUrl +"\n"+ "Presale Status: "+ artPresale + "\n"+ "\n");
+        listFormatOutputPresale.add(result);
+        return result;
+    }
+
+    @Override
+    public String getFormatOutputPresale() {
+        finalFormatOutputPresale = String.join("", listFormatOutputPresale);
+        return finalFormatOutputPresale;
+        //return listFormatOutputPresale;
+    }
+
+    @Override
+    public String getArtistName(JSONObject event) {
+        Artist artist = new ArtistModelFactory().create(event.getString("name"));
+        return artist.getName();
+    }
+//
+//    void addEventInfo(JSONObject event);
+//
+//    boolean isPastPresale(String presaleEndDate);
+//
+//    List<String> getEventUrls();
+//
+//    String getArtistName(JSONObject event);
+//
+//    String formatOutputPresale(String artName, String artUrl, String artPresale);
+//
+//    String getFormatOutputPresale();
+
+
+
+
+//    @Test
+//    void successTest() {
+//        PresaleInputData inputData = new PresaleInputData("M1E4N3", "Taylor Swift");
+//        PresaleDataAccess userRepository = new InMemoryUserDataAccessObject();
+//
+//        // This creates a successPresenter that tests whether the test case is as we expect.
+//        PresaleOutputBoundary successPresenter = new PresaleOutputBoundary() {
+//            @Override
+//            public void prepareSuccessView(PresaleOutputData user) {
+//                // 2 things to check: the output data is correct, and the user has been created in the DAO.
+//                assertEquals("Olivia Rodrigo - GUTS world tour\n" +
+//                        "Event URL: https://www.ticketmaster.ca/olivia-rodrigo-guts-world-tour-toronto-ontario-03-29-2024/event/10005F2839E1667D\n" +
+//                        "Presale Status: No presale date available. Click to see if theres tix available\n" +
+//                        "\n" +
+//                        "Olivia Rodrigo - GUTS world tour\n" +
+//                        "Event URL: https://www.ticketmaster.ca/olivia-rodrigo-guts-world-tour-toronto-ontario-03-30-2024/event/10005F2E0D0460DE\n" +
+//                        "Presale Status: No presale date available. Click to see if theres tix available\n" +
+//                        "\n" +
+//                        "\n",user.getFormatOutputPresale());
+//                //assertTrue(userRepository.existsByName("Olivia Rodrigo"));
+//            }
+//
+//            @Override
+//            public void prepareFailView(String error) {
+//                fail("Use case failure is unexpected.");
+//            }
+//        };
+//
+//        //EventStrategy eventStrategy = new EventStrategy(); {
+//
+//
+////        PresaleInputBoundary interactor = new PresaleInteractor(userRepository, EventStrategy eventStrategy, new UserModelFactory());
+////        interactor.execute(inputData);
+//    }
 
 }

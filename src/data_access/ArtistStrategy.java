@@ -94,4 +94,3 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 //        }
 //    }
 //}
-

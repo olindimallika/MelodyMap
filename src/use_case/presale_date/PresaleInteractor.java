@@ -49,7 +49,7 @@ public class PresaleInteractor implements PresaleInputBoundary {
             }
 
             UserFactory userFactory = new UserModelFactory();
-            User user = userFactory.create(presaleDataAccessObject.getPostalCode(), favArtists);
+            User user = userFactory.create(presaleInputData.getPostalCode(), favArtists);
 
             EventStrategy artistStrategy = new ArtistStrategy();
 
