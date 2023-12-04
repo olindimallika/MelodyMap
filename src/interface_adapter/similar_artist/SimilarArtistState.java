@@ -1,8 +1,5 @@
 package interface_adapter.similar_artist;
 
-import use_case.similar_artist_venue.SimilarInputData;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

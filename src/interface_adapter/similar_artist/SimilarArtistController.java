@@ -3,7 +3,6 @@ package interface_adapter.similar_artist;
 import use_case.similar_artist_venue.SimilarInputBoundary;
 import use_case.similar_artist_venue.SimilarInputData;
 
-import java.util.List;
 
 public class SimilarArtistController {
     private SimilarInputBoundary userSimilarUseCaseInteractor;

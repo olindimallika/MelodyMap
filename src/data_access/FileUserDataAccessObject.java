@@ -245,21 +245,10 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo != null;
     }
 
-    public String formatSimilarArtists(HashMap<String, List<String>> similarArtistsMap) {
-
+    public String formatSimilarArtists(List<String> events) {
         StringBuilder formattedConcerts = new StringBuilder();
-
-        List<String> concerts = new ArrayList<>();
-
-        for (Map.Entry<String, List<String>> entry : similarArtistsMap.entrySet()) {
-
-            String key = entry.getKey();
-            String value = entry.getValue().toString();
-            concerts.add(key + ": " + value);
-        }
-
-        for (int i = 0; i < 5; i++){
-            formattedConcerts.append(concerts.get(i));
+        for (int i = 0; i < events.size(); i++){
+            formattedConcerts.append(events.get(i));
             formattedConcerts.append("\n");
         }
         return formattedConcerts.toString();

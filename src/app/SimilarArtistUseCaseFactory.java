@@ -26,7 +26,7 @@ public class SimilarArtistUseCaseFactory {
 
         try {
             SimilarArtistController similarArtistController = createUserUpcomingUseCase(viewManagerModel, similarArtistViewModel, userDataAccessObject);
-            return new SimilarView(similarArtistController, similarArtistViewModel);
+            return new SimilarView(similarArtistController, similarArtistViewModel, personalize);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
         } catch (Exception e) {

@@ -1,10 +1,12 @@
 package view;
 
 import interface_adapter.notify_user_tour.NotifyViewModel;
+import interface_adapter.show_concerts.ShowConcertsController;
+import interface_adapter.show_concerts.ShowConcertsState;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.similar_artist.SimilarArtistController;
 import interface_adapter.similar_artist.SimilarArtistState;
 import interface_adapter.similar_artist.SimilarArtistViewModel;
-import use_case.similar_artist_venue.SimilarInputData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +17,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-import java.util.List;
 
-public class SimilarView extends JPanel implements ActionListener, PropertyChangeListener {
+public class SimilarView extends JPanel implements ActionListener, PropertyChangeListener  {
 
     public final String viewName = "similar artists";
     private final SimilarArtistViewModel similarArtistViewModel;
@@ -28,18 +29,18 @@ public class SimilarView extends JPanel implements ActionListener, PropertyChang
 
 
     private final JButton enter;
-//
-JLabel hyperlink;
-//    JLabel hyperlink2;
-//    JLabel hyperlink3;
-//    JLabel hyperlink4;
-//    JLabel hyperlink5;
-//
-//    final JButton findSimilarArtistsButton;
+
+    JLabel hyperlink;
+    JLabel hyperlink2;
+    JLabel hyperlink3;
+    JLabel hyperlink4;
+    JLabel hyperlink5;
+
+    final JButton personalize;
     /**
      * A window with artists and their concert links.
      */
-    public SimilarView(SimilarArtistController controller, SimilarArtistViewModel similarArtistViewModel) throws Exception{
+    public SimilarView(SimilarArtistController controller, SimilarArtistViewModel similarArtistViewModel, JButton personalize) throws Exception{
         this.similarArtistController = controller;
         this.similarArtistViewModel = similarArtistViewModel;
         similarArtistViewModel.addPropertyChangeListener(this);
@@ -49,102 +50,9 @@ JLabel hyperlink;
 
         JLabel title = new JLabel("Similar Artists to Your Favourites");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
+        title.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        title.setForeground(Color.white);
 
-//        hyperlink = new JLabel();
-//        hyperlink2 = new JLabel();
-//        hyperlink3 = new JLabel();
-//        hyperlink4 = new JLabel();
-//        hyperlink5 = new JLabel();
-//
-//        postalCodeTextField = new JTextField(20); // Initialize the postal code text field
-//
-//        JPanel buttons = new JPanel();
-//        findSimilarArtistsButton = new JButton(similarArtistViewModel.TITLE_LABEL);
-//        buttons.add(findSimilarArtistsButton);
-//
-//
-//        findSimilarArtistsButton.addActionListener(
-//                new ActionListener() {
-//                    @Override
-//                    public void actionPerformed(ActionEvent e) {
-//                        if (e.getSource().equals(findSimilarArtistsButton)) {
-//                            SimilarArtistState currentState = similarArtistViewModel.getState();
-//                            List<String> favouriteArtists = currentState.getFavouriteArtists();
-//                            if (!favouriteArtists.isEmpty()) { // Check if the list is not empty
-//                                String postalCode = postalCodeTextField.getText(); // Get the postal code from the text field
-//                                SimilarInputData inputData = new SimilarInputData(postalCode, favouriteArtists);
-//                                similarArtistController.execute(inputData);
-//                            }
-//                        }
-//                    }
-//                }
-//        );
-//
-//        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//
-//        this.add(title);
-//        this.add(hyperlink);
-//        this.add(hyperlink2);
-//        this.add(hyperlink3);
-//        this.add(hyperlink4);
-//        this.add(hyperlink5);
-//        this.add(buttons);
-//    }
-//
-//    /**
-//     * React to a button click that results in evt.
-//     */
-//    public void actionPerformed(ActionEvent evt) {
-//        System.out.println("Click " + evt.getActionCommand());
-//    }
-//@Override
-//public void propertyChange(PropertyChangeEvent evt) {
-//    SimilarArtistState state = (SimilarArtistState) evt.getNewValue();
-//
-//    HashMap<String, List<String>> similarArtists = state.getSimilarArtists();
-//    List<String> artists = new ArrayList<>(5);
-//    List<String> artistLinks = new ArrayList<>(5);
-//
-//    for (Map.Entry<String, List<String>> entry : similarArtists.entrySet()) {
-//        String key = entry.getKey();
-//        artists.add(key);
-//
-//        String value = entry.getValue().toString();
-//        artistLinks.add(value);
-//    }
-//
-//    // ARTIST 1
-//    setHyperlink(hyperlink, artists.get(0), artistLinks.get(0));
-//
-//    // ARTIST 2
-//    setHyperlink(hyperlink2, artists.get(1), artistLinks.get(1));
-//
-//    // ARTIST 3
-//    setHyperlink(hyperlink3, artists.get(2), artistLinks.get(2));
-//
-//    // ARTIST 4
-//    setHyperlink(hyperlink4, artists.get(3), artistLinks.get(3));
-//
-//    // ARTIST 5
-//    setHyperlink(hyperlink5, artists.get(4), artistLinks.get(4));
-//}
-//
-//    private void setHyperlink(List<String> favouriteArtist, JLabel hyperlink, String artist, String link) {
-//        hyperlink.setText(favouriteArtist);
-//        hyperlink.setText(artist + ": " + link);
-//        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//
-//        hyperlink.addMouseListener(new MouseAdapter() {
-//            public void mouseClicked(MouseEvent e) {
-//                try {
-//                    Desktop.getDesktop().browse(new URI(link));
-//                } catch (IOException | URISyntaxException ioException) {
-//                    ioException.printStackTrace();
-//                }
-//            }
-//        });
-//    }
         LabelTextPanel userPostalCode = new LabelTextPanel(
                 new JLabel(SimilarArtistViewModel.POSTALCODE_LABEL), postalCodeInputField);
 
@@ -154,6 +62,16 @@ JLabel hyperlink;
         JPanel buttons = new JPanel();
         enter = new JButton(SimilarArtistViewModel.ENTER_BUTTON_LABEL);
         buttons.add(enter);
+
+        hyperlink = new JLabel();
+        hyperlink.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        hyperlink.setForeground(Color.white);
+
+        hyperlink2 = new JLabel();
+        hyperlink2.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        hyperlink2.setForeground(Color.white);
+
+        hyperlink3 = new JLabel
 
         enter.addActionListener(
                 e -> {
@@ -233,5 +151,164 @@ JLabel hyperlink;
         JOptionPane.showMessageDialog(this, state.getFinalFormatSimilarArtist());
     }
 
+
+
+    /**
+     * A window with artists and their concert links.
+     */
+    public ShowConcertsView(ShowConcertsController controller, ShowConcertsViewModel showConcertsViewModel) {
+        this.showConcertsController = controller;
+        this.showConcertsViewModel = showConcertsViewModel;
+        this.showConcertsViewModel.addPropertyChangeListener(this);
+
+        this.setSize(1000, 400);
+
+        JLabel title = new JLabel("Upcoming Shows Near You");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        hyperlink = new JLabel();
+        hyperlink2 = new JLabel();
+        hyperlink3 = new JLabel();
+        hyperlink4 = new JLabel();
+        hyperlink5 = new JLabel();
+
+        JPanel buttons = new JPanel();
+        personalize = new JButton(showConcertsViewModel.PERSONALIZE_BUTTON_LABEL);
+        buttons.add(personalize);
+
+        personalize.addActionListener(
+                // This creates an anonymous subclass of ActionListener and instantiates it.
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (e.getSource().equals(personalize)){
+                            showConcertsController.execute();
+                        }
+                    }
+                }
+        );
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.add(title);
+        this.add(hyperlink);
+        this.add(hyperlink2);
+        this.add(hyperlink3);
+        this.add(hyperlink4);
+        this.add(hyperlink5);
+        this.add(buttons);
+    }
+
+    /**
+     * React to a button click that results in evt.
+     */
+    public void actionPerformed(ActionEvent evt) {
+        System.out.println("Click " + evt.getActionCommand());
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        ShowConcertsState state = (ShowConcertsState) evt.getNewValue();
+
+        LinkedHashMap<String, String> shows = state.getConcerts();
+        ArrayList<String> concerts = new ArrayList<>(5);
+        ArrayList<String> concertLinks = new ArrayList<>(5);
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            concerts.add(key);
+
+            String value = entry.getValue();
+            concertLinks.add(value);
+        }
+
+        // CONCERT 1
+        hyperlink.setText(concerts.get(0) + ": " + concertLinks.get(0));
+        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        hyperlink.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(concertLinks.get(0)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        });
+
+        // CONCERT 2
+        hyperlink2.setText(concerts.get(1) + ": " + concertLinks.get(1));
+        hyperlink2.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        hyperlink2.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(concertLinks.get(1)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        });
+
+        // CONCERT 3
+        hyperlink3.setText(concerts.get(2) + ": " + concertLinks.get(2));
+        hyperlink3.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        hyperlink3.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(concertLinks.get(2)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        });
+
+        // CONCERT 4
+        hyperlink4.setText(concerts.get(3) + ": " + concertLinks.get(3));
+        hyperlink4.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        hyperlink4.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(concertLinks.get(3)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        });
+
+
+        // CONCERT 5
+        hyperlink5.setText(concerts.get(4) + ": " + concertLinks.get(4));
+        hyperlink5.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        hyperlink5.addMouseListener(new MouseAdapter() {
+
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(concertLinks.get(4)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+        });
+    }
+
+}
 
 }
