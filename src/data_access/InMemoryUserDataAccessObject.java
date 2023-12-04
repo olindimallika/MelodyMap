@@ -24,7 +24,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
-    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private String postalCode;

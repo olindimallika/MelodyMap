@@ -22,7 +22,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
     private static final String locationFinderApiKey = "a92bf901a11c452583fe43f4f02ad7ce";
-    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
 
     public static final List<Double> geoPoint = new ArrayList<>();
 

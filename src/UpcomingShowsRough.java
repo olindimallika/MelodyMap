@@ -93,7 +93,7 @@ public class UpcomingShowsRough extends LocationFinder {
 
     public static void main(String[] args) {
         // Replace 'YOUR_API_KEY' with your actual Ticketmaster API key.
-        String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+        String apiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
 
         UpcomingShowsRough ticketmasterAPI = new UpcomingShowsRough(apiKey);
 
