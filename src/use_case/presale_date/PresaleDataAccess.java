@@ -25,7 +25,7 @@ public interface PresaleDataAccess {
 
     String getFormatOutputPresale();
 
-    String getPostalCode();
+    //boolean existsByName(String identifier);
 
 
     //List<Double> getLatLong(String postalCode);
