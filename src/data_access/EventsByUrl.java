@@ -59,16 +59,18 @@ public class EventsByUrl {
         double x = lat1 * (Math.PI / 180);
         double y = lat2 * (Math.PI / 180);
         // Equation - need to fix
-        return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
-    }
-
-    public void printEventUrls(List<JSONObject> events) {
-        for (JSONObject event : events) {
-            String url = event.getString("url");
-            System.out.println("Event URL: " + url);
-        }
+        return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) *
+                Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
     }
 }
+
+//    public void printEventUrls(List<JSONObject> events) {
+//        for (JSONObject event : events) {
+//            String url = event.getString("url");
+//            System.out.println("Event URL: " + url);
+//        }
+//    }
+
 
 //    public static void main(String[] args) {
 //        try {

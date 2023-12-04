@@ -11,10 +11,7 @@ public class ArtistState {
 
     private String onTourOrNotError = null;
 
-//    private String concertsError = null;
-
     public ArtistState(ArtistState copy){
-        //onTourorNot
         artistShows = copy.artistShows;
         onTourOrNotError = copy.onTourOrNotError; // when none of their favourite artists have shows
     }

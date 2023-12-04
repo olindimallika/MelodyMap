@@ -36,8 +36,7 @@ public class ArtistPresenter implements ArtistVenueOutputBoundary {
     public void prepareFailView(String error) {
 
         ArtistState artistState = artistViewModel.getState();
-        artistState.setArtistShowsError(error); // none of the favourite artists are on tour
+        artistState.setArtistShowsError(error);
         artistViewModel.firePropertyChanged();
-
     }
 }

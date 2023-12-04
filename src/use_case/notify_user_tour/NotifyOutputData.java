@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class NotifyOutputData {
-    private final LinkedHashMap<String, String> favouriteArtists;
-    public NotifyOutputData(LinkedHashMap<String, String> favouriteArtists){
-        this.favouriteArtists = favouriteArtists;
+    private final LinkedHashMap<String, String> artistOnTour;
+    public NotifyOutputData(LinkedHashMap<String, String> artistOnTour){
+        this.artistOnTour = artistOnTour;
     }
 
-    public LinkedHashMap<String, String> getFavouriteArtists(){
-        return favouriteArtists;
+    public LinkedHashMap<String, String> getArtistOnTour(){
+        return artistOnTour;
     }
 
 }

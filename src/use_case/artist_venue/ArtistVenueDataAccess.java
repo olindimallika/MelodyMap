@@ -14,8 +14,7 @@ public interface ArtistVenueDataAccess {
 
     String getArtistName(JSONObject event);
 
-    LinkedHashMap<String, List<String>> getArtistShows(List<List<JSONObject>> eventsList);
 
-    String formatShows(LinkedHashMap<String, String> shows);
+
 
 }

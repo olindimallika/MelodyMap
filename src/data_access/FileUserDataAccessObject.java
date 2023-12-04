@@ -3,6 +3,7 @@ package data_access;
 import entity.*;
 import org.json.JSONArray;
 import use_case.artist_menu_tour.ArtistMenuTourDataAccess;
+import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
@@ -19,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistMenuTourDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistMenuTourDataAccess, ArtistVenueDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
     private static final String locationFinderApiKey = "feaad5daa48247fd8ecaa9b3983c9383";
@@ -128,10 +129,20 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return url;
     }
 
+
+
     public String getArtistName(JSONObject event) {
         Artist artist = new ArtistModelFactory().create(event.getString("name"));
         return artist.getName();
     }
+
+//
+//    @Override
+//    public LinkedHashMap<String, List<String>> getArtistShows(List<List<JSONObject>> eventsList) {
+//        for (JSONObject event : events) {
+//
+//        }
+//    }
 
     public LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events) {
         for (JSONObject event : events) {

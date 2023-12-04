@@ -35,6 +35,7 @@ public class ArtistViewModel extends ViewModel {
     }
 
     public ArtistState getState() {
+
         return state;
     }
 }
