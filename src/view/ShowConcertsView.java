@@ -44,16 +44,24 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
         this.showConcertsViewModel = showConcertsViewModel;
         this.showConcertsViewModel.addPropertyChangeListener(this);
 
-        this.setSize(1000, 400);
-
         JLabel title = new JLabel("Upcoming Shows Near You");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial Bold", Font.PLAIN,10));
 
         hyperlink = new JLabel();
+        hyperlink.setFont(new Font("Arial Bold", Font.PLAIN,10));
+
         hyperlink2 = new JLabel();
+        hyperlink2.setFont(new Font("Arial Bold", Font.PLAIN,10));
+
         hyperlink3 = new JLabel();
+        hyperlink3.setFont(new Font("Arial Bold", Font.PLAIN,10));
+
         hyperlink4 = new JLabel();
+        hyperlink4.setFont(new Font("Arial Bold", Font.PLAIN,10));
+
         hyperlink5 = new JLabel();
+        hyperlink5.setFont(new Font("Arial Bold", Font.PLAIN,10));
 
         JPanel buttons = new JPanel();
         personalize = new JButton(showConcertsViewModel.PERSONALIZE_BUTTON_LABEL);
@@ -71,8 +79,8 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
         this.add(hyperlink);
         this.add(hyperlink2);
@@ -80,6 +88,7 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
         this.add(hyperlink4);
         this.add(hyperlink5);
         this.add(buttons);
+        this.setPreferredSize(new Dimension(1200, 250));
     }
 
     /**

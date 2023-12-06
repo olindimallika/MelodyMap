@@ -42,14 +42,11 @@ public class SimilarView extends JPanel implements ActionListener, PropertyChang
         this.similarArtistViewModel = similarArtistViewModel;
         similarArtistViewModel.addPropertyChangeListener(this);
 
-        LabelTextPanel userPostalCode = new LabelTextPanel(
-                new JLabel(SimilarArtistViewModel.POSTALCODE_LABEL), postalCodeInputField);
+        JLabel userPostalCode = new JLabel(SimilarArtistViewModel.POSTALCODE_LABEL);
         userPostalCode.setFont(new Font("Times New Roman", Font.PLAIN, 15));
 
-        LabelTextPanel userFavouriteArtist = new LabelTextPanel(
-                new JLabel(NotifyViewModel.ARTIST_LABEL), favouriteArtistInputField);
+        JLabel userFavouriteArtist = new JLabel(SimilarArtistViewModel.ARTIST_LABEL);
         userFavouriteArtist.setFont(new Font("New Times Roman", Font.PLAIN, 15));
-
 
         hyperlink = new JLabel();
         hyperlink.setFont(new Font("Times New Roman", Font.PLAIN, 16));
@@ -166,15 +163,15 @@ public class SimilarView extends JPanel implements ActionListener, PropertyChang
                     // Check if the URL is valid
                     Desktop.getDesktop().browse(new URI(url.get(0)));
 
-                    } catch (IOException | URISyntaxException e1) {
+                } catch (IOException | URISyntaxException e1) {
                     e1.printStackTrace();
                 }
             }
-            });
+        });
 
 
 
-    // Second concert
+        // Second concert
         hyperlink2.setText(artistName.get(1) + ": " + url.get(1));
         hyperlink2.setCursor(new Cursor(Cursor.HAND_CURSOR));
         hyperlink2.addMouseListener(new MouseAdapter() {
@@ -186,7 +183,7 @@ public class SimilarView extends JPanel implements ActionListener, PropertyChang
                 }
             }
 
-            });
+        });
 
         // Third concert
         hyperlink3.setText(artistName.get(2) + ": " + url.get(2));
@@ -223,7 +220,7 @@ public class SimilarView extends JPanel implements ActionListener, PropertyChang
     }
 
 
-    }
+}
 
 
 

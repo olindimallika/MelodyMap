@@ -16,8 +16,4 @@ public class SimilarArtistController {
         SimilarInputData similarInputData = new SimilarInputData(postalCode, favouriteArtists);
         userSimilarUseCaseInteractor.execute(similarInputData);
     }
-//    public void execute() throws Exception {
-//        SimilarInputData similarInputData = new SimilarInputData();
-//        userSimilarUseCaseInteractor.execute(similarInputData);
-//    }
 }
