@@ -71,6 +71,7 @@ public class PresaleInteractor implements PresaleInputBoundary {
 
             // Print event URLs and presale dates
             List<String> urls = presaleDataAccessObject.getEventUrls();
+            System.out.println(urls);
             List<String> presaleDates = presaleDataAccessObject.getPresaleDates();
 
 

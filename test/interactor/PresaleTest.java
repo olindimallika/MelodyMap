@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PresaleTest {
     @Test
     void successTest() throws IOException {
-        PresaleInputData inputData = new PresaleInputData("M5V3L9","Olivia Rodrigo");
+        PresaleInputData inputData = new PresaleInputData("M1E4N3","Olivia Rodrigo");
         PresaleDataAccess userRepository = new InMemoryUserDataAccessObject();
 
         // This creates a successPresenter that tests whether the test case is as we expect.

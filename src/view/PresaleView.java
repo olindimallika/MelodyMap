@@ -29,6 +29,12 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
     private final JButton enter;
 
+    JLabel hyperlink;
+    JLabel hyperlink2;
+    JLabel hyperlink3;
+    JLabel hyperlink4;
+    JLabel hyperlink5;
+
 
     public PresaleView(PresaleController controller,
                        PresaleViewModel presaleViewModel) {
@@ -38,7 +44,8 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         presaleViewModel.addPropertyChangeListener(this::presalePropertyChange);
 
 
-        JLabel title = new JLabel(PresaleViewModel.TITLE_LABEL);
+        //JLabel title = new JLabel(PresaleViewModel.TITLE_LABEL);
+        JLabel title = new JLabel("Upcoming Shows Near You");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         LabelTextPanel userPostalCode = new LabelTextPanel(
@@ -46,6 +53,29 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
         LabelTextPanel userFavouriteArtist = new LabelTextPanel(
                 new JLabel(NotifyViewModel.ARTIST_LABEL), favouriteArtistInputField);
+
+
+        ////hyperlink stuff
+        hyperlink = new JLabel();
+        hyperlink.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink.setForeground(Color.white);
+
+        hyperlink2 = new JLabel();
+        hyperlink2.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink2.setForeground(Color.white);
+
+        hyperlink3 = new JLabel();
+        hyperlink3.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink3.setForeground(Color.white);
+
+        hyperlink4 = new JLabel();
+        hyperlink4.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink4.setForeground(Color.white);
+
+        hyperlink5 = new JLabel();
+        hyperlink5.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink5.setForeground(Color.white);
+
 
 
 
@@ -119,6 +149,13 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(title);
+
+        this.add(hyperlink);
+        this.add(hyperlink2);
+        this.add(hyperlink3);
+        this.add(hyperlink4);
+        this.add(hyperlink5);
+
         this.add(userPostalCode);
         this.add(userFavouriteArtist);
         this.add(buttons);
