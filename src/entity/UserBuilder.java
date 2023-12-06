@@ -1,8 +1,10 @@
 package entity;
 
+import java.util.ArrayList;
+
 public class UserBuilder {
     private String postalCode;
-    private String favouriteArtist;
+    private ArrayList<Artist> favouriteArtist;
     public UserBuilder(){
     }
 
