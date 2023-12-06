@@ -1,6 +1,8 @@
 package entity;
 
 
+import java.util.ArrayList;
+
 public class UserModelFactory implements UserFactory{
     /**
      * Requires: postal code is valid.
@@ -10,7 +12,7 @@ public class UserModelFactory implements UserFactory{
      */
 
     @Override
-    public User create(String postalCode, String favouriteArtist) {
+    public User create(String postalCode, ArrayList<Artist> favouriteArtist) {
         return new UserModel(postalCode, favouriteArtist);
     }
 
