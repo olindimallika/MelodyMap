@@ -1,9 +1,11 @@
 package entity;
 
+import java.util.List;
+
 public interface User{
 
-    String getPostalCode();
+    List<Artist> getFavouriteArtists();
 
-    String getFavouriteArtist();
+    String getPostalCode();
 
 }

@@ -24,10 +24,11 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
-    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
+
     private static final List<Double> geoPoint = new ArrayList<>();
 
-    private String postalCode;
+    private JSONObject artistInfo;
 
     /**
      * @param user the user's postal code
@@ -35,7 +36,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
      */
     @Override
     public List<Double> locationFinder(User user){
-        postalCode = user.getPostalCode();
+        String postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -92,7 +93,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
             urlString += "&classificationName=" + classification;
         }
 
-        urlString += "&apikey=" + ticketmasterApiKey;
+        urlString += "&apikey=" + "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
@@ -237,9 +238,12 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return output;
     }
 
-    public String getPostalCode(){
-        return postalCode;
+    /**
+     * @return whether the api call can be made to find the artist's information
+     */
+    @Override
+    public boolean existsInApi() {
+        return artistInfo != null;
     }
-
 
 }

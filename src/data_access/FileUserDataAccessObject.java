@@ -21,18 +21,19 @@ import java.util.*;
 public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "a92bf901a11c452583fe43f4f02ad7ce";
-    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
 
-    public static final List<Double> geoPoint = new ArrayList<>();
+    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
-    private String postalCode;
+    private static final List<Double> geoPoint = new ArrayList<>();
+
+    private JSONObject artistInfo;
 
     public FileUserDataAccessObject() {
     }
 
     public List<Double> locationFinder(User user){
-        postalCode = user.getPostalCode();
+        String postalCode = user.getPostalCode();
 
         try {
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
@@ -76,7 +77,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
             urlString += "&classificationName=" + classification;
         }
 
-        urlString += "&apikey=" + ticketmasterApiKey;
+        urlString += "&apikey=" + "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
@@ -139,24 +140,24 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return shows;
     }
 
-//    public String formatShows(LinkedHashMap<String, String> shows) {
-//
-//        StringBuilder formattedConcerts = new StringBuilder();
-//
-//        ArrayList<String> concerts = new ArrayList<>();
-//
-//        for (Map.Entry<String, String> entry : shows.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//            concerts.add(key + ": " + value);
-//        }
-//
-//        for (int i = 0; i < 5; i++){
-//            formattedConcerts.append(concerts.get(i));
-//            formattedConcerts.append("\n");
-//        }
-//        return formattedConcerts.toString();
-//    }
+    public String formatShows(LinkedHashMap<String, String> shows) {
+
+        StringBuilder formattedConcerts = new StringBuilder();
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+        return formattedConcerts.toString();
+    }
 
     /**
      * @param postalCode the user's postal code
@@ -210,17 +211,13 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return output;
     }
 
-//    /**
-//     * @return whether the api call can be made to find the artist's information
-//     */
-//    @Override
-//    public boolean existsInApi() {
-//        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
-//        return artistInfo != null;
-//    }
-
-    public String getPostalCode(){
-        return postalCode;
+    /**
+     * @return whether the api call can be made to find the artist's information
+     */
+    @Override
+    public boolean existsInApi() {
+        // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
+        return artistInfo != null;
     }
 
 

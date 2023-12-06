@@ -2,15 +2,13 @@ package app;
 
 import data_access.FileUserDataAccessObject;
 
+import interface_adapter.similar_artist.SimilarArtistViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
 
-import view.NotifyView;
-import view.ShowConcertsView;
-import view.UpcomingView;
-import view.ViewManager;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +49,14 @@ public class Main {
         NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
         views.add(notifyView,notifyView.viewName);
 
+
         viewManagerModel.setActiveView(upcomingShowsView.viewName);
+        viewManagerModel.firePropertyChanged();
+
+        SimilarView similarView = SimilarArtistUseCaseFactory.create(viewManagerModel, similarViewModel, userDataAccessObject);
+        views.add(similarView, similarView.viewName);
+
+        viewManagerModel.setActiveView(similarView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();
