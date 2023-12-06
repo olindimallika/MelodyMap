@@ -2,10 +2,10 @@ package use_case.notify_user_tour;
 
 import entity.UserFactory;
 import org.json.JSONObject;
-import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.LinkedHashMap;
 
 public class NotifyInteractor implements NotifyInputBoundary {
     final NotifyDataAccess userDataAccessObject;
@@ -23,39 +23,37 @@ public class NotifyInteractor implements NotifyInputBoundary {
     @Override
     public void execute(NotifyInputData notifyInputData){
 
-       try {
-           // converting user input, so it will fit what the api expects
-           String artistNameInput = notifyInputData.getFavouriteArtistNames();
-           String lowerArtistNames = artistNameInput.toLowerCase();
+        try {
+            // converting user input, so it will fit what the api expects
+            String artistNameInput = notifyInputData.getFavouriteArtistNames();
 
-           String[] artistNameList = lowerArtistNames.split(",");
-           ArrayList<String> hasFavouriteArtistConcert = new ArrayList<>();
+            String[] artistNameList = artistNameInput.split(",");
+            LinkedHashMap<String, String> hasFavouriteArtistConcert = new LinkedHashMap<>();
 
-           for(String str : artistNameList){
+            for(String str : artistNameList){
 
-               String artistNames;
-               if (str.contains(" ")){
-                   artistNames = str.replace(' ', '-');
-               } else {
-                   artistNames = str;
-               }
-               JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistNames);
+                String artistName;
+                String lowerArtistName;
+                if (str.contains(" ")){
+                    artistName = str.strip();
+                    lowerArtistName = artistName.toLowerCase();
+                } else {
+                    artistName = str;
+                    lowerArtistName = artistName.toLowerCase();
+                }
+                String tourInfo = userDataAccessObject.hasATour(lowerArtistName, "music");
+                hasFavouriteArtistConcert.put(artistName, tourInfo);
 
-               if (artistInfo.get("has_upcoming_events").equals(true)) {
-                   hasFavouriteArtistConcert.add("Your favourite artist is on tour!");
-               } else {
-                   hasFavouriteArtistConcert.add("Sorry, your favourite artist doesn't have any upcoming concerts :(");
-               }
+            }
 
-           }
 
-           NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
-           userPresenter.prepareSuccessView(notifyOutputData);
+            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
+            userPresenter.prepareSuccessView(notifyOutputData);
 
-       } catch (Exception e){
-           // if user enters an artist name that cannot be entered into the seat geek api
-           throw new InputMismatchException();
-       }
+        } catch (Exception e){
+            // if user enters an artist name that cannot be entered into the seat geek api
+            throw new InputMismatchException();
+        }
     }
 
 

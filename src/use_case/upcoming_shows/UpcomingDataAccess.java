@@ -19,4 +19,6 @@ public interface UpcomingDataAccess {
 
     LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events);
     boolean existsInCoords(String postalCode);
+
+    boolean existsInApi();
 }

@@ -2,12 +2,13 @@ package interface_adapter.notify_user_tour;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class NotifyState {
 
     //user input
     private String favouriteArtist = "";
-    private ArrayList<String> artistOnTour = new ArrayList<>();
+    private LinkedHashMap<String, String> artistOnTour = new LinkedHashMap<>();
     private String artistOnTourError = null;
 
     public NotifyState(NotifyState copy){
@@ -27,7 +28,7 @@ public class NotifyState {
         this.favouriteArtist = favouriteArtist;
     }
 
-    public ArrayList<String> getArtistOnTour(){
+    public LinkedHashMap<String, String> getArtistOnTour(){
         return artistOnTour;
     }
 
@@ -35,7 +36,7 @@ public class NotifyState {
         return artistOnTourError;
     }
 
-    public void setArtistOnTour(ArrayList<String> artistOnTour) {
+    public void setArtistOnTour(LinkedHashMap<String, String> artistOnTour) {
         this.artistOnTour = artistOnTour;
     }
 
