@@ -43,11 +43,11 @@ public class Main {
         ShowConcertsView showConcertsView = ShowConcertsUseCaseFactory.create(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
         views.add(showConcertsView, showConcertsView.viewName);
 
-        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject, artistViewModel);
-        views.add(notifyView, notifyView.viewName);
-
-        viewManagerModel.setActiveView(upcomingShowsView.viewName);
-        viewManagerModel.firePropertyChanged();
+//        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject, artistViewModel);
+//        views.add(notifyView, notifyView.viewName);
+//
+//        viewManagerModel.setActiveView(upcomingShowsView.viewName);
+//        viewManagerModel.firePropertyChanged();
 
 //        SimilarView similarView = SimilarArtistUseCaseFactory.create(viewManagerModel, similarViewModel, userDataAccessObject);
 //        views.add(similarView, similarView.viewName);

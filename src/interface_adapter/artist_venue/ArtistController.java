@@ -2,8 +2,6 @@ package interface_adapter.artist_venue;
 
 import use_case.artist_venue.ArtistVenueInputBoundary;
 import use_case.artist_venue.ArtistVenueInputData;
-import use_case.upcoming_shows.UpcomingInputBoundary;
-import use_case.upcoming_shows.UpcomingInputData;
 
 import java.io.IOException;
 
