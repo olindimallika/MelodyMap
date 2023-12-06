@@ -8,10 +8,7 @@ import use_case.EventStrategy;
 import use_case.notify_user_tour.NotifyOutputData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class PresaleInteractor implements PresaleInputBoundary {
 
@@ -56,13 +53,14 @@ public class PresaleInteractor implements PresaleInputBoundary {
             EventProcesser<List<List<JSONObject>>> eventProcesser = new EventProcesser(artistStrategy);
             List<List<JSONObject>> events = eventProcesser.processEvent(user);
 
+
+            //old below:
             List<String> artNameList = new ArrayList<>();
 
 
             for (List<JSONObject> miniList: events){
                 for (JSONObject event : miniList){
-                    //System.out.println(event);
-                    // Add event information to the EventInfo object
+
                     presaleDataAccessObject.addEventInfo(event);
                     String artName = presaleDataAccessObject.getArtistName(event);
                     artNameList.add(artName);
@@ -73,6 +71,9 @@ public class PresaleInteractor implements PresaleInputBoundary {
             List<String> urls = presaleDataAccessObject.getEventUrls();
             System.out.println(urls);
             List<String> presaleDates = presaleDataAccessObject.getPresaleDates();
+
+            //make a hashmapp of artist name mapped to URL
+
 
 
             // iterate through every url and place the preale date beside it.
@@ -96,7 +97,6 @@ public class PresaleInteractor implements PresaleInputBoundary {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
 
 
 

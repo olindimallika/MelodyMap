@@ -175,6 +175,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         if (state.getPostalCodeError() != null) {
             JOptionPane.showMessageDialog(this, state.getPostalCodeError());
         }
+
     }
 
     public void presalePropertyChange(PropertyChangeEvent evt){
