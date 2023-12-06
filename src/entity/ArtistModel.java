@@ -1,17 +1,12 @@
 package entity;
 
+
 class ArtistModel implements Artist {
 
     private final String name;
 
-    private final String genre;
-
-    private final String artistId;
-
-    ArtistModel(String name, String genre, String artistId) {
+    ArtistModel(String name) {
         this.name = name;
-        this.genre = genre;
-        this.artistId = artistId;
     }
 
     @Override
@@ -20,12 +15,7 @@ class ArtistModel implements Artist {
     }
 
     @Override
-    public String getGenre() {
-        return genre;
-    }
-
-    @Override
-    public String getArtistId() {
-        return artistId;
+    public String toLowerCase() {
+        return null;
     }
 }

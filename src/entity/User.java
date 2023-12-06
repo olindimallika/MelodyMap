@@ -1,10 +1,11 @@
 package entity;
 
+import java.util.List;
+
 public interface User{
 
-    String getName();
+    List<Artist> getFavouriteArtists();
 
-    String[] getFavArtist();
+    String getPostalCode();
 
-    String getLocation();
 }
