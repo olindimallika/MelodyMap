@@ -9,7 +9,7 @@ public class SimilarArtistPresenter implements SimilarOutputBoundary {
     private final ViewManagerModel viewManagerModel;
 
     public SimilarArtistPresenter(ViewManagerModel viewManagerModel,
-                            SimilarArtistViewModel similarViewModel) {
+                                  SimilarArtistViewModel similarViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.similarViewModel = similarViewModel;
     }

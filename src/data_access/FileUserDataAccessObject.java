@@ -35,7 +35,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "d121a538d4924ef0a8951e8463b063e7";
+    private static final String locationFinderApiKey = "590432017a624836975180e8e71df0b1";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
@@ -74,7 +74,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return geoPoint;
     }
 
-//    @Override
+    //    @Override
     public boolean existsInCoord(String postalCode) {
         return false;
     }
@@ -236,6 +236,16 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo;
     }
 
+    @Override
+    public String hasATour(String artistName, String classification) throws IOException, InterruptedException {
+        return null;
+    }
+
+    @Override
+    public String getPostalCode() {
+        return null;
+    }
+
     /**
      * @return whether the api call can be made to find the artist's information
      */
@@ -245,20 +255,38 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return artistInfo != null;
     }
 
-    public String formatSimilarArtists(List<String> events) {
+//    public String formatSimilarArtists(List<String> events) {
+//        StringBuilder formattedConcerts = new StringBuilder();
+//        for (int i = 0; i < events.size(); i++){
+//            formattedConcerts.append(events.get(i));
+//            formattedConcerts.append("\n");
+//        }
+//        return formattedConcerts.toString();
+//    }
+    public String formatSimilarArtists(HashMap<String, String> shows) {
+
         StringBuilder formattedConcerts = new StringBuilder();
-        for (int i = 0; i < events.size(); i++){
-            formattedConcerts.append(events.get(i));
+
+        ArrayList<String> concerts = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        for (int i = 0; i < 5; i++){
+            formattedConcerts.append(concerts.get(i));
             formattedConcerts.append("\n");
         }
         return formattedConcerts.toString();
     }
 
-    public String formatOutputSimilarArtist(String favArtist, String similarArtist, String artUrl){
-        String result = (favArtist + "\n" + ": "+ similarArtist +"\n"+ " Event Link: "+ artUrl + "\n"+ "\n");
-        listFormatSimilarArtists.add(result);
-        return result;
-    };
+//    public HashMap<String, String> formatOutputSimilarArtist(String favArtist, String similarArtist, String artUrl){
+//        String result = (favArtist + "\n" + ": "+ similarArtist +"\n"+ " Event Link: "+ artUrl + "\n"+ "\n");
+//        listFormatSimilarArtists.add(result);
+//        return result;
+//    };
     public String getFormatOutputPresale() {
         finalFormatSimilarArtists = String.join("", listFormatSimilarArtists);
         return finalFormatSimilarArtists;

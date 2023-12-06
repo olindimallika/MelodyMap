@@ -6,7 +6,7 @@ import java.util.List;
 public class SimilarArtistState {
     private String postalCode = "";
     private String postalCodeError = null;
-    private String finalFormatSimilarArtist = "";
+    private HashMap<String, String> finalFormatSimilarArtist = new HashMap<>();
     private String favouriteArtistError = null;
     private HashMap<String, List<String>> similarArtists = new HashMap<>();
     private String similarArtistError = null;
@@ -60,10 +60,10 @@ public class SimilarArtistState {
     public void setPostalCodeError(String postalCodeError) {
         this.postalCodeError = postalCodeError;
     }
-    public String getFinalFormatSimilarArtist() {
+    public HashMap<String, String> getFinalFormatSimilarArtist() {
         return finalFormatSimilarArtist;
     }
-    public void setFinalFormatSimilarArtist(String finalFormatSimilarArtist) {
+    public void setFinalFormatSimilarArtist(HashMap<String, String> finalFormatSimilarArtist) {
         this.finalFormatSimilarArtist = finalFormatSimilarArtist;
     }
     @Override
