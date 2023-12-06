@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyState;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import use_case.show_concerts.ShowConcertsOutputBoundary;
-import use_case.show_concerts.ShowConcertsOutputData;
 
 public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
     private final ShowConcertsViewModel showConcertsViewModel;
@@ -18,7 +17,7 @@ public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
     }
 
     @Override
-    public void prepareSuccessView(ShowConcertsOutputData response) {
+    public void prepareSuccessView() {
         // On success, we want to switch to the notify view
 
         NotifyState notifyState = notifyViewModel.getState();

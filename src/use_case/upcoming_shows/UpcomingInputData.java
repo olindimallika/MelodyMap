@@ -7,7 +7,7 @@ public class UpcomingInputData {
         this.postalCode = postalCode;
     }
 
-    String getPostalCode(){
+    public String getPostalCode(){
         return postalCode;
     }
 

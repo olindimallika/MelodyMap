@@ -31,15 +31,20 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
 
         JLabel title = new JLabel(NotifyViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Arial Bold", Font.PLAIN,15));
+        title.setFont(new Font("Arial", Font.PLAIN,15));
+        title.setForeground(Color.white);
 
         JLabel favouriteArtistLabel = new JLabel(NotifyViewModel.ARTIST_LABEL);
+        favouriteArtistLabel.setFont(new Font("Arial", Font.PLAIN,15));
+        favouriteArtistLabel.setForeground(Color.white);
 
         LabelTextPanel favouriteArtist = new LabelTextPanel(favouriteArtistInputField);
+        favouriteArtist.setOpaque(false);
 
         JPanel buttons = new JPanel();
         check = new JButton(NotifyViewModel.CHECK_BUTTON_LABEL);
         buttons.add(check);
+        buttons.setOpaque(false);
 
         check.addActionListener(
                 new ActionListener() {
@@ -81,6 +86,8 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
         this.add(favouriteArtistLabel);
         this.add(favouriteArtist);
         this.add(buttons);
+        this.setBackground(new Color(145, 172, 200));
+
 
     }
 

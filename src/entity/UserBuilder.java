@@ -1,10 +1,8 @@
 package entity;
 
-import java.util.ArrayList;
-
 public class UserBuilder {
     private String postalCode;
-    private ArrayList<Artist> favouriteArtist;
+    private String favouriteArtist;
     public UserBuilder(){
     }
 
@@ -13,10 +11,6 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder addFavouriteArtist(ArrayList<Artist> favouriteArtist){
-        this.favouriteArtist = favouriteArtist;
-        return this;
-    }
 
     public User build() {
         return new UserModel(postalCode, favouriteArtist);

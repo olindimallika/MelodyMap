@@ -9,8 +9,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import java.io.BufferedReader;
@@ -20,12 +20,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ArtistVenueDataAccess {
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
     private static final String locationFinderApiKey = "f4802c41d44f4bf0a66c3bc96ff4c0de";
 
-    private static final String ticketmasterApiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private String postalCode;
