@@ -25,4 +25,3 @@ class UserModel implements User {
 
 }
 
-
