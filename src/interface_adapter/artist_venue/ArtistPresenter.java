@@ -1,6 +1,7 @@
 package interface_adapter.artist_venue;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.notify_user_tour.NotifyViewModel;
 import interface_adapter.show_concerts.ShowConcertsState;
 import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingState;
@@ -16,15 +17,17 @@ public class ArtistPresenter implements ArtistVenueOutputBoundary {
 
     private final ViewManagerModel viewManagerModel;
 
-    public ArtistPresenter(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel){
+    private final NotifyViewModel notifyViewModel;
+
+    public ArtistPresenter(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel, NotifyViewModel notifyViewModel){
         this.viewManagerModel = viewManagerModel;
         this.artistViewModel = artistViewModel;
+        this.notifyViewModel = notifyViewModel;
     }
 
     @Override
     public void prepareSuccessView(ArtistVenueOutputData response) {
-        ArtistState artistState = artistViewModel.getState();
-        artistState.setArtistShows(response.getArtistShows());
+        ArtistState artistState = artistViewModel.getState();  /// same as previous
         this.artistViewModel.setState(artistState);
         this.artistViewModel.firePropertyChanged();
 

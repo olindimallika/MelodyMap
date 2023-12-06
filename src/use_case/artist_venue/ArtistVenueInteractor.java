@@ -13,8 +13,6 @@ import java.util.*;
 
 public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
     final ArtistVenueDataAccess artistVenueDataAccessObject;
-//    final EventStrategy eventStrategy;
-
     final ArtistVenueOutputBoundary artistPresenter;
     final UserFactory userFactory;
 

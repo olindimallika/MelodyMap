@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ArtistState {
 
-    private LinkedHashMap<String, List<String>> artistShows = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> artistShows = new LinkedHashMap<>();
 
     private String onTourOrNotError = null;
 
@@ -20,12 +20,12 @@ public class ArtistState {
 
     }
 
-    public LinkedHashMap<String, List<String>> getArtistShows(){
+    public LinkedHashMap<String, String> getArtistShows(){
 
         return artistShows;
     }
 
-    public void setArtistShows(LinkedHashMap<String, List<String>> artistShows){
+    public void setArtistShows(LinkedHashMap<String, String> artistShows){
 
         this.artistShows = artistShows;
     }

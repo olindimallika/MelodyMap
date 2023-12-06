@@ -3,9 +3,13 @@ package use_case.notify_user_tour;
 import entity.UserFactory;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.LinkedHashMap;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class NotifyInteractor implements NotifyInputBoundary {
     final NotifyDataAccess userDataAccessObject;
@@ -23,38 +27,34 @@ public class NotifyInteractor implements NotifyInputBoundary {
     @Override
     public void execute(NotifyInputData notifyInputData){
 
-       try {
-           // converting user input, so it will fit what the api expects
-           String artistNameInput = notifyInputData.getFavouriteArtistNames();
+        try {
+            // converting user input, so it will fit what the api expects
+            String artistNameInput = notifyInputData.getFavouriteArtistName();
+            String lowerArtistName = artistNameInput.toLowerCase();
 
-           String[] artistNameList = artistNameInput.split(",");
-           LinkedHashMap<String, String> hasFavouriteArtistConcert = new LinkedHashMap<>();
+            String artistName;
+            if (lowerArtistName.contains(" ")){
+                artistName = lowerArtistName.replace(' ', '-');
+            } else {
+                artistName = lowerArtistName;
+            }
+            JSONObject artistInfo = userDataAccessObject.getPerformerInfo(artistName);
 
-           for(String str : artistNameList){
+            String favouriteArtistConcert;
+            if (artistInfo.get("has_upcoming_events").equals(true)) {
+                favouriteArtistConcert = "Your favourite artist has " + userDataAccessObject.getNumUpcomingConcerts() +
+                        " upcoming concerts! Purchase tickets here (click on link): ";
+            } else {
+                favouriteArtistConcert = "Sorry, your favourite artist doesn't have any upcoming concerts :(";
+            }
 
-               String artistName;
-               String lowerArtistName;
-               if (str.contains(" ")){
-                   artistName = str.strip();
-                   lowerArtistName = artistName.toLowerCase();
-               } else {
-                   artistName = str;
-                   lowerArtistName = artistName.toLowerCase();
-               }
-               String tourInfo = userDataAccessObject.hasATour(lowerArtistName, "music");
-               hasFavouriteArtistConcert.put(artistName, tourInfo);
+            String hyperlink = userDataAccessObject.getTicketLink();
 
-           }
+            NotifyOutputData notifyOutputData = new NotifyOutputData(favouriteArtistConcert, hyperlink);
+            userPresenter.prepareSuccessView(notifyOutputData);
 
-
-           NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
-           userPresenter.prepareSuccessView(notifyOutputData);
-
-       } catch (Exception e){
-           // if user enters an artist name that cannot be entered into the seat geek api
-           throw new InputMismatchException();
-       }
+        } catch (Exception e){
+            System.out.println("We were unable to find your favourite artist. Please exit and try again.");
+        }
     }
-
-
 }
