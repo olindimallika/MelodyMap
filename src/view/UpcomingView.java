@@ -82,7 +82,6 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
                 }
                 );
 
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
         this.add(postalCodeLabel);
         this.add(userPostalCode);

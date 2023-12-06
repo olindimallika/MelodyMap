@@ -51,6 +51,7 @@ class UpcomingShowsTest {
 
             @Override
             public void prepareFailView(String error) {
+
                 fail("Use case failure is unexpected.");
             }
         };

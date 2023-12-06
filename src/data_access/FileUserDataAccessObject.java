@@ -26,7 +26,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     public static final List<Double> geoPoint = new ArrayList<>();
 
-    private String postalCode;
+    public String postalCode;
 
     public FileUserDataAccessObject() {
     }

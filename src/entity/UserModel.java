@@ -15,10 +15,6 @@ class UserModel implements User {
         return postalCode;
     }
 
-    @Override
-    public String getFavouriteArtist() {
-        return favouriteArtist;
-    }
 
 
 }

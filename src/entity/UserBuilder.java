@@ -11,10 +11,6 @@ public class UserBuilder {
         return this;
     }
 
-    public UserBuilder addFavouriteArtist(String favouriteArtist){
-        this.favouriteArtist = favouriteArtist;
-        return this;
-    }
 
     public User build() {
         return new UserModel(postalCode, favouriteArtist);
