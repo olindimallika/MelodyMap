@@ -9,79 +9,87 @@ import java.util.LinkedHashMap;
 public class UpcomingState {
 
     /**
-     * The postal code associated with the upcoming shows state.
+     * The postal code entered by the user.
      */
     private String postalCode = "";
 
     /**
-     * The error message related to postal code, if any.
+     * An error message related to the postal code input.
      */
     private String postalCodeError = null;
 
     /**
-     * A LinkedHashMap containing upcoming shows data, where the key is the concert name and the value is the event URL.
+     * A mapping of upcoming shows where the key is the show name, and the value is the associated link.
      */
     private LinkedHashMap<String, String> upcomingShows = new LinkedHashMap<>();
 
     /**
-     * Constructs a new UpcomingState by copying the values from another UpcomingState.
-     *
-     * @param copy The UpcomingState to copy values from.
+     * An error message related to the postal code input.
      */
-    public UpcomingState(UpcomingState copy) {
+    private String upcomingShowsError = null;
+
+    /**
+     * Constructs a new UpcomingState by copying the values from another UpcomingState instance.
+     *
+     * @param copy The UpcomingState instance to copy values from.
+     */
+    public UpcomingState(UpcomingState copy){
         postalCode = copy.postalCode;
         postalCodeError = copy.postalCodeError;
         upcomingShows = copy.upcomingShows;
+        upcomingShowsError = copy.upcomingShowsError;
     }
 
     /**
-     * Constructs an empty UpcomingState.
+     * Constructs a new, empty UpcomingState.
      */
-    public UpcomingState() {
+    public UpcomingState(){
     }
 
     /**
-     * Gets the postal code associated with the upcoming shows state.
+     * Gets the postal code stored in the UpcomingState.
      *
-     * @return The postal code.
+     * @return The postal code entered by the user.
      */
-    public String getPostalCode() {
+    public String getPostalCode(){
         return postalCode;
     }
 
     /**
-     * Gets the error message related to postal code, if any.
+     * Gets the error message related to the postal code input.
      *
-     * @return The postal code error message.
+     * @return The error message for the postal code.
      */
-    public String getPostalCodeError() {
+    public String getPostalCodeError(){
         return postalCodeError;
     }
 
     /**
-     * Sets the postal code for the upcoming shows state.
+     * Sets the postal code in the UpcomingState.
      *
-     * @param postalCode The postal code to set.
+     * @param postalCode The postal code entered by the user.
      */
-    public void setPostalCode(String postalCode) {
+    public void setPostalCode(String postalCode){
         this.postalCode = postalCode;
     }
 
     /**
-     * Sets the error message related to postal code.
+     * Sets the error message related to the postal code input.
      *
-     * @param postalCodeError The postal code error message to set.
+     * @param postalCodeError The error message for the postal code.
      */
     public void setPostalCodeError(String postalCodeError) {
         this.postalCodeError = postalCodeError;
     }
 
     /**
-     * Sets the error message related to upcoming shows.
+     * Sets the error message for upcoming shows.
      *
-     * @param postalCodeError The upcoming shows error message to set.
+     * @param upcomingShowsError The error message for upcoming shows.
      */
-    public void setUpcomingShowsError(String postalCodeError) {
-        this.postalCodeError = postalCodeError;
+    public void setUpcomingShowsError(String upcomingShowsError){
+        this.upcomingShowsError = upcomingShowsError;
     }
+
+
 }
