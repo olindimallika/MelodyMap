@@ -9,101 +9,82 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-//
+
+/**
+ * The LocationFinder class is responsible for retrieving the geographical coordinates (latitude and longitude)
+ * based on a given postal code using the OpenCageData API.
+ */
+/**
+ * The LocationFinder class is responsible for retrieving the geographical coordinates (latitude and longitude)
+ * based on a given postal code using the OpenCageData API.
+ */
 public class LocationFinder {
 
+    /**
+     * A constant representing an empty postal code (initialized, but not used in the code).
+     */
     private final String postalCode = "";
 
+    /**
+     * A static list to store the geographical coordinates (latitude and longitude) obtained from the API response.
+     */
     private static final List<Double> geoPoint = new ArrayList<>();
 
+    /**
+     * Retrieves the geographical coordinates for a given user's postal code using the OpenCageData API.
+     *
+     * @param user The user object containing the postal code.
+     * @return A list containing the latitude and longitude of the specified postal code.
+     */
     public List<Double> locationFinder(User user) {
+        // Extract postal code from the user object
         String postalCode = user.getPostalCode();
 
         try {
-            String locationFinderApiKey = "a4c826ba476848a2b9cf95990185f1a1";
+            // OpenCageData API key for geocoding
+            String locationFinderApiKey = "590432017a624836975180e8e71df0b1";
+
+            // Construct the URL for the OpenCageData API request
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
+
+            // Create an OkHttpClient to send the HTTP request
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
                     .build();
 
+            // Execute the HTTP request and obtain the response
             try (Response response = client.newCall(request).execute()) {
+                // Read the response body as a string
                 String responseBody = response.body().string();
+
+                // Parse the response as a JSON object
                 JSONObject json = new JSONObject(responseBody);
+
+                // Extract the geometry information from the JSON response
                 JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
 
+                // Extract latitude and longitude from the API response
                 double latitude = location.getDouble("lat");
                 double longitude = location.getDouble("lng");
 
+                // Add the coordinates to the geoPoint list
                 geoPoint.add(latitude);
                 geoPoint.add(longitude);
-
             }
         } catch (IOException e) {
+            // Handle potential IO exceptions, such as network errors
             e.printStackTrace();
         }
         return geoPoint;
     }
 
-    public String getPostalCode(){
+    /**
+     * Gets the empty postal code constant.
+     *
+     * @return The empty postal code constant.
+     */
+    public String getPostalCode() {
         return postalCode;
     }
-
 }
-//public class LocationFinder {
-//
-//    private static final List<Double> geoPoint = new ArrayList<>();
-//
-//    public List<Double> locationFinder(String postalCode){
-//
-//        String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
-//        try {
-//            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
-//            OkHttpClient client = new OkHttpClient();
-//            Request request = new Request.Builder()
-//                    .url(url)
-//                    .build();
-//
-//            try (Response response = client.newCall(request).execute()) {
-//                if (response.isSuccessful()) {
-//                    String responseBody = response.body().string();
-//                    JSONObject json = new JSONObject(responseBody);
-//                    JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
-//
-//                    double latitude = location.getDouble("lat");
-//                    double longitude = location.getDouble("lng");
-//
-//                    geoPoint.add(latitude);
-//                    geoPoint.add(longitude);
-//
-//                } else {
-//                    System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return geoPoint;
-//    }
-//
-//
-//    public static void main(String[] args) {
-//        // Create a User with a postal code
-//          // Replace with the actual postal code you want to test
-//
-//        // Use the LocationFinder to get coordinates
-//        LocationFinder locationFinder = new LocationFinder();
-//        List<Double> coordinates = locationFinder.locationFinder("M2J2C6");
-//
-//        // Display the coordinates
-//        if (coordinates.size() == 2) {
-//            double latitude = coordinates.get(0);
-//            double longitude = coordinates.get(1);
-//            System.out.println("Latitude: " + latitude);
-//            System.out.println("Longitude: " + longitude);
-//        } else {
-//            System.out.println("Unable to retrieve coordinates.");
-//        }
-//    }
-//}
-

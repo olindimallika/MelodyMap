@@ -1,3 +1,9 @@
+/**
+ * The {@code PresaleTest} class contains unit tests for the {@link PresaleInteractor} class.
+ * These tests cover various scenarios, including successful execution.
+ *
+ * <p><strong>Note:</strong> This class uses JUnit 5 for testing.
+ */
 package interactor;
 
 import data_access.ArtistStrategy;
@@ -11,8 +17,16 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link PresaleInteractor} class.
+ */
 public class PresaleTest {
 
+    /**
+     * Tests the successful execution of the {@link PresaleInteractor}.
+     *
+     * @throws IOException if an I/O exception occurs during the test.
+     */
     @Test
     void successTest() throws IOException {
         // Create input data for the test case
@@ -23,6 +37,11 @@ public class PresaleTest {
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         PresaleOutputBoundary successPresenter = new PresaleOutputBoundary() {
+            /**
+             * Prepares the success view based on the provided output data and asserts that it matches the expected values.
+             *
+             * @param user The output data for the presale operation.
+             */
             @Override
             public void prepareSuccessView(PresaleOutputData user) {
                 // Expected test for artist "Olivia Rodrigo"
@@ -39,6 +58,11 @@ public class PresaleTest {
                 assertEquals(test, user.getFormatOutputPresale());
             }
 
+            /**
+             * Asserts that the failure view is not expected to be called during a successful test.
+             *
+             * @param error The error message (unexpected in this context).
+             */
             @Override
             public void prepareFailView(String error) {
                 // If the use case fails, then fail the test
