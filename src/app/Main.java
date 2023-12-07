@@ -50,7 +50,7 @@ public class Main {
         NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, artistViewModel, userDataAccessObject);
         views.add(notifyView,notifyView.viewName);
 
-        ArtistVenueView artistVenueView = ArtistVenueUseCaseFactory.create(viewManagerModel, artistViewModel, userDataAccessObject, notifyViewModel);
+        ArtistVenueView artistVenueView = ArtistVenueUseCaseFactory.create(viewManagerModel, artistViewModel, userDataAccessObject);
         views.add(artistVenueView, artistVenueView.viewName);
 
         viewManagerModel.setActiveView(upcomingShowsView.viewName);

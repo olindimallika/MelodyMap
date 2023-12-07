@@ -9,7 +9,7 @@ import java.beans.PropertyChangeSupport;
 
 public class ArtistViewModel extends ViewModel {
 
-    public final String TITLE_LABEL = "ArtistVenue View";
+    public final String TITLE_LABEL = "Artist Venue View";
 
     private ArtistState state = new ArtistState();
 

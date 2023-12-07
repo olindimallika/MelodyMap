@@ -28,16 +28,22 @@ public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
     }
 
     @Override
-    public void execute() throws IOException {
+    public void execute(ArtistVenueInputData artistVenueInputData) throws IOException {
         try {
-            String strFavArtists = artistVenueDataAccessObject.getFavouriteArtists();
-            String[] artistsArray = strFavArtists.split(", ");
-            List<String> artistList = Arrays.asList(artistsArray);
+            LinkedHashMap<String, String> artistTours = artistVenueInputData.getArtistTours();
+
+            ArrayList<String> artistsOnTour = new ArrayList<>();
+
+            for (Map.Entry<String, String> entry : artistTours.entrySet()) {
+                if (entry.getValue().equals("has a tour")) {
+                    artistsOnTour.add(entry.getKey());
+                }
+            }
+
             ArtistFactory artistFactory = new ArtistModelFactory();
             ArrayList<Artist> favArtists = new ArrayList<>();
 
-
-            for (String artistString : artistList) {
+            for (String artistString : artistsOnTour) {
                 Artist artist = artistFactory.create(artistString);
                 favArtists.add(artist);
             }
