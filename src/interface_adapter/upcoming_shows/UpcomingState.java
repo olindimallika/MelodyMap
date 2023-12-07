@@ -3,8 +3,8 @@ package interface_adapter.upcoming_shows;
 import java.util.LinkedHashMap;
 
 /**
- * Represents the state of the Upcoming Shows view in the application.
- * It contains information about the postal code, postal code error, and upcoming shows.
+ * The UpcomingState class represents the state of the upcoming shows functionality in the application.
+ * It encapsulates information such as postal code, postal code errors, and upcoming shows data.
  */
 public class UpcomingState {
 

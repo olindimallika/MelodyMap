@@ -10,31 +10,14 @@ import org.junit.jupiter.api.Test;
 import use_case.upcoming_shows.UpcomingOutputData;
 
 import java.util.LinkedHashMap;
-
 /**
- * The UpcomingShowsTest class contains JUnit tests for the UpcomingPresenter and associated
- * components in the "presenter" package. It focuses on testing the success scenarios of presenting upcoming shows.
- *
- * <p>The test case checks the functionality of the UpcomingPresenter by verifying that the presenter
- * correctly prepares the view model for upcoming shows. The test creates a mock output data object representing
- * upcoming concerts, view models, and a presenter to simulate a successful presentation of upcoming shows.</p>
- *
- * First, create a LinkedHashMap representing upcoming concerts with their names and ticket URLs and create an
- * UpcomingOutputData object with the upcoming concerts data.
- *
- * Then create view models (UpcomingViewModel) and (ShowConcertsViewModel) to hold the presented data and create a
- * ViewManagerModel to manage the views.
- *
- * Create an UpcomingPresenter instance, providing it with the view manager and view models.
- *
- * Finally invoke the presenter by passing in the upcoming output data.
- *
+ * The {@code UpcomingShowsTest} class contains unit tests for the successful execution
+ * of the upcoming shows use case within the controller layer.
  */
-public class UpcomingShowsTest {
 
+public class UpcomingShowsTest {
     /**
-     * Test the success scenario of the UpcomingController by creating necessary input boundary
-     * and verifying that the controller executes the upcoming shows use case with the correct postal code.
+     * Test case for a successful execution of the upcoming shows use case.
      */
     @Test
     void successTest() {

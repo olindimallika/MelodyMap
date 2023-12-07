@@ -4,44 +4,31 @@ import use_case.upcoming_shows.UpcomingInputBoundary;
 import use_case.upcoming_shows.UpcomingInputData;
 
 /**
- * The UpcomingController class serves as an adapter between the user interface and the upcoming shows use case.
- * It encapsulates the interaction logic by accepting user input from the UI (postal code) and invoking the corresponding
- * use case interactor to process the input and retrieve upcoming shows information.
- *
- * Member Variables:
- * The use case interactor responsible for handling upcoming shows related logic.
- *
- * Constructor:
- * Constructs an instance of the controller with the provided UpcomingInputBoundary as the use case interactor.
- *
- * Methods:
- * execute(String): Accepts a postal code from the UI, creates an UpcomingInputData object,
- * and delegates the execution to the underlying use case interactor.
+ * The UpcomingController class is responsible for handling user input and triggering the execution
+ * of the upcoming shows functionality through the associated UpcomingInputBoundary.
  */
 public class UpcomingController {
     /**
-     * The use case interactor responsible for handling upcoming shows related logic.
+     * The UpcomingInputBoundary associated with this controller to handle the upcoming shows use case.
      */
     final UpcomingInputBoundary userUpcomingUseCaseInteractor;
 
     /**
-     * Constructs an instance of the controller with the provided use case interactor.
+     * Constructs a new UpcomingController with the given UpcomingInputBoundary.
      *
-     * @param userUpcomingUseCaseInteractor The use case interactor to be used by the controller.
+     * @param userUpcomingUseCaseInteractor The UpcomingInputBoundary associated with this controller.
      */
-    public UpcomingController(UpcomingInputBoundary userUpcomingUseCaseInteractor){
+    public UpcomingController(UpcomingInputBoundary userUpcomingUseCaseInteractor) {
         this.userUpcomingUseCaseInteractor = userUpcomingUseCaseInteractor;
     }
 
     /**
-     * Accepts a postal code from the UI, creates an UpcomingInputData object, and delegates the execution
-     * to the underlying use case interactor.
+     * Executes the upcoming shows functionality with the provided postal code.
      *
-     * @param postalCode The postal code input received from the UI.
+     * @param postalCode The postal code input provided by the user.
      */
-    public void execute(String postalCode){
+    public void execute(String postalCode) {
         UpcomingInputData upcomingInputData = new UpcomingInputData(postalCode);
-
         userUpcomingUseCaseInteractor.execute(upcomingInputData);
     }
 }
