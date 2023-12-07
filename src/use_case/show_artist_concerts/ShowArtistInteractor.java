@@ -1,6 +1,5 @@
 package use_case.show_artist_concerts;
 
-import use_case.show_concerts.ShowConcertsOutputBoundary;
 
 public class ShowArtistInteractor implements ShowArtistInputBoundary{
 
@@ -8,7 +7,7 @@ public class ShowArtistInteractor implements ShowArtistInputBoundary{
     final ShowArtistOuputBoundary showArtistPresenter;
 
     /**
-     * Constructs a new instance of ShowConcertsInteractor
+     * Constructs a new instance of ShowArtistsInteractor
      *
      * @param showArtistOuputBoundary The presenter for displaying the results to the user.
      */
