@@ -1,0 +1,8 @@
+# .DS_Store files
+.DS_Store
+target/.DS_Store
+target/classes/.DS_Store
+target/classes/use_case/.DS_Store
+target/generated-sources/
+target/generated-test-sources/
+target/test-classes/.DS_Store
