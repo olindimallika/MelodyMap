@@ -1,5 +1,8 @@
 package entity;
+
+
 import java.util.ArrayList;
+
 public class UserModelFactory implements UserFactory{
     /**
      * Requires: postal code is valid.

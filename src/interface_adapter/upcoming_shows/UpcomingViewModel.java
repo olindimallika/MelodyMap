@@ -6,9 +6,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public class UpcomingViewModel extends ViewModel{
-    public static final String TITLE_LABEL = "Upcoming Shows View";
+    public static final String TITLE_LABEL = "                                                                                                            " +
+            "                                           " +
+            "Upcoming Shows View                                                                                                                          ";
 
-    public static final String POSTALCODE_LABEL = "Please enter a Canadian postal code (capital, no space):";
+    public static final String POSTALCODE_LABEL = "                                                                                                        " +
+            "                     Please enter a Canadian postal code (capital, no space):                                                                       ";
 
     public static final String ENTER_BUTTON_LABEL = "Enter";
 

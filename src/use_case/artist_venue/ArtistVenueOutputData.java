@@ -1,23 +1,20 @@
 package use_case.artist_venue;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 public class ArtistVenueOutputData {
 
-    private final String upcomingConcerts;
+    private final LinkedHashMap<String, List<String>> artistShows;
 
-    public ArtistVenueOutputData(String upcomingConcerts){
+    public ArtistVenueOutputData(LinkedHashMap<String, List<String>> artistShows){
 
-        this.upcomingConcerts = upcomingConcerts;
+        this.artistShows = artistShows;
     }
 
-    public String getUpcomingConcerts() {
+    public LinkedHashMap<String, List<String>> getArtistShows() {
 
-        return upcomingConcerts;
+        return artistShows;
     }
 
 }

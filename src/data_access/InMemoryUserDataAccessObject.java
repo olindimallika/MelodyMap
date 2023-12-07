@@ -1,167 +1,30 @@
 package data_access;
 
-import entity.*;
+import entity.Artist;
+import entity.ArtistFactory;
+import entity.ArtistModelFactory;
+import entity.User;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.testng.annotations.Test;
-import use_case.EventStrategy;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
-import use_case.presale_date.*;
-import use_case.similar_artist_venue.SimilarDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
-import use_case.presale_date.PresaleDataAccess;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static org.testng.Assert.*;
-
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ArtistVenueDataAccess, PresaleDataAccess {
+//
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
-
-    private static final String locationFinderApiKey = "d121a538d4924ef0a8951e8463b063e7";
-
-    private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
-
-    private static final List<Double> geoPoint = new ArrayList<>();
-
-    private JSONObject artistInfo;
-
-    private List<String> presaleDates = new ArrayList<>();
-    private List<String> eventUrls = new ArrayList<>();
-    private List<String> listFormatOutputPresale = new ArrayList<>();
-    private String finalFormatOutputPresale = "";
-    private String postalCode = "";
+    private String favouriteArtists = "";
     private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
-
-    /**
-     * @param user the user's postal code
-     * @return the user's geoPoint as a list of 2 doubles, latitude and longitude.
-     */
-    @Override
-    public List<Double> locationFinder(User user){
-        String postalCode = user.getPostalCode();
-
-        try {
-            String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
-            OkHttpClient client = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            try (Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    JSONObject json = new JSONObject(responseBody);
-                    JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
-
-                    double latitude = location.getDouble("lat");
-                    double longitude = location.getDouble("lng");
-
-                    geoPoint.add(latitude);
-                    geoPoint.add(longitude);
-
-                } else {
-                    System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return geoPoint;
-    }
-
-    /**
-     * @param radius FILL IN LATER
-     * @param unit FILL IN LATER
-     * @param classification FILL IN LATER
-     * @param user the user's postal code to get the closest concerts
-     * @return the user's geoPoint as a list of 2 doubles, latitude and longitude.
-     */
-    @Override
-    public List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification, User user) throws IOException {
-        List<Double> latlong = locationFinder(user);
-        double lat1 = latlong.get(0);
-        double lat2 = latlong.get(1);
-        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
-
-        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-        String urlString = baseUrl + "?geoPoint=" + strLatlong;
-
-        // Append radius, unit, and classification if provided
-        if (radius > 0 && unit != null) {
-            urlString += "&radius=" + radius + "&unit=" + unit;
-        }
-
-        if (classification != null) {
-            urlString += "&classificationName=" + classification;
-        }
-
-        urlString += "&apikey=" + "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
-
-        URL url = new URL(urlString);
-        Scanner scanner = new Scanner(url.openStream());
-        StringBuilder jsonContent = new StringBuilder();
-
-        while (scanner.hasNext()) {
-            jsonContent.append(scanner.nextLine());
-        }
-
-        scanner.close();
-        // Parse the JSON response and return a list of events
-        List<JSONObject> events = new ArrayList<>();
-        JSONObject obj = new JSONObject(jsonContent.toString());
-
-        // Check if _embedded is a JSONArray
-        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
-            JSONObject embedded = obj.getJSONObject("_embedded");
-
-            if (embedded.has("events")) {
-                JSONArray eventsArray = embedded.getJSONArray("events");
-
-                for (int i = 0; i < eventsArray.length(); i++) {
-                    events.add(eventsArray.getJSONObject(i));
-                }
-
-                // Sort events based on distance
-                events.sort(Comparator.comparingDouble(event ->
-                        calculateDistance(
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("latitude"),
-                                event.getJSONObject("_embedded").getJSONArray("venues").getJSONObject(0).getJSONObject("location").getDouble("longitude"),
-                                user)));
-            }
-        }
-
-        return events;
-    }
-
-
-    /**
-     * @param lat2 the user's latitude coordinate from their postal code
-     * @param lon2 the user's longitude coordinate from their postal code
-     * @param user the user's postal code to make calculations from
-     * @return the length between the user's location and the concert venue
-     */
-    @Override
-    public double calculateDistance(double lat2, double lon2, User user) {
-        List<Double> latlong = locationFinder(user);
-        double lat1 = latlong.get(0);
-        double lon1 = latlong.get(1);
-        double x = lat1 * (Math.PI / 180);
-        double y = lat2 * (Math.PI / 180);
-        // Equation - need to fix
-        return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
-    }
 
     /**
      * @param event concert event from the ticket master api
@@ -177,6 +40,11 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
      * @param event concert event from the ticketmaster api
      * @return the name of the artist who is holding the given ticketmaster concert
      */
+    @Override
+    public String getArtistName(JSONObject event) {
+        Artist artist = new ArtistModelFactory().create(event.getString("name"));
+        return artist.getName();
+    }
 
     /**
      * @param events concert events from ticketmaster api
@@ -189,19 +57,6 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         }
         return shows;
     }
-
-
-
-    /**
-     * @param postalCode the user's postal code
-     * @return whether the coordinates of the user's postal code exists
-     */
-    @Override
-    public boolean existsInCoords(String postalCode) {
-        return !geoPoint.isEmpty();
-    }
-
-
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
     /**
@@ -251,96 +106,8 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return output;
     }
 
-    @Override
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    /**
-     * @return whether the api call can be made to find the artist's information
-     */
-    @Override
-    public boolean existsInApi() {
-        return artistInfo != null;
-    }
-
-    //////////////////////// FOR PRESALE USER TOUR USE CASE /////////////////////////////
-//    ----List<JSONObject> getEventsFromLatLong(int radius, String unit, String classification, User user) throws Exception;
-//
-//    //List<String> getEventUrls();
-//    List<String> getPresaleDates();
-
-
-    @Override
-    public List<String> getPresaleDates() {
-        return presaleDates;
-    }
-
-    @Override
-    public void addEventInfo(JSONObject event) {
-        // Extract and store the URL
-        String url = event.getString("url");
-        eventUrls.add(url);
-
-        // Extract and store presale date if available
-        if (event.has("sales") && event.getJSONObject("sales").has("presales")) {
-            JSONArray presalesArray = event.getJSONObject("sales").getJSONArray("presales");
-            for (int j = 0; j < presalesArray.length(); j++) {
-                JSONObject presale = presalesArray.getJSONObject(j);
-                String startPresaleDate = presale.getString("startDateTime");
-                String endPresaleDate = presale.getString("endDateTime");
-
-                if (isPastPresale(endPresaleDate)) {
-                    presaleDates.add("You missed the presale. Go to general sale by clicking link");
-                } else {
-                    String intervalPresale = "Presale is happening now until "+ endPresaleDate + " click the link to go to presale.";
-                    presaleDates.add(intervalPresale);
-                }
-            }
-        } else {
-            // If no presale date is available, add a placeholder or handle it as needed
-            presaleDates.add("No presale date available. Click to see if theres tix available");
-        }
-    }
-
-    @Override
-    public boolean isPastPresale(String presaleEndDate){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        try {
-            Date endDate = sdf.parse(presaleEndDate);
-            Date currentDate = new Date();
-
-            return currentDate.after(endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            // Handle the parse exception as needed
-            return false;
-        }
-    }
-
-    @Override
-    public List<String> getEventUrls() {
-        return eventUrls;
-    }
-
-    @Override
-    public String formatOutputPresale(String artName, String artUrl, String artPresale){
-        String result = (artName + "\n" + "Event URL: "+artUrl +"\n"+ "Presale Status: "+ artPresale + "\n"+ "\n");
-        listFormatOutputPresale.add(result);
-        return result;
-    }
-
-    @Override
-    public String getFormatOutputPresale() {
-        finalFormatOutputPresale = String.join("", listFormatOutputPresale);
-        return finalFormatOutputPresale;
-        //return listFormatOutputPresale;
-    }
-
-    @Override
-    public String getArtistName(JSONObject event) {
-        Artist artist = new ArtistModelFactory().create(event.getString("name"));
-        return artist.getName();
+    public String getFavouriteArtists(){
+        return favouriteArtists;
     }
 
 }
