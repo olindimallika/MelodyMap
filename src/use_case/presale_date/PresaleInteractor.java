@@ -69,11 +69,22 @@ public class PresaleInteractor implements PresaleInputBoundary {
 
             // Print event URLs and presale dates
             List<String> urls = presaleDataAccessObject.getEventUrls();
-            System.out.println(urls);
+            //System.out.println(urls);
             List<String> presaleDates = presaleDataAccessObject.getPresaleDates();
 
             //make a hashmapp of artist name mapped to URL
 
+            HashMap<String, String> artistUrlMap = new HashMap<>();
+            // Populate the HashMap
+            for (int i = 0; i < artNameList.size(); i++) {
+                String artistName = artNameList.get(i);
+                String urlArtist = urls.get(i);
+                artistUrlMap.put(artistName, urlArtist);
+            }
+
+            // Now artistUrlMap contains the mapping of artist names to URLs
+            // You can use it as needed
+            //System.out.println(artistUrlMap);
 
 
             // iterate through every url and place the preale date beside it.
@@ -86,7 +97,7 @@ public class PresaleInteractor implements PresaleInputBoundary {
             }
 
             String displayFormatOut = presaleDataAccessObject.getFormatOutputPresale();
-            System.out.println(displayFormatOut);
+            //System.out.println(displayFormatOut);
 
             PresaleOutputData presaleOutputData = new PresaleOutputData(displayFormatOut);
             presalePresenter.prepareSuccessView(presaleOutputData);

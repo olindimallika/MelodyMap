@@ -5,8 +5,10 @@ import java.util.List;
 public class PresaleState {
     private String postalCode = "";
     private String postalCodeError = null;
-    //private List<String> presaleDates = new ArrayList<>();
+    private List<String> presaleDates = new ArrayList<>();
+    private List<String> eventUrls = new ArrayList<>();
     private String finalFormatOutputPresale = "";
+    //private List<String> presaleuRLS = new ArrayList<>();
 
 
 
@@ -49,6 +51,8 @@ public class PresaleState {
         return finalFormatOutputPresale;
     }
 
+
+
 //    public List<String> getPresaleDates(){
 //        return presaleDates;
 //    }
@@ -69,6 +73,15 @@ public class PresaleState {
     //notify
     public String getFavArtists(){
         return favArtists;
+    }
+
+    public List<String> getPresaleDates(){
+        return presaleDates;
+    }
+
+    public List<String> getEventUrls(){
+        return eventUrls;
+
     }
 
     @Override
