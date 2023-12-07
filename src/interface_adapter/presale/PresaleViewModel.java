@@ -19,21 +19,17 @@ public class PresaleViewModel extends ViewModel {
     public PresaleViewModel(){
         super("presale");
     }
-
     public void setState(PresaleState state){
         this.state = state;
     }
-
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public void firePropertyChanged(){
         support.firePropertyChange("state", null, this.state);
     }
-
     public void addPropertyChangeListener(PropertyChangeListener listener){
         support.addPropertyChangeListener(listener);
     }
-
 
     public PresaleState getState() {
         return state;

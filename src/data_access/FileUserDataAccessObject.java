@@ -36,13 +36,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     private List<String> listFormatOutputPresale = new ArrayList<>();
     private String finalFormatOutputPresale = "";
 
-
-    //private String idkFormatOutputPresale = "";
-
-
-
-    //private List<String> artName = new ArrayList<>();
-
     public FileUserDataAccessObject() {
     }
 
@@ -126,7 +119,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
         return events;
     }
-
 
     // Finds length between users location and the venue to sort it so closest venue is shown
     public double calculateDistance(double lat2, double lon2, User user) {
@@ -231,7 +223,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return result;
     }
 
-
     public List<String> getEventUrls() {
         return eventUrls;
     }
@@ -245,9 +236,6 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return finalFormatOutputPresale;
         //return listFormatOutputPresale;
     }
-
-
-
 
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////

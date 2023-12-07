@@ -12,6 +12,8 @@ public class EventProcesser<T> {
         this.eventStrategy = eventStrategy;
     }
 
+
+
     public T processEvent(User user) throws IOException {
         return eventStrategy.getEvents(user);
     }

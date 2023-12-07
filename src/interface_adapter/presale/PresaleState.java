@@ -74,7 +74,6 @@ public class PresaleState {
     public String getFavArtists(){
         return favArtists;
     }
-
     public List<String> getPresaleDates(){
         return presaleDates;
     }
@@ -83,7 +82,6 @@ public class PresaleState {
         return eventUrls;
 
     }
-
     @Override
     public String toString() {
         return "SignupState{" +
@@ -94,7 +92,6 @@ public class PresaleState {
     public void setFavArtists(String favArtists) {
         this.favArtists = favArtists;
     }
-
     public String getFavArtistsError(){
         return favArtistsError;
     }

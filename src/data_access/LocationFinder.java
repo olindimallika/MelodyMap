@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationFinder {
-    //
 
     private static final List<Double> geoPoint = new ArrayList<>();
 

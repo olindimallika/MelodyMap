@@ -32,31 +32,7 @@ public class UpcomingStrategy implements EventStrategy<List<JSONObject>> {
         List<JSONObject> upcomingEvents = findEvents.fetchEvents(urlString, user);
         return upcomingEvents;
     }
-//    public static void main(String[] args) {
-//        try {
-//            // Create a sample user
-//            UserFactory userFactory = new UserModelFactory();
-//            User user = userFactory.create("L1C0K1", "John Doe");
-//
-//            // Create an instance of UpcomingStrategy
-//            UpcomingStrategy upcomingStrategy = new UpcomingStrategy();
-//
-//            // Call the getEvents method
-//            List<JSONObject> events = upcomingStrategy.getEvents(user);
-//
-//            // Display the event URLs using the printEventUrls method
-//            printEventUrls(events);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void printEventUrls(List<JSONObject> events) {
-//        for (JSONObject event : events) {
-//            String url = event.getString("url");
-//            System.out.println("Event URL: " + url);
-//        }
-//    }
+
 
 }
 

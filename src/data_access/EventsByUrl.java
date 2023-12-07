@@ -69,9 +69,11 @@ public class EventsByUrl {
         }
     }
 
+
     public static void main(String[] args) {
         try {
             // Sample user and coordinates
+
 
             UserFactory userFactory = new UserModelFactory();
             ArtistFactory artistFactory = new ArtistModelFactory();

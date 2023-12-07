@@ -186,55 +186,9 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
     public void presalePropertyChange(PropertyChangeEvent evt){
         PresaleState state = (PresaleState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getEventUrls());
-        System.out.println(state.getFormatOutputPresale());
-
-        List<String> urlPresale = state.getEventUrls();
-        System.out.println("////");
-        System.out.println(urlPresale);
-
-        hyperlink.setText(urlPresale.get(0));
-        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        hyperlink.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-
-                try {
-                    // Check if the URL is valid
-                    Desktop.getDesktop().browse(new URI(urlPresale.get(0)));
-
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        JOptionPane.showMessageDialog(this, state.getFormatOutputPresale());
 
     }
-
-
-//    public void notifyPropertyChange(PropertyChangeEvent evt){
-//        PresaleState state = (PresaleState) evt.getNewValue();
-//
-//        String hyperlinkText = state.getConcertLink();
-//
-//        // making the link clickable for user
-//        JLabel hyperlink = new JLabel(state.getFavouriteArtistUpcoming() + hyperlinkText);
-//        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//        hyperlink.addMouseListener(new MouseAdapter() {
-//
-//            public void mouseClicked(MouseEvent e) {
-//                try {
-//                    Desktop.getDesktop().browse(new URI(hyperlinkText));
-//                } catch (IOException | URISyntaxException e1) {
-//                    e1.printStackTrace();
-//                }
-//            }
-//
-//        });
-//
-//        JOptionPane.showMessageDialog(this, hyperlink);
-//    }
-
-
 
 }
 

@@ -369,55 +369,5 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         Artist artist = new ArtistModelFactory().create(event.getString("name"));
         return artist.getName();
     }
-//
-//    void addEventInfo(JSONObject event);
-//
-//    boolean isPastPresale(String presaleEndDate);
-//
-//    List<String> getEventUrls();
-//
-//    String getArtistName(JSONObject event);
-//
-//    String formatOutputPresale(String artName, String artUrl, String artPresale);
-//
-//    String getFormatOutputPresale();
-
-
-
-
-//    @Test
-//    void successTest() {
-//        PresaleInputData inputData = new PresaleInputData("M1E4N3", "Taylor Swift");
-//        PresaleDataAccess userRepository = new InMemoryUserDataAccessObject();
-//
-//        // This creates a successPresenter that tests whether the test case is as we expect.
-//        PresaleOutputBoundary successPresenter = new PresaleOutputBoundary() {
-//            @Override
-//            public void prepareSuccessView(PresaleOutputData user) {
-//                // 2 things to check: the output data is correct, and the user has been created in the DAO.
-//                assertEquals("Olivia Rodrigo - GUTS world tour\n" +
-//                        "Event URL: https://www.ticketmaster.ca/olivia-rodrigo-guts-world-tour-toronto-ontario-03-29-2024/event/10005F2839E1667D\n" +
-//                        "Presale Status: No presale date available. Click to see if theres tix available\n" +
-//                        "\n" +
-//                        "Olivia Rodrigo - GUTS world tour\n" +
-//                        "Event URL: https://www.ticketmaster.ca/olivia-rodrigo-guts-world-tour-toronto-ontario-03-30-2024/event/10005F2E0D0460DE\n" +
-//                        "Presale Status: No presale date available. Click to see if theres tix available\n" +
-//                        "\n" +
-//                        "\n",user.getFormatOutputPresale());
-//                //assertTrue(userRepository.existsByName("Olivia Rodrigo"));
-//            }
-//
-//            @Override
-//            public void prepareFailView(String error) {
-//                fail("Use case failure is unexpected.");
-//            }
-//        };
-//
-//        //EventStrategy eventStrategy = new EventStrategy(); {
-//
-//
-////        PresaleInputBoundary interactor = new PresaleInteractor(userRepository, EventStrategy eventStrategy, new UserModelFactory());
-////        interactor.execute(inputData);
-//    }
 
 }

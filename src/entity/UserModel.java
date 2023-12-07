@@ -1,7 +1,5 @@
 package entity;
-
 import java.util.ArrayList;
-
 class UserModel implements User {
 
     private final String postalCode;
@@ -11,7 +9,6 @@ class UserModel implements User {
         this.postalCode = postalCode;
         this.favouriteArtist = favouriteArtist;
     }
-
     @Override
     public String getPostalCode() {
         return postalCode;
@@ -21,7 +18,6 @@ class UserModel implements User {
     public ArrayList<Artist> getFavouriteArtist() {
         return favouriteArtist;
     }
-
 
 }
 

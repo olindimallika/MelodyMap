@@ -98,6 +98,8 @@ public class PresaleInteractor implements PresaleInputBoundary {
 
             String displayFormatOut = presaleDataAccessObject.getFormatOutputPresale();
             //System.out.println(displayFormatOut);
+            //List<String> empty = new ArrayList<>();
+            //System.out.println(empty.add(displayFormatOut));
 
             PresaleOutputData presaleOutputData = new PresaleOutputData(displayFormatOut);
             presalePresenter.prepareSuccessView(presaleOutputData);

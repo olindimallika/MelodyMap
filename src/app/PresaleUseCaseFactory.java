@@ -34,6 +34,7 @@ public class PresaleUseCaseFactory {
     private static PresaleController createUserPresaleUseCase(ViewManagerModel viewManagerModel,
                                                               PresaleViewModel presaleViewModel,
                                                               PresaleDataAccess userDataAccessObject) throws IOException {
+        //creating a new EventStategy to extract events
         EventStrategy artistStrategy = new ArtistStrategy();
         PresaleOutputBoundary presaleOutputBoundary = new PresalePresenter(viewManagerModel, presaleViewModel);
 

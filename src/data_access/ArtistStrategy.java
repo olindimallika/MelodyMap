@@ -17,13 +17,6 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
     @Override
     public List<List<JSONObject>> getEvents(User user) throws IOException {
 
-        //LocationFinder helper = new LocationFinder();
-        //        List<Double> latlong = helper.locationFinder(user);
-        //
-        //        double lat1 = latlong.get(0);
-        //        double lat2 = latlong.get(1);
-        //        String strLatlong = lat1 + "," + lat2;
-
         String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
         String classification = "music";
 
@@ -33,6 +26,7 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
         double lat1 = helper.locationFinder(user).get(0);
         double lat2 = helper.locationFinder(user).get(1);
         String coordinates = lat1 + "," + lat2;
+
 
         List<Artist> favArtists = user.getFavouriteArtist();
         List<List<JSONObject>> favArtistsEvents = new ArrayList<>();
@@ -55,42 +49,4 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 
     }
 }
-//    public static void main(String[] args) {
-//        // Checking to see if i get an output
-//
-//
-//        try {
-//            // Create a sample user
-//            UserFactory userFactory = new UserModelFactory();
-//            ArtistFactory artistFactory = new ArtistModelFactory();
-//            Artist artist1 = artistFactory.create("Taylor Swift");
-//            Artist artist2 = artistFactory.create("Olivia Rodrigo");
-//            ArrayList<Artist> artists = new ArrayList<>();
-//            artists.add(artist1);
-//            artists.add(artist2);
-//            String postal = "L1C0K1";
-//            User user = userFactory.create(postal, artists);
-//
-//            // Create an instance of ArtistStrategy
-//            ArtistStrategy artistStrategy = new ArtistStrategy();
-//
-//            // Call the getEvents method
-//            List<List<JSONObject>> eventsList = artistStrategy.getEvents(user);
-//
-//            // Display or process the fetched events
-//            printArtistEvents(eventsList);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void printArtistEvents(List<List<JSONObject>> eventsList) {
-//        for (List<JSONObject> events : eventsList) {
-//            for (JSONObject event : events) {
-//                String url = event.getString("url");
-//                System.out.println("Event URL: " + url);
-//            }
-//            System.out.println("----"); // Separate events from different artists
-//        }
-//    }
-//}
+

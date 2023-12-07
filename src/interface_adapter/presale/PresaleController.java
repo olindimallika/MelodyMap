@@ -1,20 +1,15 @@
 package interface_adapter.presale;
 
-import entity.Artist;
 import use_case.presale_date.PresaleInputBoundary;
 import use_case.presale_date.PresaleInputData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 
 public class PresaleController {
     final PresaleInputBoundary userPresaleUseCaseInteractor;
-
     public PresaleController(PresaleInputBoundary userPresaleUseCaseInteractor){
         this.userPresaleUseCaseInteractor = userPresaleUseCaseInteractor;
     }
-
 
     public void execute(String postalCode, String favouriteArtist) throws IOException {
         PresaleInputData presaleInputData = new PresaleInputData(postalCode, favouriteArtist);
