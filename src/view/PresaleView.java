@@ -6,7 +6,11 @@ import interface_adapter.presale.PresaleState;
 import interface_adapter.presale.PresaleViewModel;
 import interface_adapter.upcoming_shows.UpcomingState;
 
-
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +19,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+
 
 public class PresaleView extends JPanel implements ActionListener, PropertyChangeListener  {
     public final String viewName = "presale";
@@ -178,10 +183,33 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
     }
 
+
     public void presalePropertyChange(PropertyChangeEvent evt){
         PresaleState state = (PresaleState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getFormatOutputPresale());
+        JOptionPane.showMessageDialog(this, state.getEventUrls());
+        System.out.println(state.getFormatOutputPresale());
+
+        List<String> urlPresale = state.getEventUrls();
+        System.out.println("////");
+        System.out.println(urlPresale);
+
+        hyperlink.setText(urlPresale.get(0));
+        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        hyperlink.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+                try {
+                    // Check if the URL is valid
+                    Desktop.getDesktop().browse(new URI(urlPresale.get(0)));
+
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
     }
+
 
 //    public void notifyPropertyChange(PropertyChangeEvent evt){
 //        PresaleState state = (PresaleState) evt.getNewValue();
@@ -206,4 +234,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 //        JOptionPane.showMessageDialog(this, hyperlink);
 //    }
 
+
+
 }
+
