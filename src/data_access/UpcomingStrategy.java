@@ -2,12 +2,8 @@ package data_access;
 
 import entity.*;
 import org.json.JSONObject;
-import data_access.EventStrategy;
-import data_access.EventsByUrl;
-import data_access.LocationFinder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -66,8 +62,3 @@ public class UpcomingStrategy implements EventStrategy<List<JSONObject>> {
 //    }
 //
 //}
-
-
-
-
-

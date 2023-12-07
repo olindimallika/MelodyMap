@@ -1,10 +1,7 @@
 package data_access;
 
 import entity.*;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import data_access.EventStrategy;
-import data_access.EventsByUrl;
 
 import java.io.IOException;
 import java.util.*;
@@ -86,4 +83,3 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 //        }
 //    }
 //}
-

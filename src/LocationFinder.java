@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class LocationFinder {
 
-    private static final String API_KEY = "f4802c41d44f4bf0a66c3bc96ff4c0de";
+    private static final String API_KEY = "da6cc6f8acb046428c81ee0b87e411a1";
 
     public static List<Double> latlong = new ArrayList<>();
 

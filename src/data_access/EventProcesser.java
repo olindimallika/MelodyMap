@@ -1,7 +1,7 @@
 package data_access;
 
 import entity.User;
-import data_access.EventStrategy;
+
 import java.io.IOException;
 
 public class EventProcesser<T> {

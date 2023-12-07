@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import data_access.LocationFinder;
+
 
 public class EventsByUrl {
     public List<JSONObject> fetchEvents(String urlString, User user) throws IOException {
@@ -113,4 +113,3 @@ public class EventsByUrl {
 //}
 
 //+ "&keyword=" + artistName
-
