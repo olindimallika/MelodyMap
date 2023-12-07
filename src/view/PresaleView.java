@@ -1,10 +1,12 @@
+/**
+ * This class represents the view for the presale functionality in the application.
+ * It extends JPanel and implements ActionListener and PropertyChangeListener interfaces.
+ */
 package view;
-import interface_adapter.notify_user_tour.NotifyState;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import interface_adapter.presale.PresaleController;
 import interface_adapter.presale.PresaleState;
 import interface_adapter.presale.PresaleViewModel;
-import interface_adapter.upcoming_shows.UpcomingState;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -20,20 +22,44 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
+/**
+ * The PresaleView class provides a graphical user interface for the presale functionality.
+ */
 public class PresaleView extends JPanel implements ActionListener, PropertyChangeListener  {
+    /**
+     * The name of the view, used for identification.
+     */
     public final String viewName = "presale";
 
+    /**
+     * The associated PresaleViewModel for managing the view's data.
+     */
     private final PresaleViewModel presaleViewModel;
 
+
+    /**
+     * Text field for user input of postal code.
+     */
     private final JTextField postalCodeInputField = new JTextField(15);
+
+    /**
+     * Text field for user input of favorite artist.
+     */
     private final JTextField favouriteArtistInputField = new JTextField(15);
 
-
+    /**
+     * The associated PresaleController for handling user actions.
+     */
     private final PresaleController presaleController;
 
+    /**
+     * Button for triggering the presale functionality.
+     */
     private final JButton enter;
 
+    /**
+     * Hyperlink labels for additional information.
+     */
     JLabel hyperlink;
     JLabel hyperlink2;
     JLabel hyperlink3;
@@ -41,6 +67,12 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
     JLabel hyperlink5;
 
 
+    /**
+     * Constructs a new PresaleView with the given controller and view model.
+     *
+     * @param controller        The PresaleController associated with this view.
+     * @param presaleViewModel  The PresaleViewModel associated with this view.
+     */
     public PresaleView(PresaleController controller,
                        PresaleViewModel presaleViewModel) {
         this.presaleController = controller;
@@ -60,7 +92,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
                 new JLabel(NotifyViewModel.ARTIST_LABEL), favouriteArtistInputField);
 
 
-        ////hyperlink stuff
+        //setting hyperlinks to be clickable
         hyperlink = new JLabel();
         hyperlink.setFont(new Font("Arial", Font.PLAIN,12));
         hyperlink.setForeground(Color.white);
@@ -90,6 +122,7 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
         enter.addActionListener(
                 new ActionListener() {
+
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource().equals(enter)){
@@ -174,6 +207,12 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
         JOptionPane.showConfirmDialog(this, "Error, not expected.");
     }
 
+
+    /**
+     * Reacts to changes in the properties of the PresaleViewModel.
+     *
+     * @param evt The PropertyChangeEvent representing a change in the PresaleViewModel.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         PresaleState state = (PresaleState) evt.getNewValue();
@@ -183,7 +222,11 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
     }
 
-
+    /**
+     * Reacts to changes in the properties of the PresaleViewModel specific to presale information.
+     *
+     * @param evt The PropertyChangeEvent representing a change in presale information.
+     */
     public void presalePropertyChange(PropertyChangeEvent evt){
         PresaleState state = (PresaleState) evt.getNewValue();
         JOptionPane.showMessageDialog(this, state.getFormatOutputPresale());
