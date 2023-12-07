@@ -12,7 +12,7 @@ public class PresaleControllerTest {
     @Test
     void successTest() throws IOException {
         // creating the input boundary object
-        String postalCode = "M1E4N3";
+        String postalCode = "M5V3L9";
         String favArtsts = "Laufey";
         PresaleInputBoundary successInteractor = new PresaleInputBoundary() {
 
