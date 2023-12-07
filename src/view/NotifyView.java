@@ -23,7 +23,7 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
     private final JButton check;
 
     public NotifyView(NotifyController controller,
-                        NotifyViewModel notifyViewModel){
+                      NotifyViewModel notifyViewModel){
         this.notifyController = controller;
         this.notifyViewModel = notifyViewModel;
         notifyViewModel.addPropertyChangeListener(this);
@@ -107,4 +107,3 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
     }
 
 }
-

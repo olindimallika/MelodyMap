@@ -144,5 +144,3 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
 
     }
 }
-
-

@@ -2,7 +2,7 @@ package data_access;
 
 import entity.*;
 import org.json.JSONObject;
-import use_case.EventStrategy;
+import data_access.EventStrategy;
 import data_access.EventsByUrl;
 import data_access.LocationFinder;
 
