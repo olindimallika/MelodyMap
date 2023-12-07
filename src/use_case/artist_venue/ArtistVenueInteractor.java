@@ -1,180 +1,100 @@
 package use_case.artist_venue;
 
-import data_access.ArtistStrategy;
-import data_access.EventProcesser;
-import data_access.LocationFinder;
+import data_access.*;
 import entity.*;
 import org.json.JSONObject;
 
-
 import java.io.IOException;
 import java.util.*;
-//
 
+/**
+ * The `ArtistVenueInteractor` class represents the use case interactor for handling artist and venue-related operations.
+ * It implements the `ArtistVenueInputBoundary` interface, orchestrating the execution of the use case
+ * and interacting with data access objects, presenters, and other necessary components.
+ */
 public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
-    final ArtistVenueDataAccess artistVenueDataAccessObject;
+
+    /**
+     * The data access object responsible for retrieving artist and venue-related data.
+     */
+    final ArtistVenueDataAccess userDataAccessObject;
+
+    /**
+     * The output boundary for presenting the results of the artist and venue-related use case.
+     */
     final ArtistVenueOutputBoundary artistPresenter;
+
+    /**
+     * The factory for creating user entities.
+     */
     final UserFactory userFactory;
+
+    /**
+     * The location finder for determining the location of the user.
+     */
     final LocationFinder locationFinder;
 
+    /**
+     * Constructs an `ArtistVenueInteractor` with the specified dependencies.
+     *
+     * @param artistVenueDataAccess The data access object for artist and venue-related operations.
+     * @param artistPresenter       The output boundary for presenting results.
+     * @param userFactory           The factory for creating user entities.
+     * @param locationFinder        The location finder for determining user location.
+     */
     public ArtistVenueInteractor(ArtistVenueDataAccess artistVenueDataAccess,
                                  ArtistVenueOutputBoundary artistPresenter,
                                  UserFactory userFactory,
                                  LocationFinder locationFinder) {
-        this.artistVenueDataAccessObject = artistVenueDataAccess;
+        this.userDataAccessObject = artistVenueDataAccess;
         this.artistPresenter = artistPresenter;
         this.userFactory = userFactory;
         this.locationFinder = locationFinder;
     }
 
+    /**
+     * Executes the artist and venue-related use case based on the provided input data.
+     *
+     * @param artistVenueInputData The input data containing information for the use case execution.
+     * @throws IOException If an I/O error occurs during the execution of the use case.
+     */
     @Override
     public void execute(ArtistVenueInputData artistVenueInputData) throws IOException {
         try {
-            LinkedHashMap<String, String> artistTours = artistVenueInputData.getArtistTours();
 
-            ArrayList<String> artistsOnTour = new ArrayList<>();
+            // Define the strategy for processing events related to artists
+            EventStrategy<List<List<JSONObject>>> artistStrategy = new ArtistStrategy();
 
-            for (Map.Entry<String, String> entry : artistTours.entrySet()) {
-                if (entry.getValue().equals("has a tour")) {
-                    artistsOnTour.add(entry.getKey());
-                }
-            }
+            // Extract artist names from the input data
+            ArrayList<String> arrayList = new ArrayList<>();
+            arrayList.addAll(artistVenueInputData.getArtistTours().keySet());
 
+            // Create artists based on the extracted names
             ArtistFactory artistFactory = new ArtistModelFactory();
             ArrayList<Artist> favArtists = new ArrayList<>();
 
-            for (String artistString : artistsOnTour) {
+            for (String artistString : arrayList) {
                 Artist artist = artistFactory.create(artistString);
                 favArtists.add(artist);
             }
 
+            // Create a user with the extracted artists
             UserFactory userFactory = new UserModelFactory();
-            User user = userFactory.create(locationFinder.getPostalCode(), favArtists);
+            User user = userFactory.create("L1C0K1", favArtists);
 
-            ArtistStrategy artistStrategy = new ArtistStrategy();
-
+            // Process events using the defined strategy
             EventProcesser<List<List<JSONObject>>> eventProcesser = new EventProcesser(artistStrategy);
             List<List<JSONObject>> eventsList = eventProcesser.processEvent(user);
 
-            if (eventsList.isEmpty()) {
-                artistPresenter.prepareFailView("Sorry none of your favourite artists have shows playing near you");
-            } else {
-                System.out.println("\n");
+            // Retrieve upcoming artist shows from the data access object
+            LinkedHashMap<String, List<String>> upcomingArtistShows = userDataAccessObject.getUpcomingArtistShows(eventsList);
 
-//                LinkedHashMap<String, List<String>> upcomingShows = artistVenueDataAccessObject.getArtistShows(events);
-//                System.out.println(upcomingShows);
-//                ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(upcomingShows);
-//                artistPresenter.prepareSuccessView(artistVenueOutputData);
-
-
-                LinkedHashMap<String, List<String>> artistShowsMap = new LinkedHashMap<>();
-
-                for (List<JSONObject> events : eventsList) {
-                    for (JSONObject event : events) {
-                        String artistName = event.getString("name");
-                        String eventUrl = event.getString("url");
-
-                        // Check if the artist is already in the map
-                        if (artistShowsMap.containsKey(artistName)) {
-                            // If yes, add the eventUrl to the existing list of shows
-                            List<String> artistShows = artistShowsMap.get(artistName);
-                            artistShows.add(eventUrl);
-                        } else {
-                            // If no, create a new list with the current eventUrl
-                            List<String> artistShows = new ArrayList<>();
-                            artistShows.add(eventUrl);
-                            artistShowsMap.put(artistName, artistShows);
-                        }
-                    }
-                }
-
-                System.out.println(artistShowsMap);
-                ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(artistShowsMap);
-                artistPresenter.prepareSuccessView(artistVenueOutputData);
-            }
-
+            // Create output data and prepare the success view
+            ArtistVenueOutputData artistVenueOutputData = new ArtistVenueOutputData(upcomingArtistShows);
+            artistPresenter.prepareSuccessView(artistVenueOutputData);
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
     }
 }
-//}
-
-
-//    public static void main(String[] args) {
-//        try {
-//            // You can create an instance of your dependencies here if needed
-//            String strFavArtists = "Olivia Rodrigo, Eagles, Noah Kahan";
-//            String[] artistsArray = strFavArtists.split(", ");
-//            List<String> artistList = Arrays.asList(artistsArray);
-//            ArtistFactory artistFactory = new ArtistModelFactory();
-//            ArrayList<Artist> favArtists = new ArrayList<>();
-//
-//
-//            for (String artistString : artistList) {
-//                Artist artist = artistFactory.create(artistString);
-//                favArtists.add(artist);
-//            }
-//
-//            UserFactory userFactory = new UserModelFactory();
-//            User user = userFactory.create("L1C0K1", favArtists);
-//
-//            ArtistStrategy artistStrategy = new ArtistStrategy();
-//
-//            EventProcesser<List<List<JSONObject>>> eventProcesser = new EventProcesser(artistStrategy);
-//            List<List<JSONObject>> events = eventProcesser.processEvent(user);
-//
-//            LinkedHashMap<String, String> allShows = new LinkedHashMap<>();
-//            for (List<JSONObject> artistEvents : events) {
-//                LinkedHashMap<String, String> shows = getUpcomingShows(artistEvents);
-//                allShows.putAll(shows);
-//            }
-//
-//            String upcomingShows = formatShows(allShows);
-//            System.out.println(upcomingShows);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//    public static LinkedHashMap<String, String> getUpcomingShows(List<JSONObject> events) {
-//        LinkedHashMap<String, String> shows = new LinkedHashMap<String, String>();
-//        for (JSONObject event : events) {
-//            shows.put(getArtistName(event), getEventUrl(event));
-//        }
-//        return shows;
-//    }
-//    public static String getArtistName(JSONObject event) {
-//        Artist artist = new ArtistModelFactory().create(event.getString("name"));
-//        return artist.getName();
-//    }
-//
-//    public static String getEventUrl(JSONObject event) {
-//        String url = event.getString("url");
-//        return url;
-//    }
-//
-//    public static String formatShows(LinkedHashMap<String, String> shows) {
-//
-//        StringBuilder formattedConcerts = new StringBuilder();
-//
-//        ArrayList<String> concerts = new ArrayList<>();
-//
-//        for (Map.Entry<String, String> entry : shows.entrySet()) {
-//            String key = entry.getKey();
-//            String value = entry.getValue();
-//            concerts.add(key + ": " + value);
-//        }
-//
-//        for (int i = 0; i < Math.min(5, concerts.size()); i++){
-//            formattedConcerts.append(concerts.get(i));
-//            formattedConcerts.append("\n");
-//        }
-//
-//        return formattedConcerts.toString();
-//    }
-
-
-
-

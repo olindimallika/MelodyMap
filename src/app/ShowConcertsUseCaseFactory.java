@@ -33,7 +33,7 @@ public class ShowConcertsUseCaseFactory {
             ShowConcertsViewModel showConcertsViewModel,
             NotifyViewModel notifyViewModel,
             ShowConcertsDataAccess userDataAccessObject
-            ) {
+    ) {
 
         try {
             ShowConcertsController showConcertsController = createShowConcertsUseCase(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);

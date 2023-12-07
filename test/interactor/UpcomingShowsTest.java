@@ -1,6 +1,7 @@
 package interactor;
 
 import data_access.InMemoryUserDataAccessObject;
+import entity.UserFactory;
 import entity.UserModelFactory;
 
 import org.junit.jupiter.api.Test;
