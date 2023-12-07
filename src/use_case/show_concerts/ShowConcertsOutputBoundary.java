@@ -22,11 +22,10 @@ package use_case.show_concerts;
 public interface ShowConcertsOutputBoundary {
 
     /**
-     * Prepares and displays a success view based on the provided output data.
+     * Prepares and displays a success view
      *
-     * @param ShowConcertsOutputData The output data object containing information to be presented in the success view.
      */
-    void prepareSuccessView(ShowConcertsOutputData user);
+    void prepareSuccessView();
 
     /**
      * Prepares and displays a fail view based on the provided error message.
@@ -34,4 +33,6 @@ public interface ShowConcertsOutputBoundary {
      * @param error The error message describing the reason for the failure.
      */
     void prepareFailView(String error);
+
+
 }

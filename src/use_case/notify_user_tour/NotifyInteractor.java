@@ -46,7 +46,6 @@ public class NotifyInteractor implements NotifyInputBoundary {
 
            }
 
-
            NotifyOutputData notifyOutputData = new NotifyOutputData(hasFavouriteArtistConcert);
            userPresenter.prepareSuccessView(notifyOutputData);
 

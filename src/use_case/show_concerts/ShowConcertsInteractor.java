@@ -28,35 +28,27 @@ package use_case.show_concerts;
  */
 public class ShowConcertsInteractor implements ShowConcertsInputBoundary{
 
-    // The data access object responsible for retrieving concert information
-    final ShowConcertsDataAccess userDataAccessObject;
-
     // The presenter responsible for preparing and displaying the results to the user
     final ShowConcertsOutputBoundary showConcertsPresenter;
 
     /**
      * Constructs a new instance of ShowConcertsInteractor
      *
-     * @param userDataAccessInterface The data access object providing access to concert information.
      * @param showConcertsOutputBoundary The presenter for displaying the results to the user.
      */
-    public ShowConcertsInteractor(ShowConcertsDataAccess userDataAccessInterface,
-                           ShowConcertsOutputBoundary showConcertsOutputBoundary){
-        this.userDataAccessObject = userDataAccessInterface;
+    public ShowConcertsInteractor(ShowConcertsOutputBoundary showConcertsOutputBoundary){
         this.showConcertsPresenter = showConcertsOutputBoundary;
     }
 
     /**
      * Executes the show concerts logic based on the provided input data.
      *
-     * @param showConcertsInputData The input data object encapsulating information necessary for the show concerts operation.
      */
-    public void execute(ShowConcertsInputData showConcertsInputData){
-        // Create an instance of ShowConcertsOutputData
-        ShowConcertsOutputData showConcertsOutputData = new ShowConcertsOutputData();
-
-        // Instruct the presenter to prepare a success view based on the output data
-        showConcertsPresenter.prepareSuccessView(showConcertsOutputData);
+    public void execute(){
+        // Instruct the presenter to prepare a success view
+        showConcertsPresenter.prepareSuccessView();
 
     }
+
+
 }

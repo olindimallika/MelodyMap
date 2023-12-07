@@ -7,5 +7,4 @@ import java.io.IOException;
 
 public interface NotifyDataAccess {
     String hasATour(String artistName, String classification) throws IOException, InterruptedException;
-    String getPostalCode();
 }

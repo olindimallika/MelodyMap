@@ -8,7 +8,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import use_case.similar_artist_venue.SimilarDataAccess;
+import use_case.artist_venue.ArtistVenueDataAccess;
+import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
+import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 import java.io.IOException;
 import java.net.URL;
@@ -209,7 +214,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
             urlString += "&classificationName=" + classification;
         }
 
-        urlString += "&apikey=" + apiKey;
+        urlString += "&apikey=" + ticketmasterApiKey;
 
         URL url = new URL(urlString);
         Scanner scanner = new Scanner(url.openStream());
@@ -241,17 +246,8 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return output;
     }
 
-    @Override
-    public String getPostalCode() {
-        return null;
-    }
-
-    /**
-     * @return whether the api call can be made to find the artist's information
-     */
-    @Override
-    public boolean existsInApi() {
-        return artistInfo != null;
+    public String getFavouriteArtists(){
+        return favouriteArtists;
     }
 
     @Override

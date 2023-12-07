@@ -29,5 +29,8 @@ public interface ShowConcertsInputBoundary {
      *
      * @param showConcertsInputData The input data object encapsulating information necessary for the show concerts operation.
      */
-    void execute(ShowConcertsInputData showConcertsInputData);
+    void execute();
+
+
 }
+
