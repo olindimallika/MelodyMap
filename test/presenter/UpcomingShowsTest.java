@@ -10,8 +10,15 @@ import org.junit.jupiter.api.Test;
 import use_case.upcoming_shows.UpcomingOutputData;
 
 import java.util.LinkedHashMap;
+/**
+ * The {@code UpcomingShowsTest} class contains unit tests for the successful execution
+ * of the upcoming shows use case within the controller layer.
+ */
 
 public class UpcomingShowsTest {
+    /**
+     * Test case for a successful execution of the upcoming shows use case.
+     */
     @Test
     void successTest() {
 

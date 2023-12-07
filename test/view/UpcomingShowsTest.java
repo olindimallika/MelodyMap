@@ -15,8 +15,18 @@ import java.awt.event.KeyEvent;
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+/**
+ * The UpcomingShowsTest class provides JUnit tests for the upcoming shows functionality in the application.
+ */
+
 
 public class UpcomingShowsTest {
+
+    /**
+     * Gets the "Enter" button from the main application window.
+     *
+     * @return The "Enter" button.
+     */
 
     public JButton getButton() {
         JFrame app = null;
@@ -55,6 +65,9 @@ public class UpcomingShowsTest {
         assert(button.getText().equals("Enter"));
     }
 
+    /**
+     * Test the interaction with the UpcomingView, including typing characters into the postal code field.
+     */
     @org.junit.Test
     public void testUpcomingView() {
 

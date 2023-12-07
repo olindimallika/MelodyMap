@@ -9,18 +9,13 @@ import interface_adapter.presale.PresaleState;
 import interface_adapter.presale.PresaleViewModel;
 
 import javax.swing.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+
 
 /**
  * The PresaleView class provides a graphical user interface for the presale functionality.
@@ -202,6 +197,8 @@ public class PresaleView extends JPanel implements ActionListener, PropertyChang
 
     /**
      * React to a button click that results in evt.
+     *
+     * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
         JOptionPane.showConfirmDialog(this, "Error, not expected.");
