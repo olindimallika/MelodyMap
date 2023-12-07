@@ -256,6 +256,18 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     }
 
     //////////////////////// FOR SIMILAR ARTIST USE CASE /////////////////////////////
+    /**
+     * Finds events within a specified radius from a given latitude and longitude using the Ticketmaster Discovery API.
+     *
+     * @param latlong A List containing latitude and longitude values for the center point.
+     * @param radius The search radius for events around the specified location.
+     * @param unit The unit of measurement for the search radius (e.g., "km" or "miles").
+     * @param classification The classification or category of events to filter the search.
+     * @param artistName The name of the artist to filter events by.
+     * @return A List of JSONObjects representing events matching the search criteria.
+     * @throws IOException If an error occurs during the HTTP request or response handling.
+     * @throws InterruptedException If the thread is interrupted during the HTTP request.
+     */
     public List<JSONObject> findEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification, String artistName) throws IOException, InterruptedException {
         double lat1 = latlong.get(0);
         double long2 = latlong.get(1);
@@ -308,7 +320,40 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         }
         return events;
     }
+    /**
+     * Formats a HashMap of shows into a human-readable string, including key-value pairs.
+     *
+     * @param shows A HashMap containing show names as keys and details as values.
+     * @return A formatted string representation of the shows, limited to the first 5 entries.
+     */
+    public String formatSimilarArtists(HashMap<String, String> shows) {
+        StringBuilder formattedConcerts = new StringBuilder();
+        ArrayList<String> concerts = new ArrayList<>();
 
+        // Iterate through the provided HashMap to create a list of formatted concert entries.
+        for (Map.Entry<String, String> entry : shows.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            concerts.add(key + ": " + value);
+        }
+
+        // Append the first 5 entries from the concerts list to the formatted string.
+        for (int i = 0; i < 5; i++) {
+            formattedConcerts.append(concerts.get(i));
+            formattedConcerts.append("\n");
+        }
+
+        return formattedConcerts.toString();
+    }
+
+    /**
+     * Calculates the distance between two geographic points using their latitude and longitude.
+     *
+     * @param latlong A List containing latitude and longitude values of the first point.
+     * @param lat2 The latitude of the second point.
+     * @param lon2 The longitude of the second point.
+     * @return The distance between the two points in kilometers.
+     */
     public static double calculateDistance(List<Double> latlong, double lat2, double lon2) {
         double lat1 = latlong.get(0);
         double lon1 = latlong.get(1);
@@ -318,15 +363,30 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return Math.acos(Math.sin(x) * Math.sin(y) + Math.cos(x) * Math.cos(y) * Math.cos((lon1 - lon2) * (Math.PI / 180))) * 6371; // Earth radius in km
     }
 
-    public void printEventUrls(List<JSONObject> eventList) {
+    /**
+     * Retrieves the URL of the first event from a list of JSONObjects representing events.
+     *
+     * @param eventList A list of JSONObjects containing information about events.
+     * @return The URL of the first event, or a message if no URL is found.
+     */
+    public String printEventUrls(List<JSONObject> eventList) {
         for (JSONObject event : eventList) {
             if (event.has("url")) {
-                System.out.println(event.getString("url"));
+                return (event.getString("url"));
             } else {
-                System.out.println("No URL found for this event.");
+                return ("No URL found for this event.");
             }
         }
+        return "";
+
     }
+
+    /**
+     * Retrieves an access token using the Spotify API client credentials flow.
+     *
+     * @return The access token for authenticating Spotify API requests.
+     * @throws Exception If an error occurs during the token retrieval process.
+     */
     public static String getToken() throws Exception {
         String authString = CLIENT_ID + ":" + CLIENT_SECRET;
         String authBase64 = Base64.getEncoder().encodeToString(authString.getBytes());
@@ -344,6 +404,14 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return jsonResult.getString("access_token");
     }
 
+    /**
+     * Searches for an artist on Spotify using the provided access token and artist name.
+     *
+     * @param token The access token for authenticating the API request.
+     * @param artistName The name of the artist to search for.
+     * @return A JSONObject containing information about the searched artist.
+     * @throws Exception If an error occurs during the API request or artist not found.
+     */
     public static JSONObject searchForArtist(String token, String artistName) throws Exception {
         artistName = artistName.replace(" ", "%20");  // replace spaces with %20
         HttpClient client = HttpClient.newHttpClient();
@@ -363,6 +431,14 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return items.getJSONObject(0);
     }
 
+    /**
+     * Retrieves a list of artists similar to the specified artist from the Spotify API.
+     *
+     * @param token The access token for authenticating the API request.
+     * @param artistId The unique Spotify ID of the artist to find similar artists for.
+     * @return A JSONObject containing information about similar artists.
+     * @throws Exception If an error occurs during the API request or no similar artists found.
+     */
     public static JSONObject getSimilarArtists(String token, String artistId) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
