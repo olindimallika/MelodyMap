@@ -16,8 +16,7 @@ public class NotifyPresenter implements NotifyOutputBoundary {
     @Override
     public void prepareSuccessView(NotifyOutputData response){
         NotifyState notifyState = notifyViewModel.getState();
-        notifyState.setFavouriteArtistUpcoming(response.getFavouriteArtistConcerts());
-        notifyState.setConcertLink(response.getConcertLink());
+        notifyState.setArtistOnTour(response.getArtistOnTour());
         this.notifyViewModel.setState(notifyState);
         this.notifyViewModel.firePropertyChanged();
 
@@ -28,8 +27,7 @@ public class NotifyPresenter implements NotifyOutputBoundary {
     @Override
     public void prepareFailView(String error){
         NotifyState notifyState = notifyViewModel.getState();
-        notifyState.setFavouriteArtistUpcomingError(error);
-        notifyState.setConcertLinkError(error);
+        notifyState.setArtistOnTourError(error);
         notifyViewModel.firePropertyChanged();
     }
 }

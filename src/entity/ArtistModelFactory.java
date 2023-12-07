@@ -1,7 +1,5 @@
 package entity;
 
-import java.time.LocalDateTime;
-
 public class ArtistModelFactory implements ArtistFactory{
     /**
      * @param name

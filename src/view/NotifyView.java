@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 public class NotifyView extends JPanel implements ActionListener, PropertyChangeListener {
     public final String viewName = "notify user tour";
     private final NotifyViewModel notifyViewModel;
-    private final JTextField favouriteArtistInputField = new JTextField(15);
+    private final JTextField favouriteArtistInputField = new JTextField(50);
 
     private final NotifyController notifyController;
 
@@ -31,9 +31,11 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
 
         JLabel title = new JLabel(NotifyViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial Bold", Font.PLAIN,15));
 
-        LabelTextPanel userFavouriteArtist = new LabelTextPanel(
-                new JLabel(NotifyViewModel.ARTIST_LABEL), favouriteArtistInputField);
+        JLabel favouriteArtistLabel = new JLabel(NotifyViewModel.ARTIST_LABEL);
+
+        LabelTextPanel favouriteArtist = new LabelTextPanel(favouriteArtistInputField);
 
         JPanel buttons = new JPanel();
         check = new JButton(NotifyViewModel.CHECK_BUTTON_LABEL);
@@ -74,10 +76,10 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
                 }
         );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
-        this.add(userFavouriteArtist);
+        this.add(favouriteArtistLabel);
+        this.add(favouriteArtist);
         this.add(buttons);
 
     }
@@ -93,32 +95,16 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         NotifyState state = (NotifyState) evt.getNewValue();
-        if (state.getFavouriteArtistError() != null) {
-            JOptionPane.showMessageDialog(this, state.getFavouriteArtistError());
+        if (state.getArtistOnTourError() != null) {
+            JOptionPane.showMessageDialog(this, state.getArtistOnTourError());
         }
     }
 
     public void notifyPropertyChange(PropertyChangeEvent evt){
         NotifyState state = (NotifyState) evt.getNewValue();
-
-        String hyperlinkText = state.getConcertLink();
-
-        // making the link clickable for user
-        JLabel hyperlink = new JLabel(state.getFavouriteArtistUpcoming() + hyperlinkText);
-        hyperlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        hyperlink.addMouseListener(new MouseAdapter() {
-
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(hyperlinkText));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-        });
-
-        JOptionPane.showMessageDialog(this, hyperlink);
+        if (!state.getArtistOnTour().isEmpty()) {
+            JOptionPane.showMessageDialog(this, state.getArtistOnTour());
+        }
     }
 
 }

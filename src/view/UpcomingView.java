@@ -6,10 +6,7 @@ import interface_adapter.upcoming_shows.UpcomingViewModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -19,7 +16,7 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
 
     private final UpcomingViewModel upcomingShowsViewModel;
 
-    private final JTextField postalCodeInputField = new JTextField(15);
+    private final JTextField postalCodeInputField = new JTextField(45);
 
     private final UpcomingController upcomingShowsController;
 
@@ -30,13 +27,17 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         this.upcomingShowsController = controller;
         this.upcomingShowsViewModel = upcomingShowsViewModel;
         upcomingShowsViewModel.addPropertyChangeListener(this);
-        upcomingShowsViewModel.addPropertyChangeListener(this::showsPropertyChange);
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JLabel title = new JLabel(UpcomingViewModel.TITLE_LABEL);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial", Font.PLAIN,15));
 
-        LabelTextPanel userPostalCode = new LabelTextPanel(
-                new JLabel(UpcomingViewModel.POSTALCODE_LABEL), postalCodeInputField);
+        JLabel postalCodeLabel = new JLabel(UpcomingViewModel.POSTALCODE_LABEL);
+        postalCodeLabel.setFont(new Font("Arial", Font.PLAIN,15));
+
+        LabelTextPanel userPostalCode = new LabelTextPanel(postalCodeInputField);
+        userPostalCode.setFont(new Font("Arial", Font.PLAIN,15));
 
         JPanel buttons = new JPanel();
         enter = new JButton(UpcomingViewModel.ENTER_BUTTON_LABEL);
@@ -77,9 +78,9 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
                 }
                 );
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
+        this.add(postalCodeLabel);
         this.add(userPostalCode);
         this.add(buttons);
 
@@ -99,11 +100,6 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
         if (state.getPostalCodeError() != null) {
             JOptionPane.showMessageDialog(this, state.getPostalCodeError());
         }
-    }
-
-    public void showsPropertyChange(PropertyChangeEvent evt){
-        UpcomingState state = (UpcomingState) evt.getNewValue();
-        JOptionPane.showMessageDialog(this, state.getUpcomingShows());
     }
 
 }

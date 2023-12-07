@@ -38,15 +38,13 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
                 User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
                 List<JSONObject> eventL = userDataAccessObject.getEventsFromLatLong(radius, unit, "music", user);
 
-                LinkedHashMap<String, String> upcomingShowMap = userDataAccessObject.getUpcomingShows(eventL);
-                String upcomingShows = userDataAccessObject.formatShows(upcomingShowMap);
+                LinkedHashMap<String, String> upcomingShows = userDataAccessObject.getUpcomingShows(eventL);
 
                 UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
                 userPresenter.prepareSuccessView(upcomingOutputData);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
         }
     }
 }

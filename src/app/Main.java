@@ -1,14 +1,17 @@
 package app;
 
 import data_access.FileUserDataAccessObject;
+
+import interface_adapter.similar_artist.SimilarArtistViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import interface_adapter.presale.PresaleViewModel;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
+import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
-import view.NotifyView;
-import view.PresaleView;
-import view.UpcomingView;
-import view.ViewManager;
+import view.*;
+
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +24,9 @@ public class Main {
         JFrame application = new JFrame("Melody Map");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        ImageIcon icon = new ImageIcon("src/logo.png");
+        application.setIconImage(icon.getImage());
+
         CardLayout cardLayout = new CardLayout();
 
         JPanel views = new JPanel(cardLayout);
@@ -30,6 +36,9 @@ public class Main {
         ViewManagerModel viewManagerModel = new ViewManagerModel();
         new ViewManager(views, cardLayout, viewManagerModel);
 
+        UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
+        ShowConcertsViewModel showConcertsViewModel = new ShowConcertsViewModel();
+        NotifyViewModel notifyViewModel = new NotifyViewModel();
 //        UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
 //        NotifyViewModel notifyViewModel = new NotifyViewModel();
         PresaleViewModel presaleViewModel = new PresaleViewModel();
@@ -37,6 +46,8 @@ public class Main {
         FileUserDataAccessObject userDataAccessObject;
         userDataAccessObject = new FileUserDataAccessObject();
 
+        UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, showConcertsViewModel, userDataAccessObject);
+        views.add(upcomingShowsView, upcomingShowsView.viewName);
 //        UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, userDataAccessObject);
 //        views.add(upcomingShowsView, upcomingShowsView.viewName);
 
@@ -46,6 +57,11 @@ public class Main {
         //presale
         PresaleView presaleView = PresaleUseCaseFactory.create(viewManagerModel, presaleViewModel, userDataAccessObject);
         views.add(presaleView, presaleView.viewName);
+        ShowConcertsView showConcertsView = ShowConcertsUseCaseFactory.create(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
+        views.add(showConcertsView, showConcertsView.viewName);
+
+        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
+        views.add(notifyView,notifyView.viewName);
 
 //        viewManagerModel.setActiveView(upcomingShowsView.viewName);
 //        viewManagerModel.firePropertyChanged();

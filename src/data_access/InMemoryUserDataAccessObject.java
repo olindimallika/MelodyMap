@@ -11,6 +11,7 @@ import use_case.EventStrategy;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
 import use_case.presale_date.*;
+import use_case.similar_artist_venue.SimilarDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 import use_case.presale_date.PresaleDataAccess;
 
@@ -40,7 +41,8 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     private List<String> eventUrls = new ArrayList<>();
     private List<String> listFormatOutputPresale = new ArrayList<>();
     private String finalFormatOutputPresale = "";
-
+    private String postalCode = "";
+    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
 
     /**
      * @param user the user's postal code
@@ -188,29 +190,7 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
         return shows;
     }
 
-    /**
-     * @param shows a hashmap of the artist and a link for the user to buy tickets
-     * @return a string listing the artist and the link to their upcoming concert
-     */
-    @Override
-    public String formatShows(LinkedHashMap<String, String> shows) {
 
-        StringBuilder formattedConcerts = new StringBuilder();
-
-        ArrayList<String> concerts = new ArrayList<>();
-
-        for (Map.Entry<String, String> entry : shows.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            concerts.add(key + ": " + value);
-        }
-
-        for (int i = 0; i < 5; i++){
-            formattedConcerts.append(concerts.get(i));
-            formattedConcerts.append("\n");
-        }
-        return formattedConcerts.toString();
-    }
 
     /**
      * @param postalCode the user's postal code
@@ -226,61 +206,54 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
     /**
      * @param artistName the user's favourite artist
-     * @return the JSONObject listing all the artist information, specifically if they have upcoming concerts
+     * @param classification the type of event; (music event, concert)
+     * @return whether the artist has upcoming concerts
      */
     @Override
-    public JSONObject getPerformerInfo(String artistName){
+    public String hasATour(String artistName, String classification) throws IOException, InterruptedException {
 
-        try {
-            // Replace with your specific API endpoint and parameters
-            String baseUrl = "https://api.seatgeek.com/2/performers?";
-            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
+        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
+        String urlString = baseUrl + "?keyword=" + artistName;
 
-            // Create URL object
-            URL url = new URL(apiUrl);
-
-            // Open connection
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-            // Set request method
-            connection.setRequestMethod("GET");
-
-            connection.setRequestProperty("Cache-Control", "no-cache");
-            connection.setRequestProperty("Pragma", "no-cache");
-            connection.setRequestProperty("Expires", "no-cache");
-
-            // Read the response
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String line;
-            StringBuilder response = new StringBuilder();
-
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
-            }
-            reader.close();
-
-            // Parse the JSON response
-            JSONObject jsonResponse = new JSONObject(response.toString());
-
-            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
-            artistInfo = artistArray.getJSONObject(0);
-
-            // Close the connection
-            connection.disconnect();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (classification != null) {
+            urlString += "&classificationName=" + classification;
         }
-        return artistInfo;
+
+        urlString += "&apikey=" + ticketmasterApiKey;
+
+        URL url = new URL(urlString);
+        Scanner scanner = new Scanner(url.openStream());
+        StringBuilder jsonContent = new StringBuilder();
+
+        while (scanner.hasNext()) {
+            jsonContent.append(scanner.nextLine());
+        }
+
+        scanner.close();
+
+        JSONObject obj = new JSONObject(jsonContent.toString());
+
+        String output = "";
+        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
+            JSONObject embedded = obj.getJSONObject("_embedded");
+
+            if (embedded.has("events")) {
+                output = "has a tour";
+            }
+
+        } else {
+            output = "doesn't have a tour";
+        }
+
+        // Introduce a 1 second delay to avoid hitting the rate limit
+        Thread.sleep(500); // Adjust the sleep duration as needed
+
+        return output;
     }
 
-    public Integer getNumUpcomingConcerts(){
-        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
-        return numUpcomingEvents;
-    }
-
-    public String getTicketLink(){
-        return String.valueOf(artistInfo.get("url"));
+    @Override
+    public String getPostalCode() {
+        return postalCode;
     }
 
     /**

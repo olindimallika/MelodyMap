@@ -8,9 +8,9 @@ import java.beans.PropertyChangeSupport;
 public class NotifyViewModel extends ViewModel {
     public static final String TITLE_LABEL = "Notify User of Upcoming Concerts View";
 
-    public static final String ARTIST_LABEL = "Please enter the name of your favourite artist!:";
+    public static final String ARTIST_LABEL = "Enter 5 of your favourite artists (use commas to separate each):";
 
-    public static final String CHECK_BUTTON_LABEL = "Check Upcoming Concerts";
+    public static final String CHECK_BUTTON_LABEL = "See if they're on tour";
 
     private NotifyState state = new NotifyState();
 

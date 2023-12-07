@@ -12,7 +12,6 @@ public class NotifyController {
 
     public void execute(String favouriteArtist){
         NotifyInputData notifyInputData = new NotifyInputData(favouriteArtist);
-
         userNotifyUseCaseInteractor.execute(notifyInputData);
     }
 }
