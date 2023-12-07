@@ -13,7 +13,8 @@ public class ArtistViewModel extends ViewModel {
 
     private ArtistState state = new ArtistState();
 
-    public static final String PERSONALIZE_BUTTON_LABEL1 = "Click to reload and see if there are presale dates";
+    public static final String PERSONALIZE_BUTTON_LABEL1 = "Click to see your favourite artist shows";
+
     public static final String PERSONALIZE_BUTTON_LABEL2 = "Back";
 
     public ArtistViewModel() {

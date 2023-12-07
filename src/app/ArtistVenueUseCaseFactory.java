@@ -8,6 +8,7 @@ import interface_adapter.artist_venue.ArtistController;
 import interface_adapter.artist_venue.ArtistPresenter;
 import interface_adapter.artist_venue.ArtistViewModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
+import interface_adapter.show_artist_concerts.ShowArtistViewModel;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.artist_venue.ArtistVenueInputBoundary;
 import use_case.artist_venue.ArtistVenueInteractor;
@@ -25,11 +26,11 @@ public class ArtistVenueUseCaseFactory {
 
     public static ArtistVenueView create(
             ViewManagerModel viewManagerModel,
-            ArtistViewModel artistViewModel,
+            ArtistViewModel artistViewModel, ShowArtistViewModel showArtistViewModel,
             ArtistVenueDataAccess userDataAccessObject) {
 
         try {
-            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAccessObject);
+            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, showArtistViewModel, userDataAccessObject);
             return new ArtistVenueView(artistController, artistViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -40,11 +41,11 @@ public class ArtistVenueUseCaseFactory {
 
     private static ArtistController createArtistVenueUseCase(
             ViewManagerModel viewManagerModel,
-            ArtistViewModel artistViewModel,
+            ArtistViewModel artistViewModel, ShowArtistViewModel showArtistViewModel,
             ArtistVenueDataAccess userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel);
+        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel, showArtistViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 

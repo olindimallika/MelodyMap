@@ -25,8 +25,12 @@ public class NotifyPresenter implements NotifyOutputBoundary {
 
     @Override
     public void prepareSuccessView(NotifyOutputData response){
+
+        // switch to artist on success
         ArtistState artistState = artistViewModel.getState();
+//        artistState.setArtistsOnTour(response.getArtistOnTour());
         artistState.setArtistsOnTour(response.getArtistOnTour());
+
 
         this.artistViewModel.setState(artistState);
         this.artistViewModel.firePropertyChanged();
