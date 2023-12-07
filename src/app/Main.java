@@ -5,6 +5,7 @@ import data_access.FileUserDataAccessObject;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.artist_venue.ArtistViewModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
+import interface_adapter.show_artist_concerts.ShowArtistViewModel;
 import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
 
@@ -37,6 +38,7 @@ public class Main {
         ShowConcertsViewModel showConcertsViewModel = new ShowConcertsViewModel();
         NotifyViewModel notifyViewModel = new NotifyViewModel();
         ArtistViewModel artistViewModel = new ArtistViewModel();
+        ShowArtistViewModel showArtistViewModel = new ShowArtistViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         userDataAccessObject = new FileUserDataAccessObject();
@@ -50,8 +52,12 @@ public class Main {
         NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, artistViewModel, userDataAccessObject);
         views.add(notifyView,notifyView.viewName);
 
-        ArtistVenueView artistVenueView = ArtistVenueUseCaseFactory.create(viewManagerModel, artistViewModel, userDataAccessObject);
+        ArtistVenueView artistVenueView = ArtistVenueUseCaseFactory.create(viewManagerModel, artistViewModel, showArtistViewModel, userDataAccessObject);
         views.add(artistVenueView, artistVenueView.viewName);
+
+//        ShowArtistView showArtistView = ShowArtistUseCaseFactory.create(viewManagerModel, showArtistViewModel, userDataAccessObject);
+//        views.add(showArtistView, showArtistView.viewName);
+
 
         viewManagerModel.setActiveView(upcomingShowsView.viewName);
         viewManagerModel.firePropertyChanged();

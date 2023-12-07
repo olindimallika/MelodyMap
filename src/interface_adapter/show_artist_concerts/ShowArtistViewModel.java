@@ -1,42 +1,41 @@
-package interface_adapter.artist_venue;
+package interface_adapter.show_artist_concerts;
 
 import interface_adapter.ViewModel;
 import interface_adapter.show_concerts.ShowConcertsState;
-import interface_adapter.upcoming_shows.UpcomingState;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class ArtistViewModel extends ViewModel {
+public class ShowArtistViewModel extends ViewModel {
 
-    public final String TITLE_LABEL = "Artist Venue View";
+    public final String TITLE_LABEL = "Artist Concerts";
 
-    private ArtistState state = new ArtistState();
+    private ShowArtistState state = new ShowArtistState();
 
-    public static final String PERSONALIZE_BUTTON_LABEL1 = "Click to see your favourite artist shows";
+    public static final String PERSONALIZE_BUTTON_LABEL = "Click to reload and see if there are presale dates";;
 
-    public static final String PERSONALIZE_BUTTON_LABEL2 = "Back";
 
-    public ArtistViewModel() {
-        super("show artist concerts");
+    public ShowArtistViewModel() {
+        super("show all concerts");
     }
 
-    public void setState(ArtistState state) {
+    public void setState(ShowArtistState state) {
         this.state = state;
     }
 
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+    @Override
     public void firePropertyChanged() {
         support.firePropertyChange("state", null, this.state);
     }
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    public ArtistState getState() {
-
+    public ShowArtistState getState() {
         return state;
     }
 }

@@ -12,7 +12,7 @@ public class ArtistVenueOutputData {
         this.artistShows = artistShows;
     }
 
-    public LinkedHashMap<String, List<String>> getArtistShows() {
+    public LinkedHashMap<String, List<String>> getUpcomingArtistShows() {
 
         return artistShows;
     }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_artist_concerts.ShowArtistDataAcess;
 import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
@@ -21,7 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 //
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess {
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess, ShowArtistDataAcess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
     private String favouriteArtists = "";
     private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
