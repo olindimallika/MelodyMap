@@ -2,14 +2,11 @@ package app;
 
 import data_access.FileUserDataAccessObject;
 
-import interface_adapter.similar_artist.SimilarArtistViewModel;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.artist_venue.ArtistViewModel;
 import interface_adapter.notify_user_tour.NotifyViewModel;
-import interface_adapter.presale.PresaleViewModel;
-import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.show_concerts.ShowConcertsViewModel;
 import interface_adapter.upcoming_shows.UpcomingViewModel;
-import view.*;
 
 import view.*;
 
@@ -39,39 +36,24 @@ public class Main {
         UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
         ShowConcertsViewModel showConcertsViewModel = new ShowConcertsViewModel();
         NotifyViewModel notifyViewModel = new NotifyViewModel();
-//        UpcomingViewModel upcomingShowsViewModel = new UpcomingViewModel();
-//        NotifyViewModel notifyViewModel = new NotifyViewModel();
-        PresaleViewModel presaleViewModel = new PresaleViewModel();
+        ArtistViewModel artistViewModel = new ArtistViewModel();
 
         FileUserDataAccessObject userDataAccessObject;
         userDataAccessObject = new FileUserDataAccessObject();
 
         UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, showConcertsViewModel, userDataAccessObject);
         views.add(upcomingShowsView, upcomingShowsView.viewName);
-//        UpcomingView upcomingShowsView = UpcomingUseCaseFactory.create(viewManagerModel, upcomingShowsViewModel, userDataAccessObject);
-//        views.add(upcomingShowsView, upcomingShowsView.viewName);
 
-//        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
-//        views.add(notifyView, notifyView.viewName);
-
-        //presale
-        PresaleView presaleView = PresaleUseCaseFactory.create(viewManagerModel, presaleViewModel, userDataAccessObject);
-        views.add(presaleView, presaleView.viewName);
         ShowConcertsView showConcertsView = ShowConcertsUseCaseFactory.create(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
         views.add(showConcertsView, showConcertsView.viewName);
 
-        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, userDataAccessObject);
+        NotifyView notifyView = NotifyUseCaseFactory.create(viewManagerModel, notifyViewModel, artistViewModel, userDataAccessObject);
         views.add(notifyView,notifyView.viewName);
 
-//        viewManagerModel.setActiveView(upcomingShowsView.viewName);
-//        viewManagerModel.firePropertyChanged();
+        ArtistVenueView artistVenueView = ArtistVenueUseCaseFactory.create(viewManagerModel, artistViewModel, userDataAccessObject);
+        views.add(artistVenueView, artistVenueView.viewName);
 
-//        viewManagerModel.setActiveView(notifyView.viewName);
-//        viewManagerModel.firePropertyChanged();
-
-
-        //presale
-        viewManagerModel.setActiveView(presaleView.viewName);
+        viewManagerModel.setActiveView(upcomingShowsView.viewName);
         viewManagerModel.firePropertyChanged();
 
         application.pack();

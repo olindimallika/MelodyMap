@@ -54,8 +54,7 @@ public class ShowConcertsUseCaseFactory {
         // Notice how we pass this method's parameters to the Presenter.
         ShowConcertsOutputBoundary showConcertsOutputBoundary = new ShowConcertsPresenter(viewManagerModel, showConcertsViewModel, notifyViewModel);
 
-        ShowConcertsInputBoundary showConcertsInteractor = new ShowConcertsInteractor(
-                userDataAccessObject, showConcertsOutputBoundary);
+        ShowConcertsInputBoundary showConcertsInteractor = new ShowConcertsInteractor(showConcertsOutputBoundary);
 
         return new ShowConcertsController(showConcertsInteractor);
     }

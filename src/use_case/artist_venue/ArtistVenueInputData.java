@@ -1,30 +1,19 @@
 package use_case.artist_venue;
 
-import entity.Artist;
+import java.util.LinkedHashMap;
 
-import java.util.ArrayList;
-
+//
 public class ArtistVenueInputData {
+    final private LinkedHashMap<String, String> artistTours;
 
-    final private String postalCode;
-    final private ArrayList<Artist> favouriteArtist;
-
-    public ArtistVenueInputData(String postalCode, ArrayList<Artist> favouriteArtist) {
-        this.postalCode = postalCode;
-        this.favouriteArtist = favouriteArtist;
+    public ArtistVenueInputData(LinkedHashMap<String, String> artistTours){
+        this.artistTours = artistTours;
     }
 
-    String getPostalCode() {
-
-        return postalCode;
-    }
-
-    ArrayList<Artist> getFavouriteArtist() {
-
-        return favouriteArtist;
+    LinkedHashMap<String, String> getArtistTours(){
+        return artistTours;
     }
 }
-
 
 
 

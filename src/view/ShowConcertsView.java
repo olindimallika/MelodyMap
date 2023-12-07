@@ -46,26 +46,33 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
 
         JLabel title = new JLabel("Upcoming Shows Near You");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        title.setFont(new Font("Arial Bold", Font.PLAIN,12));
+        title.setForeground(Color.white);
 
         hyperlink = new JLabel();
-        hyperlink.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        hyperlink.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink.setForeground(Color.white);
 
         hyperlink2 = new JLabel();
-        hyperlink2.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        hyperlink2.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink2.setForeground(Color.white);
 
         hyperlink3 = new JLabel();
-        hyperlink3.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        hyperlink3.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink3.setForeground(Color.white);
 
         hyperlink4 = new JLabel();
-        hyperlink4.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        hyperlink4.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink4.setForeground(Color.white);
 
         hyperlink5 = new JLabel();
-        hyperlink5.setFont(new Font("Arial Bold", Font.PLAIN,10));
+        hyperlink5.setFont(new Font("Arial", Font.PLAIN,12));
+        hyperlink5.setForeground(Color.white);
 
         JPanel buttons = new JPanel();
         personalize = new JButton(showConcertsViewModel.PERSONALIZE_BUTTON_LABEL);
         buttons.add(personalize);
+        buttons.setOpaque(false);
 
         personalize.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
@@ -89,6 +96,7 @@ public class ShowConcertsView extends JPanel implements ActionListener, Property
         this.add(hyperlink5);
         this.add(buttons);
         this.setPreferredSize(new Dimension(1200, 250));
+        this.setBackground(new Color(145, 172, 200));
     }
 
     /**

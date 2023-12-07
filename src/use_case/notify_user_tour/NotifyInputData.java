@@ -7,7 +7,7 @@ public class NotifyInputData {
         this.favouriteArtistNames = favouriteArtistNames;
     }
 
-    String getFavouriteArtistNames(){
+    public String getFavouriteArtistNames(){
         return favouriteArtistNames;
     }
 }
