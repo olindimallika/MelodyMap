@@ -12,11 +12,11 @@ public class PresaleInputData {
         this.postalCode = postalCode;
         this.favArtists = favArtists;
     }
-    String getPostalCode() {
+    public String getPostalCode() {
 
         return postalCode;
     }
-    String getFavArtists() {
+    public String getFavArtists() {
 
         return favArtists;
     }
