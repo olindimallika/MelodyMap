@@ -10,8 +10,33 @@ import java.util.LinkedHashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The UpcomingShowsTest class contains JUnit tests for the UpcomingInteractor and associated
+ * components in the "interactor" package. It focuses on testing the success scenarios of the upcoming shows feature.
+ *
+ * The test case checks the functionality of the UpcomingInteractor by verifying that the interactor
+ * correctly handles input data, interacts with the data access layer, and provides the expected output to the
+ * UpcomingOutputBoundary. The test creates an input data object, a data access object, and a success
+ * output presenter to simulate a successful execution of the upcoming shows use case.
+ *
+ * First, create an UpcomingInputData object representing the input data, such as a postal code as well as
+ * an InMemoryUserDataAccessObject as a mock data access object for the upcoming shows.
+ *
+ * Then, create a success output presenter (UpcomingOutputBoundary) to verify the correctness of the
+ * output data, including the concert details and URLs.
+ *
+ * Create an UpcomingInteractor instance, providing it with the input data, data access object, and
+ * the success output presenter.
+ *
+ * Finally, invoke the interactor by passing in the input data.</li>
+ *
+ */
 class UpcomingShowsTest {
 
+    /**
+     * Test the success scenario of the UpcomingInteractor by creating necessary input data, data access,
+     * and output presenter, and verifying that the interactor execution results in the expected output.
+     */
     @Test
     void successTest() {
         // creating the input data object
@@ -23,8 +48,6 @@ class UpcomingShowsTest {
         UpcomingOutputBoundary successPresenter = new UpcomingOutputBoundary() {
             @Override
             public void prepareSuccessView(UpcomingOutputData upcomingConcerts) {
-                // 2 things to check: the output data is correct, and the postal code has valid coordinates.
-
                 LinkedHashMap<String, String> outputConcerts = new LinkedHashMap<>();
                 outputConcerts.put("KESmas - Kes The Band Live in Concert", "https://www.ticketmaster.ca/kesmas-kes-the-band-live-in-toronto-ontario-12-21-2023/event/10005F6AD6584CEE");
                 outputConcerts.put("Big Wreck", "https://www.ticketmaster.ca/big-wreck-toronto-ontario-12-22-2023/event/10005F09E92D43C5");
