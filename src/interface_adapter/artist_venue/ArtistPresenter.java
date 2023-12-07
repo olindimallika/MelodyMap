@@ -17,12 +17,9 @@ public class ArtistPresenter implements ArtistVenueOutputBoundary {
 
     private final ViewManagerModel viewManagerModel;
 
-    private final NotifyViewModel notifyViewModel;
-
-    public ArtistPresenter(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel, NotifyViewModel notifyViewModel){
+    public ArtistPresenter(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel){
         this.viewManagerModel = viewManagerModel;
         this.artistViewModel = artistViewModel;
-        this.notifyViewModel = notifyViewModel;
     }
 
     @Override

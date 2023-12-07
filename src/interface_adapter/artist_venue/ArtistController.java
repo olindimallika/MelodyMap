@@ -4,6 +4,7 @@ import use_case.artist_venue.ArtistVenueInputBoundary;
 import use_case.artist_venue.ArtistVenueInputData;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 
 public class ArtistController {
 
@@ -12,8 +13,9 @@ public class ArtistController {
     public ArtistController(ArtistVenueInputBoundary userArtistVenueUseCaseInteractor) {
         this.userArtistVenueUseCaseInteractor = userArtistVenueUseCaseInteractor;
     }
-    public void execute() throws IOException {
-        userArtistVenueUseCaseInteractor.execute();
+    public void execute(LinkedHashMap<String, String> artistTours) throws IOException {
+        ArtistVenueInputData artistVenueInputData = new ArtistVenueInputData(artistTours);
+        userArtistVenueUseCaseInteractor.execute(artistVenueInputData);
     }
 
 }

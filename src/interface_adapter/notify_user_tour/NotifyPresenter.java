@@ -26,23 +26,8 @@ public class NotifyPresenter implements NotifyOutputBoundary {
     @Override
     public void prepareSuccessView(NotifyOutputData response){
         ArtistState artistState = artistViewModel.getState();
+        artistState.setArtistsOnTour(response.getArtistOnTour());
 
-//        LinkedHashMap<String, String> shows = response.getArtistOnTour();
-//        LinkedHashMap<String, String> artistsOnTour = new LinkedHashMap<>();
-//
-//        for (Map.Entry<String, String> entry : shows.entrySet()) {
-//
-//            if (entry.getValue().equals("has a tour")) {
-//                artistsOnTour.put(entry.getKey(), entry.getValue());
-//            }
-////            else {
-////                String key = entry.getKey();
-////                artistsNotOnTour.add(key);
-////            }
-//        }
-//
-//        artistState.setArtistShows(artistsOnTour);
-        artistState.setArtistShows(response.getArtistOnTour());
         this.artistViewModel.setState(artistState);
         this.artistViewModel.firePropertyChanged();
 

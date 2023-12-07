@@ -20,7 +20,7 @@ public class LocationFinder {
         String postalCode = user.getPostalCode();
 
         try {
-            String locationFinderApiKey = "a92bf901a11c452583fe43f4f02ad7ce";
+            String locationFinderApiKey = "590432017a624836975180e8e71df0b1";
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()

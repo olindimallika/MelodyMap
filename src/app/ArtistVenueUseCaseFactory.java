@@ -26,10 +26,10 @@ public class ArtistVenueUseCaseFactory {
     public static ArtistVenueView create(
             ViewManagerModel viewManagerModel,
             ArtistViewModel artistViewModel,
-            ArtistVenueDataAccess userDataAccessObject, NotifyViewModel notifyViewModel) {
+            ArtistVenueDataAccess userDataAccessObject) {
 
         try {
-            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAccessObject, notifyViewModel);
+            ArtistController artistController = createArtistVenueUseCase(viewManagerModel, artistViewModel, userDataAccessObject);
             return new ArtistVenueView(artistController, artistViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -41,11 +41,10 @@ public class ArtistVenueUseCaseFactory {
     private static ArtistController createArtistVenueUseCase(
             ViewManagerModel viewManagerModel,
             ArtistViewModel artistViewModel,
-            ArtistVenueDataAccess userDataAccessObject,
-            NotifyViewModel notifyViewModel) throws IOException {
+            ArtistVenueDataAccess userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel, notifyViewModel);
+        ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 
