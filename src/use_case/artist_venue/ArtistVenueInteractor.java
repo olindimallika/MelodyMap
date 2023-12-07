@@ -5,12 +5,11 @@ import data_access.EventProcesser;
 import data_access.LocationFinder;
 import entity.*;
 import org.json.JSONObject;
-import data_access.EventStrategy;
-import use_case.upcoming_shows.*;
+
 
 import java.io.IOException;
 import java.util.*;
-
+//
 
 public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
     final ArtistVenueDataAccess artistVenueDataAccessObject;
