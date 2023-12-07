@@ -1,7 +1,7 @@
 package interface_adapter.artist_venue;
 
 import java.util.LinkedHashMap;
-
+//
 public class ArtistState {
 
     private LinkedHashMap<String, String> artistShows = new LinkedHashMap<>();
