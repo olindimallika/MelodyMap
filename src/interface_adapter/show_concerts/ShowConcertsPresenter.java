@@ -76,4 +76,6 @@ public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
         showConcertsState.setConcertsError(error);
         showConcertsViewModel.firePropertyChanged();
     }
+
+
 }

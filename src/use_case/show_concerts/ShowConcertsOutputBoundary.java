@@ -33,4 +33,6 @@ public interface ShowConcertsOutputBoundary {
      * @param error The error message describing the reason for the failure.
      */
     void prepareFailView(String error);
+
+
 }
