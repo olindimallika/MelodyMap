@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
  *
  * Finally, invoke the presenter to prepare the success view.
  *
+ * Author: Bea Castro
  */
 public class ShowConcertsTest {
 

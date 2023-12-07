@@ -10,14 +10,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-
-
 import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * The UpcomingShowsTest class contains JUnit tests for the graphical user interface (GUI) components
+ * in the "view" package related to upcoming shows. It focuses on testing the presence and functionality of the
+ * UI elements, such as buttons and text fields, in the context of entering a postal code to search for upcoming shows.
+ *
+ * The test cases cover scenarios like verifying the presence and text of the "Enter" button and simulating user
+ * interactions with the postal code field. It ensures that the UI components are correctly initialized, and the user
+ * input is processed as expected, leading to the correct values in the associated view model.
+ *
+ * Author: Bea Castro
+ */
 public class UpcomingShowsTest {
 
+    /**
+     * Get the "Enter" button from the main application.
+     *
+     * @return The "Enter" button.
+     */
     public JButton getButton() {
         JFrame app = null;
         Window[] windows = Window.getWindows();
@@ -55,6 +69,10 @@ public class UpcomingShowsTest {
         assert(button.getText().equals("Enter"));
     }
 
+    /**
+     * Test the functionality of the upcoming view, including the postal code field and user interactions
+     * to enter a postal code.
+     */
     @org.junit.Test
     public void testUpcomingView() {
 
@@ -72,7 +90,6 @@ public class UpcomingShowsTest {
         LabelTextPanel panel = (LabelTextPanel) upcomingView.getComponent(2);
         JTextField postalField = (JTextField) panel.getComponent(0);
 
-        // create and dispatch KeyEvents to the UI
         // create and dispatch KeyEvents to the UI
         KeyEvent event = new KeyEvent(
                 postalField, // we are interacting with the postalField
