@@ -10,7 +10,7 @@ public class SimilarArtistTest {
     @Test
     void successTest() throws Exception {
         SimilarInputData similarInput = new SimilarInputData("M8V1B7", "Taylor Swift, Laufey, Niki");
-        SimilarDataAccess userRepository = new InMemoryUserDataAccessObject();
+        SimilarDataAccess userRepository = (SimilarDataAccess) new InMemoryUserDataAccessObject();
 
         SimilarOutputBoundary successPresenter = new SimilarOutputBoundary() {
             public void prepareSuccessView(SimilarOutputData user) {
@@ -34,23 +34,7 @@ public class SimilarArtistTest {
 
         }
 
-//        @Test
-//        void failureSimilarArtistsMismatch() {
-//            SimilarInputData inputData = new SimilarInputData("M8V1B7", "Taylor Swift, Laufey, Niki");
-//            SimilarDataAccess userRepository = new InMemoryUserDataAccessObject();
-//
-//            SimilarOutputBoundary failurePresenter = new SimilarOutputBoundary() {
-//                @Override
-//                public void prepareSuccessView(SimilarOutputData user) {
-//                    fail("Use case success is unexpected");
-//                }
-//
-//                @Override
-//                public void prepareFailView(String errorMessage) {
-//                    assertEquals("")
-//                }
-//            };
-//        }
+
     }
 
 
