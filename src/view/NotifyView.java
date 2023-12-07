@@ -27,7 +27,6 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
         this.notifyController = controller;
         this.notifyViewModel = notifyViewModel;
         notifyViewModel.addPropertyChangeListener(this);
-        notifyViewModel.addPropertyChangeListener(this::notifyPropertyChange);
 
         JLabel title = new JLabel(NotifyViewModel.TITLE_LABEL);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -104,13 +103,6 @@ public class NotifyView extends JPanel implements ActionListener, PropertyChange
         NotifyState state = (NotifyState) evt.getNewValue();
         if (state.getArtistOnTourError() != null) {
             JOptionPane.showMessageDialog(this, state.getArtistOnTourError());
-        }
-    }
-
-    public void notifyPropertyChange(PropertyChangeEvent evt){
-        NotifyState state = (NotifyState) evt.getNewValue();
-        if (!state.getArtistOnTour().isEmpty()) {
-            JOptionPane.showMessageDialog(this, state.getArtistOnTour());
         }
     }
 
