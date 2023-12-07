@@ -56,6 +56,9 @@ public class Main {
         viewManagerModel.setActiveView(upcomingShowsView.viewName);
         viewManagerModel.firePropertyChanged();
 
+//        viewManagerModel.setActiveView(artistVenueView.viewName);
+//        viewManagerModel.firePropertyChanged();
+
         application.pack();
         application.setVisible(true);
     }

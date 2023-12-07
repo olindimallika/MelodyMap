@@ -168,7 +168,3 @@ public class ArtistVenueInteractor implements ArtistVenueInputBoundary {
 //
 //        return formattedConcerts.toString();
 //    }
-
-
-
-

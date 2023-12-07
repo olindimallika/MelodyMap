@@ -26,6 +26,9 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
     private String favouriteArtists = "";
     private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
 
+    private final LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
+
+
     /**
      * @param event concert event from the ticket master api
      * @return a link to ticketmaster website with the closest concert where user can purchase tickets
@@ -108,6 +111,27 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     public String getFavouriteArtists(){
         return favouriteArtists;
+    }
+
+    @Override
+    public LinkedHashMap<String, List<String>> getUpcomingArtistShows(List<List<JSONObject>> artistsEvents) {
+        for (List<JSONObject> events : artistsEvents) {
+            if (!events.isEmpty()) {
+                String artistName = getArtistName(events.get(0)); // Assuming all events in the list have the same artist
+                List<String> eventUrls = new ArrayList<>();
+
+                // Limit the number of events to the minimum of the size of the list or 3
+                int limit = Math.min(events.size(), 3);
+                for (int i = 0; i < limit; i++) {
+                    eventUrls.add(getEventUrl(events.get(i)));
+                }
+
+                allShows.put(artistName, eventUrls);
+            }
+        }
+
+        return allShows;
+
     }
 
 }

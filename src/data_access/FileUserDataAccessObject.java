@@ -22,6 +22,8 @@ import java.util.*;
 public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
+    private final LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
+
     private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
 
     private String favouriteArtists = "";
@@ -44,6 +46,25 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
             shows.put(getArtistName(event), getEventUrl(event));
         }
         return shows;
+    }
+
+    public LinkedHashMap<String, List<String>> getUpcomingArtistShows(List<List<JSONObject>> artistsEvents) {
+        for (List<JSONObject> events : artistsEvents) {
+            if (!events.isEmpty()) {
+                String artistName = getArtistName(events.get(0)); // Assuming all events in the list have the same artist
+                List<String> eventUrls = new ArrayList<>();
+
+                // Limit the number of events to the minimum of the size of the list or 3
+                int limit = Math.min(events.size(), 3);
+                for (int i = 0; i < limit; i++) {
+                    eventUrls.add(getEventUrl(events.get(i)));
+                }
+
+                allShows.put(artistName, eventUrls);
+            }
+        }
+
+        return allShows;
     }
 
 
@@ -94,5 +115,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
     public String getFavouriteArtists(){
         return favouriteArtists;
     }
+
+
 
 }
