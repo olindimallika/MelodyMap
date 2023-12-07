@@ -6,10 +6,20 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.*;
 
+
+/**
+ * The ArtistStrategy class implements the EventStrategy interface and provides a strategy for
+ * retrieving a list of events for each favorite artist of a specified user.
+ */
 public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 
-    // returns a list of lists of events, where every inner list is are a bunch of events for one specific user
-    //  Doesn't run right now as there is an error in the LocationFinder
+    /**
+     * Retrieves a list of events for each favorite artist of the specified user using the Ticketmaster API.
+     *
+     * @param user The user for whom events for favorite artists are being retrieved.
+     * @return A list of lists of JSONObject, where the inner lists represent events for a specific artist.
+     * @throws IOException If an I/O error occurs during the process of fetching events.
+     */
 
     @Override
     public List<List<JSONObject>> getEvents(User user) throws IOException {
@@ -18,7 +28,6 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
         String classification = "music";
 
         LocationFinder helper = new LocationFinder();
-//        List<Double> latlong = helper.locationFinder(user);
 
         double lat1 = helper.locationFinder(user).get(0);
         double lat2 = helper.locationFinder(user).get(1);
@@ -32,8 +41,6 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
             String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
             String urlString = baseUrl + "?geoPoint=" + coordinates + "&radius=" + 50 + "&classificationName=" + classification
                     + "&keyword=" + artistName + "&apikey=" + apiKey;
-//            List<JSONObject> events = fetchEvents(urlString, latlong);
-            ////            favArtistEvents.add(events);
 
             EventsByUrl findEvents = new EventsByUrl();
             List<JSONObject> events = findEvents.fetchEvents(urlString, user);
@@ -44,42 +51,3 @@ public class ArtistStrategy implements EventStrategy<List<List<JSONObject>>> {
 
     }
 }
-//    public static void main(String[] args) {
-//        // Checking to see if i get an output
-//
-//
-//        try {
-//            // Create a sample user
-//            UserFactory userFactory = new UserModelFactory();
-//            ArtistFactory artistFactory = new ArtistModelFactory();
-//            Artist artist1 = artistFactory.create("Taylor Swift");
-//            Artist artist2 = artistFactory.create("Olivia Rodrigo");
-//            ArrayList<Artist> artists = new ArrayList<>();
-//            artists.add(artist1);
-//            artists.add(artist2);
-//            String postal = "L1C0K1";
-//            User user = userFactory.create(postal, artists);
-//
-//            // Create an instance of ArtistStrategy
-//            ArtistStrategy artistStrategy = new ArtistStrategy();
-//
-//            // Call the getEvents method
-//            List<List<JSONObject>> eventsList = artistStrategy.getEvents(user);
-//
-//            // Display or process the fetched events
-//            printArtistEvents(eventsList);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public static void printArtistEvents(List<List<JSONObject>> eventsList) {
-//        for (List<JSONObject> events : eventsList) {
-//            for (JSONObject event : events) {
-//                String url = event.getString("url");
-//                System.out.println("Event URL: " + url);
-//            }
-//            System.out.println("----"); // Separate events from different artists
-//        }
-//    }
-//}
