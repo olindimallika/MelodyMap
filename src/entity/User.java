@@ -1,11 +1,9 @@
 package entity;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface User{
-
-    List<Artist> getFavouriteArtists();
-
     String getPostalCode();
+    ArrayList<Artist> getFavouriteArtist();
 
 }

@@ -1,4 +1,4 @@
-import org.json.JSONArray;
+import  org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -14,12 +14,17 @@ public class UpcomingShowsRough extends LocationFinder {
     private static final double d2km = 111189.57696D * r2d;
     static LocationFinder lf = new LocationFinder();
     public static List<Double> latlong = lf.latlongy();
+
     private final String apiKey;
 
     public UpcomingShowsRough(String apiKey) {
         this.apiKey = apiKey;
     }
 
+    public List<JSONObject> getEventsFromLatLong(List<Double> latlong) throws IOException {
+        return getEventsFromLatLong(latlong, 0, null, "music");
+    }
+    //...
     public List<JSONObject> getEventsFromLatLong(List<Double> latlong, int radius, String unit, String classification) throws IOException {
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
@@ -99,7 +104,7 @@ public class UpcomingShowsRough extends LocationFinder {
 
         try {
             System.out.println("\n");
-            int radius = 20;
+            int radius = 10;
             String unit = "miles";
             // Example: Get only music events based on geoPoint without specifying radius and unit
             List<JSONObject> eventL = ticketmasterAPI.getEventsFromLatLong(latlong, radius, unit, "music");

@@ -3,7 +3,7 @@ package data_access;
 import entity.*;
 import org.json.JSONArray;
 import use_case.notify_user_tour.NotifyDataAccess;
-import use_case.show_concerts.ShowConcertsDataAccess;
+import use_case.presale_date.PresaleDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
 import okhttp3.OkHttpClient;
@@ -16,18 +16,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess {
+public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, PresaleDataAccess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
 
-    private static final String locationFinderApiKey = "daf00ad4979542568d5801316ffd22dd";
+    private static final String locationFinderApiKey = "d121a538d4924ef0a8951e8463b063e7";
 
     private static final String seatGeekApiKey = "Mzg2MzEwODZ8MTcwMTM3MjE3Ny43MzQwMTQ3";
 
     private static final List<Double> geoPoint = new ArrayList<>();
 
     private JSONObject artistInfo;
+
+    private List<String> presaleDates = new ArrayList<>();
+    private List<String> eventUrls = new ArrayList<>();
+    private List<String> listFormatOutputPresale = new ArrayList<>();
+    private String finalFormatOutputPresale = "";
 
     public FileUserDataAccessObject() {
     }
@@ -63,7 +70,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         List<Double> latlong = locationFinder(user);
         double lat1 = latlong.get(0);
         double lat2 = latlong.get(1);
-        String strLatlong = lat1 + "," + lat2;
+        String strLatlong = Double.toString(lat1) + "," + Double.toString(lat2);
 
         String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
         String urlString = baseUrl + "?geoPoint=" + strLatlong;
@@ -168,47 +175,122 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         return !geoPoint.isEmpty();
     }
 
+    //--------------- FOR PRESALE USE CASE ----------
+    public void addEventInfo(JSONObject event) {
+        // Extract and store the URL
+        String url = event.getString("url");
+        eventUrls.add(url);
+
+        // Extract and store presale date if available
+        if (event.has("sales") && event.getJSONObject("sales").has("presales")) {
+            JSONArray presalesArray = event.getJSONObject("sales").getJSONArray("presales");
+            for (int j = 0; j < presalesArray.length(); j++) {
+                JSONObject presale = presalesArray.getJSONObject(j);
+                String startPresaleDate = presale.getString("startDateTime");
+                String endPresaleDate = presale.getString("endDateTime");
+
+                if (isPastPresale(endPresaleDate)) {
+                    presaleDates.add("You missed the presale. Go to general sale by clicking link");
+                } else {
+                    String intervalPresale = "Presale is happening now until "+ endPresaleDate + " click the link to go to presale.";
+                    presaleDates.add(intervalPresale);
+                }
+            }
+        } else {
+            // If no presale date is available, add a placeholder or handle it as needed
+            presaleDates.add("No presale date available. Click to see if theres tix available");
+        }
+    }
+
+    public boolean isPastPresale(String presaleEndDate){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        try {
+            Date endDate = sdf.parse(presaleEndDate);
+            Date currentDate = new Date();
+
+            return currentDate.after(endDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Handle the parse exception as needed
+            return false;
+        }
+
+    }
+
+    public String formatOutputPresale(String artName, String artUrl, String artPresale){
+        String result = (artName + "\n" + "Event URL: "+artUrl +"\n"+ "Presale Status: "+ artPresale + "\n"+ "\n");
+        listFormatOutputPresale.add(result);
+        return result;
+    }
+
+    public List<String> getEventUrls() {
+        return eventUrls;
+    }
+
+    public List<String> getPresaleDates() {
+        return presaleDates;
+    }
+
+    public String getFormatOutputPresale() {
+        finalFormatOutputPresale = String.join("", listFormatOutputPresale);
+        return finalFormatOutputPresale;
+        //return listFormatOutputPresale;
+    }
+
 
     //////////////////////// FOR NOTIFY USER TOUR USE CASE /////////////////////////////
-    public String hasATour(String artistName, String classification) throws IOException, InterruptedException {
+    public JSONObject getPerformerInfo(String artistName){
 
-        String baseUrl = "https://app.ticketmaster.com/discovery/v2/events.json";
-        String urlString = baseUrl + "?keyword=" + artistName;
+        try {
+            // Replace with your specific API endpoint and parameters
+            String baseUrl = "https://api.seatgeek.com/2/performers?";
+            String apiUrl = baseUrl + "slug=" + artistName + "&client_id=" + seatGeekApiKey;
 
-        if (classification != null) {
-            urlString += "&classificationName=" + classification;
-        }
+            // Create URL object
+            URL url = new URL(apiUrl);
 
-        urlString += "&apikey=" + ticketmasterApiKey;
+            // Open connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        URL url = new URL(urlString);
-        Scanner scanner = new Scanner(url.openStream());
-        StringBuilder jsonContent = new StringBuilder();
+            // Set request method
+            connection.setRequestMethod("GET");
 
-        while (scanner.hasNext()) {
-            jsonContent.append(scanner.nextLine());
-        }
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Pragma", "no-cache");
+            connection.setRequestProperty("Expires", "no-cache");
 
-        scanner.close();
+            // Read the response
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+            StringBuilder response = new StringBuilder();
 
-        JSONObject obj = new JSONObject(jsonContent.toString());
-
-        String output = "";
-        if (obj.has("_embedded") && obj.get("_embedded") instanceof JSONObject) {
-            JSONObject embedded = obj.getJSONObject("_embedded");
-
-            if (embedded.has("events")) {
-                output = "has a tour";
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
             }
+            reader.close();
 
-        } else {
-            output = "doesn't have a tour";
+            // Parse the JSON response
+            JSONObject jsonResponse = new JSONObject(response.toString());
+
+            JSONArray artistArray = (JSONArray) jsonResponse.get("performers");
+            artistInfo = artistArray.getJSONObject(0);
+
+            // Close the connection
+            connection.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return artistInfo;
+    }
 
-        // Introduce a 0.2 second delay to avoid hitting the rate limit
-        Thread.sleep(200); // Adjust the sleep duration as needed
+    public Integer getNumUpcomingConcerts(){
+        Integer numUpcomingEvents = (Integer) artistInfo.get("num_upcoming_events");
+        return numUpcomingEvents;
+    }
 
-        return output;
+    public String getTicketLink(){
+        return String.valueOf(artistInfo.get("url"));
     }
 
     /**
@@ -219,6 +301,5 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
         // if artistInfo is null, that means the artistName could not be assigned through the getPerformerInfo method
         return artistInfo != null;
     }
-
 
 }
