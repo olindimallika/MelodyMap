@@ -29,6 +29,7 @@ import java.beans.PropertyChangeSupport;
  * @see ShowConcertsState
  */
 public class ShowConcertsViewModel extends ViewModel {
+
     // Title label for the show concerts view
     public final String TITLE_LABEL = "Logged In View";
 

@@ -7,5 +7,4 @@ public interface User{
     String getPostalCode();
 
     ArrayList<Artist> getFavouriteArtist();
-
 }

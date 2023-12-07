@@ -1,7 +1,5 @@
 package entity;
 
-import java.time.LocalDateTime;
-
 public class ArtistModelFactory implements ArtistFactory{
     /**
      * @param name
@@ -9,6 +7,7 @@ public class ArtistModelFactory implements ArtistFactory{
      */
     @Override
     public Artist create(String name) {
+
         return new ArtistModel(name);
     }
 }
