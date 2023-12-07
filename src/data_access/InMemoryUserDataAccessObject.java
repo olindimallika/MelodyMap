@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import use_case.artist_venue.ArtistVenueDataAccess;
 import use_case.notify_user_tour.NotifyDataAccess;
+import use_case.show_artist_concerts.ShowArtistDataAcess;
 import use_case.show_concerts.ShowConcertsDataAccess;
 import use_case.upcoming_shows.UpcomingDataAccess;
 
@@ -21,10 +22,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 //
-public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess {
+public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess, ShowArtistDataAcess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
     private String favouriteArtists = "";
     private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
+
+    private final LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
+
 
     /**
      * @param event concert event from the ticket master api
@@ -108,6 +112,27 @@ public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyD
 
     public String getFavouriteArtists(){
         return favouriteArtists;
+    }
+
+    @Override
+    public LinkedHashMap<String, List<String>> getUpcomingArtistShows(List<List<JSONObject>> artistsEvents) {
+        for (List<JSONObject> events : artistsEvents) {
+            if (!events.isEmpty()) {
+                String artistName = getArtistName(events.get(0)); // Assuming all events in the list have the same artist
+                List<String> eventUrls = new ArrayList<>();
+
+                // Limit the number of events to the minimum of the size of the list or 3
+                int limit = Math.min(events.size(), 3);
+                for (int i = 0; i < limit; i++) {
+                    eventUrls.add(getEventUrl(events.get(i)));
+                }
+
+                allShows.put(artistName, eventUrls);
+            }
+        }
+
+        return allShows;
+
     }
 
 }

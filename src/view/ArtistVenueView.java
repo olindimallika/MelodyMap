@@ -12,26 +12,48 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-//
+/**
+ * The `ArtistVenueView` class represents a Swing-based view for displaying artists and their concert links.
+ * It extends JPanel and implements ActionListener and PropertyChangeListener interfaces
+ * to handle user interactions and respond to property changes in the associated view model.
+ */
 public class ArtistVenueView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    /**
+     * The unique name identifier for this view.
+     */
     public final String viewName = "show artist concerts";
-    private final ArtistViewModel artistViewModel;
-    private final ArtistController artistController;
-
-    final JButton reload;
-
-    final JButton back;
-
 
     /**
-     * A window with artists and their concert links.
+     * The view model responsible for managing the state of the artist and concert information.
+     */
+    private final ArtistViewModel artistViewModel;
+
+    /**
+     * The controller responsible for handling user interactions and executing corresponding use cases.
+     */
+    private final ArtistController artistController;
+
+    /**
+     * Button for reloading and seeing if there are presale dates.
+     */
+    final JButton reload;
+
+    /**
+     * Button for navigating back.
+     */
+    final JButton back;
+
+    /**
+     * Constructs an `ArtistVenueView` with the specified controller and view model.
+     *
+     * @param artistController The controller for handling user interactions.
+     * @param artistViewModel  The view model managing the state of artist and concert information.
      */
     public ArtistVenueView(ArtistController artistController, ArtistViewModel artistViewModel) {
         this.artistController = artistController;
         this.artistViewModel = artistViewModel;
         this.artistViewModel.addPropertyChangeListener(this);
-        //this.artistViewModel.addPropertyChangeListener(this::artistPropertyChange);
 
         JLabel title = new JLabel("Artist Venues for your favourite artists");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -56,7 +78,6 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
                             } catch (IOException ex) {
                                 throw new RuntimeException(ex);
                             }
-
                         }
                     }
                 }
@@ -69,92 +90,23 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
 
     /**
      * React to a button click that results in evt.
+     *
+     * @param evt The ActionEvent representing the button click.
      */
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Click " + evt.getActionCommand());
     }
 
+    /**
+     * Handles property change events, updating the view based on changes in the associated view model's state.
+     *
+     * @param evt The PropertyChangeEvent representing a change in the associated view model.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         ArtistState state = (ArtistState) evt.getNewValue();
         if (state.getArtistShowsError() != null) {
             JOptionPane.showMessageDialog(this, state.getArtistShowsError());
         }
-//        LinkedHashMap<String, List<String>> shows = state.getArtistShows();
-//        ArrayList<String> artists = new ArrayList<>(5);
-//        ArrayList<List<String>> artistShows = new ArrayList<>(5);
-//
-//        for (Map.Entry<String, List<String>> entry : shows.entrySet()) {
-//            String key = entry.getKey();
-//            artists.add(key);
-//
-//            List<String> value = entry.getValue();
-//            artistShows.add(value);
-//        }
-//
-//        // CONCERT 1
-//        hyperlink.setText(artists.get(0) + ": " + artistShows.get(0));
-//
-//        // CONCERT 2
-//        hyperlink2.setText(artists.get(1) + ": " + artistShows.get(1));
-//
-//        // CONCERT 3
-//        hyperlink3.setText(artists.get(2) + ": " + artistShows.get(2));
-//
-//        // CONCERT 4
-//        hyperlink4.setText(artists.get(3) + ": " + artistShows.get(3));
-//
-//        // CONCERT 5
-//        hyperlink5.setText(artists.get(4) + ": " + artistShows.get(4));
-//
-//    }
-//
-//    public void artistPropertyChange(PropertyChangeEvent evt){
-//        ArtistState state = (ArtistState) evt.getNewValue();
-//
-//        LinkedHashMap<String, List<String>> shows = state.getArtistShows();
-////        ArrayList<String> concerts = new ArrayList<>(5);
-////        ArrayList<String> concertLinks = new ArrayList<>(5);
-////
-////        for (Map.Entry<String, String> entry : shows.entrySet()) {
-////            String key = entry.getKey();
-////            concerts.add(key);
-////
-////            String value = entry.getValue();
-////            concertLinks.add(value);
-////        }
-////
-////        JPanel panel = new JPanel();
-////
-////        JLabel hyperlink = new JLabel();
-////        JLabel hyperlink2 = new JLabel();
-////        JLabel hyperlink3 = new JLabel();
-////
-////        // CONCERT 1
-////        hyperlink.setText(concerts.get(0) + ": " + concertLinks.get(0));
-////
-////        // CONCERT 2
-////        hyperlink2.setText(concerts.get(1) + ": " + concertLinks.get(1));
-////
-////        // CONCERT 3
-////        hyperlink3.setText(concerts.get(2) + ": " + concertLinks.get(2));
-////
-////        panel.add(hyperlink);
-////        panel.add(hyperlink2);
-////        panel.add(hyperlink3);
-//
-//        JOptionPane.showMessageDialog(this, shows);
-//
-//    }
     }
-
-
-//    public void artistPropertyChange(PropertyChangeEvent evt){
-//        ArtistState state = (ArtistState) evt.getNewValue();
-//        JOptionPane.showMessageDialog(this, state.getArtistShows());
-//    }
-
-
 }
-
-

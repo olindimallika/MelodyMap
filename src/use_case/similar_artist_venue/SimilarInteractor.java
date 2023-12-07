@@ -11,6 +11,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
+/**
+ * The `SimilarInteractor` class functions as the orchestrator, seamlessly bridging the gap between user input, data access,
+ * and result presentation. It implements the SimilarInputBoundary interface and encapsulates
+ * the business logic for executing this specific use case.
+ */
 public class SimilarInteractor implements SimilarInputBoundary {
     private static final HashMap<String, List<String>> similarArtistsMap = new HashMap<>();
     static SimilarDataAccess similarDataAccessObject = new SimilarDataAccess() {

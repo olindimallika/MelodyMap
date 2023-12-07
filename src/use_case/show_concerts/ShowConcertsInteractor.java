@@ -1,6 +1,5 @@
 package use_case.show_concerts;
 
-
 /**
  * The ShowConcertsInteractor class represents the interactor component for the show concerts use case.
  * It implements the ShowConcertsInputBoundary interface, defining the behavior required to execute the show concerts logic.

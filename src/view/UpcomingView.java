@@ -80,7 +80,7 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
                     public void keyReleased(KeyEvent e) {
                     }
                 }
-                );
+        );
 
         this.add(title);
         this.add(postalCodeLabel);
@@ -107,4 +107,3 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
     }
 
 }
-
