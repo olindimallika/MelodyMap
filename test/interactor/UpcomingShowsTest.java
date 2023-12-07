@@ -46,7 +46,6 @@ class UpcomingShowsTest {
                 outputConcerts.put( "Eagles - The Long Goodbye", "https://www.ticketmaster.ca/eagles-the-long-goodbye-toronto-ontario-03-13-2024/event/10005F5732708A10");
 
                 assertEquals(outputConcerts, upcomingConcerts.getUpcomingConcerts());
-                assertTrue(userRepository.existsInCoords("M1J3J9"));
             }
 
             @Override

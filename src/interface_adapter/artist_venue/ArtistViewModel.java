@@ -39,4 +39,3 @@ public class ArtistViewModel extends ViewModel {
         return state;
     }
 }
-

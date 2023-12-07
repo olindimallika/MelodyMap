@@ -1,6 +1,7 @@
 package view;
 
 import interface_adapter.artist_venue.ArtistController;
+import interface_adapter.artist_venue.ArtistState;
 import interface_adapter.artist_venue.ArtistViewModel;
 import interface_adapter.notify_user_tour.NotifyController;
 import interface_adapter.notify_user_tour.NotifyState;
@@ -29,14 +30,15 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
     public final String viewName = "artist concerts";
     private final ArtistViewModel artistViewModel;
     private final ArtistController artistController;
+//
+//    JLabel hyperlink;
+//    JLabel hyperlink2;
+//    JLabel hyperlink3;
+//
+//    final JButton reload;
 
-    JLabel hyperlink;
-    JLabel hyperlink2;
-    JLabel hyperlink3;
 
     final JButton back;
-
-    final JButton reload;
 
 
     /**
@@ -46,42 +48,45 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
         this.artistController = artistController;
         this.artistViewModel = artistViewModel;
         this.artistViewModel.addPropertyChangeListener(this);
+        this.artistViewModel.addPropertyChangeListener(this::artistPropertyChange);
 
         this.setSize(1000, 400);
 
-        JLabel title = new JLabel("Shows Near You");
+        JLabel title = new JLabel("Artist Venues for your favourite artists");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        hyperlink = new JLabel();
-        hyperlink2 = new JLabel();
-        hyperlink3 = new JLabel();
+//        hyperlink = new JLabel();
+//        hyperlink2 = new JLabel();
+//        hyperlink3 = new JLabel();
 
         JPanel buttons = new JPanel();
+
+//        reload = new JButton(artistViewModel.PERSONALIZE_BUTTON_LABEL1);
+//        buttons.add(reload);
+
         back = new JButton(artistViewModel.PERSONALIZE_BUTTON_LABEL2);
         buttons.add(back);
 
-        reload = new JButton(artistViewModel.PERSONALIZE_BUTTON_LABEL1);
-        buttons.add(reload);
-
-
         back.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (e.getSource().equals(back)) {
-                            artistController.execute();
+                            try {
+                                artistController.execute();
+                            } catch (IOException ex) {
+                                throw new RuntimeException(ex);
+                            }
                         }
                     }
                 }
         );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
         this.add(title);
-        this.add(hyperlink);
-        this.add(hyperlink2);
-        this.add(hyperlink3);
+//        this.add(hyperlink);
+//        this.add(hyperlink2);
+//        this.add(hyperlink3);
         this.add(buttons);
     }
 
@@ -94,9 +99,17 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        ShowConcertsState state = (ShowConcertsState) evt.getNewValue();
+        ArtistState state = (ArtistState) evt.getNewValue();
+        if(state.getArtistShowsError() != null){
+            JOptionPane.showMessageDialog(this, state.getArtistShowsError());
+        }
 
-        LinkedHashMap<String, String> shows = state.getConcerts();
+    }
+
+    public void artistPropertyChange(PropertyChangeEvent evt){
+        ArtistState state = (ArtistState) evt.getNewValue();
+
+        LinkedHashMap<String, String> shows = state.getArtistShows();
         ArrayList<String> concerts = new ArrayList<>(5);
         ArrayList<String> concertLinks = new ArrayList<>(5);
 
@@ -108,6 +121,12 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
             concertLinks.add(value);
         }
 
+        JPanel panel = new JPanel();
+
+        JLabel hyperlink = new JLabel();
+        JLabel hyperlink2 = new JLabel();
+        JLabel hyperlink3 = new JLabel();
+
         // CONCERT 1
         hyperlink.setText(concerts.get(0) + ": " + concertLinks.get(0));
 
@@ -117,8 +136,13 @@ public class ArtistVenueView extends JPanel implements ActionListener, PropertyC
         // CONCERT 3
         hyperlink3.setText(concerts.get(2) + ": " + concertLinks.get(2));
 
+        panel.add(hyperlink);
+        panel.add(hyperlink2);
+        panel.add(hyperlink3);
+
+        JOptionPane.showMessageDialog(this, panel);
+
     }
 }
-
 
 

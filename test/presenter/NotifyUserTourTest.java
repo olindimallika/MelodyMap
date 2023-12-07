@@ -1,6 +1,7 @@
 package presenter;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.artist_venue.ArtistViewModel;
 import interface_adapter.notify_user_tour.NotifyPresenter;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 
@@ -25,10 +26,12 @@ public class NotifyUserTourTest {
 
         NotifyViewModel notifyViewModel = new NotifyViewModel();
 
+        ArtistViewModel artistViewModel = new ArtistViewModel();
+
         ViewManagerModel viewManagerModel = new ViewManagerModel();
 
         // creating the presenter
-        NotifyPresenter presenter = new NotifyPresenter(viewManagerModel, notifyViewModel);
+        NotifyPresenter presenter = new NotifyPresenter(viewManagerModel, artistViewModel, notifyViewModel);
 
         // invoking the presenter by passing in the output data
         presenter.prepareSuccessView(notifyOutputData);

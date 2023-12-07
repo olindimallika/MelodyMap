@@ -11,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationFinder {
-    //
+
+    private final String postalCode = "";
 
     private static final List<Double> geoPoint = new ArrayList<>();
 
-    public List<Double> locationFinder(User user){
+    public List<Double> locationFinder(User user) {
         String postalCode = user.getPostalCode();
 
         try {
-            String locationFinderApiKey = "feaad5daa48247fd8ecaa9b3983c9383";
+            String locationFinderApiKey = "a92bf901a11c452583fe43f4f02ad7ce";
             String url = "https://api.opencagedata.com/geocode/v1/json?key=" + locationFinderApiKey + "&q=" + postalCode + "&countrycode=CA";
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -27,20 +28,16 @@ public class LocationFinder {
                     .build();
 
             try (Response response = client.newCall(request).execute()) {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().string();
-                    JSONObject json = new JSONObject(responseBody);
-                    JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
+                String responseBody = response.body().string();
+                JSONObject json = new JSONObject(responseBody);
+                JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry");
 
-                    double latitude = location.getDouble("lat");
-                    double longitude = location.getDouble("lng");
+                double latitude = location.getDouble("lat");
+                double longitude = location.getDouble("lng");
 
-                    geoPoint.add(latitude);
-                    geoPoint.add(longitude);
+                geoPoint.add(latitude);
+                geoPoint.add(longitude);
 
-                } else {
-                    System.out.println("Error, please use a valid postal code: " + response.code() + " - " + response.message());
-                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,8 +45,11 @@ public class LocationFinder {
         return geoPoint;
     }
 
-}
+    public String getPostalCode(){
+        return postalCode;
+    }
 
+}
 //public class LocationFinder {
 //
 //    private static final List<Double> geoPoint = new ArrayList<>();

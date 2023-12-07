@@ -15,6 +15,9 @@ public class ShowConcertsState {
     public LinkedHashMap<String, String> getConcerts(){
         return concerts;
     }
+    public String getConcertsError(){
+        return concertsError;
+    }
 
     public void setConcerts(LinkedHashMap<String, String> concerts){
         this.concerts = concerts;

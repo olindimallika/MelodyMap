@@ -8,20 +8,19 @@ import use_case.notify_user_tour.NotifyOutputData;
 
 public class NotifyPresenter implements NotifyOutputBoundary {
     private final NotifyViewModel notifyViewModel;
+    private final ArtistViewModel artistViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    private final ArtistViewModel artistViewModel;
-
-    public NotifyPresenter(ViewManagerModel viewManagerModel, NotifyViewModel notifyViewModel,
-                           ArtistViewModel artistViewModel){
+    public NotifyPresenter(ViewManagerModel viewManagerModel,
+                           ArtistViewModel artistViewModel,
+                           NotifyViewModel notifyViewModel){
         this.viewManagerModel = viewManagerModel;
-        this.notifyViewModel = notifyViewModel;
         this.artistViewModel = artistViewModel;
+        this.notifyViewModel = notifyViewModel;
     }
 
     @Override
     public void prepareSuccessView(NotifyOutputData response){
-
         ArtistState artistState = artistViewModel.getState();
         artistState.setArtistShows(response.getArtistOnTour());
         this.artistViewModel.setState(artistState);
@@ -29,6 +28,7 @@ public class NotifyPresenter implements NotifyOutputBoundary {
 
         viewManagerModel.setActiveView(artistViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
+
     }
 
     @Override

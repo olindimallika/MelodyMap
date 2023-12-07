@@ -12,11 +12,8 @@ public class ArtistController {
     public ArtistController(ArtistVenueInputBoundary userArtistVenueUseCaseInteractor) {
         this.userArtistVenueUseCaseInteractor = userArtistVenueUseCaseInteractor;
     }
-    public void execute(String postalCode, String favouriteArtist) throws IOException {
-        ArtistVenueInputData artistVenueInputData = new ArtistVenueInputData(postalCode, favouriteArtist);
-        userArtistVenueUseCaseInteractor.execute(artistVenueInputData);
+    public void execute() throws IOException {
+        userArtistVenueUseCaseInteractor.execute();
     }
 
-    public void execute() {
-    }
 }

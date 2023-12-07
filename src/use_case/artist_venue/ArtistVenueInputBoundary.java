@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface ArtistVenueInputBoundary {
 
-    void execute(ArtistVenueInputData artistVenueInputData) throws IOException;
+    void execute() throws IOException;
 }

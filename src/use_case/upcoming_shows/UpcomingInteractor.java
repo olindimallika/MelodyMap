@@ -30,9 +30,6 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
     public void execute(UpcomingInputData upcomingInputData){
 
         try {
-            if (userDataAccessObject.existsInCoords(upcomingInputData.getPostalCode())){
-                userPresenter.prepareFailView("Unable to find coordinates for postal code.");
-            } else {
                 UserBuilder builder = new UserBuilder();
                 User user = builder.addPostalCode(upcomingInputData.getPostalCode()).build();
 
@@ -45,7 +42,6 @@ public class UpcomingInteractor implements UpcomingInputBoundary{
 
                 UpcomingOutputData upcomingOutputData = new UpcomingOutputData(upcomingShows);
                 userPresenter.prepareSuccessView(upcomingOutputData);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

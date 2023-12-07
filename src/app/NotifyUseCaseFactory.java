@@ -21,10 +21,13 @@ public class NotifyUseCaseFactory {
     private NotifyUseCaseFactory() {}
 
     public static NotifyView create(
-            ViewManagerModel viewManagerModel, NotifyViewModel notifyViewModel, NotifyDataAccess userDataAccessObject, ArtistViewModel artistViewModel) {
+            ViewManagerModel viewManagerModel,
+            NotifyViewModel notifyViewModel,
+            ArtistViewModel artistViewModel,
+            NotifyDataAccess userDataAccessObject) {
 
         try {
-            NotifyController notifyController = createUserNotifyUseCase(viewManagerModel, notifyViewModel, userDataAccessObject, artistViewModel);
+            NotifyController notifyController = createUserNotifyUseCase(viewManagerModel, notifyViewModel, artistViewModel, userDataAccessObject);
             return new NotifyView(notifyController, notifyViewModel);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Could not open user data file.");
@@ -35,11 +38,11 @@ public class NotifyUseCaseFactory {
 
     private static NotifyController createUserNotifyUseCase(ViewManagerModel viewManagerModel,
                                                             NotifyViewModel notifyViewModel,
-                                                            NotifyDataAccess userDataAccessObject,
-                                                            ArtistViewModel artistViewModel) throws IOException {
+                                                            ArtistViewModel artistViewModel,
+                                                            NotifyDataAccess userDataAccessObject) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
-        NotifyOutputBoundary notifyOutputBoundary = new NotifyPresenter(viewManagerModel, notifyViewModel, artistViewModel);
+        NotifyOutputBoundary notifyOutputBoundary = new NotifyPresenter(viewManagerModel, artistViewModel, notifyViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 

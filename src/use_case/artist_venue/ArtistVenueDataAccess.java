@@ -14,7 +14,7 @@ public interface ArtistVenueDataAccess {
 
     String getArtistName(JSONObject event);
 
-
+    String getFavouriteArtists();
 
 
 }

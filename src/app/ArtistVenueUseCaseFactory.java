@@ -1,6 +1,6 @@
 package app;
 
-import entity.Artist;
+import data_access.LocationFinder;
 import entity.UserFactory;
 import entity.UserModelFactory;
 import interface_adapter.ViewManagerModel;
@@ -13,9 +13,9 @@ import use_case.artist_venue.ArtistVenueInputBoundary;
 import use_case.artist_venue.ArtistVenueInteractor;
 import use_case.artist_venue.ArtistVenueOutputBoundary;
 import view.ArtistVenueView;
-import view.ShowConcertsView;
 
 import javax.swing.*;
+import javax.xml.stream.Location;
 import java.io.IOException;
 
 public class ArtistVenueUseCaseFactory {
@@ -42,14 +42,17 @@ public class ArtistVenueUseCaseFactory {
     private static ArtistController createArtistVenueUseCase(
             ViewManagerModel viewManagerModel,
             ArtistViewModel artistViewModel,
-            ArtistVenueDataAccess userDataAccessObject, NotifyViewModel notifyViewModel) throws IOException {
+            ArtistVenueDataAccess userDataAccessObject,
+            NotifyViewModel notifyViewModel) throws IOException {
 
         // Notice how we pass this method's parameters to the Presenter.
         ArtistVenueOutputBoundary artistVenueOutputBoundary = new ArtistPresenter(viewManagerModel, artistViewModel, notifyViewModel);
 
         UserFactory userFactory = new UserModelFactory();
 
-        ArtistVenueInputBoundary artistVenueInteractor = new ArtistVenueInteractor(userDataAccessObject, artistVenueOutputBoundary, userFactory);
+        LocationFinder locationFinder = new LocationFinder();
+
+        ArtistVenueInputBoundary artistVenueInteractor = new ArtistVenueInteractor(userDataAccessObject, artistVenueOutputBoundary, userFactory, locationFinder);
 
         return new ArtistController(artistVenueInteractor);
     }
@@ -58,41 +61,41 @@ public class ArtistVenueUseCaseFactory {
 
 
 
-        
-    
-    // private ShowConcertsUseCaseFactory() {}
-    //
-    //    public static ShowConcertsView create(
-    //            ViewManagerModel viewManagerModel,
-    //            ShowConcertsViewModel showConcertsViewModel,
-    //            NotifyViewModel notifyViewModel,
-    //            ShowConcertsDataAccess userDataAccessObject
-    //            ) {
-    //
-    //        try {
-    //            ShowConcertsController showConcertsController = createShowConcertsUseCase(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
-    //            return new ShowConcertsView(showConcertsController, showConcertsViewModel);
-    //        } catch (IOException e) {
-    //            JOptionPane.showMessageDialog(null, "Could not open user data file.");
-    //        }
-    //
-    //        return null;
-    //    }
-    //
-    //    private static ShowConcertsController createShowConcertsUseCase(
-    //            ViewManagerModel viewManagerModel,
-    //            ShowConcertsViewModel showConcertsViewModel,
-    //            NotifyViewModel notifyViewModel,
-    //            ShowConcertsDataAccess userDataAccessObject) throws IOException {
-    //
-    //        // Notice how we pass this method's parameters to the Presenter.
-    //        ShowConcertsOutputBoundary showConcertsOutputBoundary = new ShowConcertsPresenter(viewManagerModel, showConcertsViewModel, notifyViewModel);
-    //
-    //        ShowConcertsInputBoundary showConcertsInteractor = new ShowConcertsInteractor(
-    //                userDataAccessObject, showConcertsOutputBoundary);
-    //
-    //        return new ShowConcertsController(showConcertsInteractor);
-    //    }
+
+
+// private ShowConcertsUseCaseFactory() {}
+//
+//    public static ShowConcertsView create(
+//            ViewManagerModel viewManagerModel,
+//            ShowConcertsViewModel showConcertsViewModel,
+//            NotifyViewModel notifyViewModel,
+//            ShowConcertsDataAccess userDataAccessObject
+//            ) {
+//
+//        try {
+//            ShowConcertsController showConcertsController = createShowConcertsUseCase(viewManagerModel, showConcertsViewModel, notifyViewModel, userDataAccessObject);
+//            return new ShowConcertsView(showConcertsController, showConcertsViewModel);
+//        } catch (IOException e) {
+//            JOptionPane.showMessageDialog(null, "Could not open user data file.");
+//        }
+//
+//        return null;
+//    }
+//
+//    private static ShowConcertsController createShowConcertsUseCase(
+//            ViewManagerModel viewManagerModel,
+//            ShowConcertsViewModel showConcertsViewModel,
+//            NotifyViewModel notifyViewModel,
+//            ShowConcertsDataAccess userDataAccessObject) throws IOException {
+//
+//        // Notice how we pass this method's parameters to the Presenter.
+//        ShowConcertsOutputBoundary showConcertsOutputBoundary = new ShowConcertsPresenter(viewManagerModel, showConcertsViewModel, notifyViewModel);
+//
+//        ShowConcertsInputBoundary showConcertsInteractor = new ShowConcertsInteractor(
+//                userDataAccessObject, showConcertsOutputBoundary);
+//
+//        return new ShowConcertsController(showConcertsInteractor);
+//    }
 
 
 //    private static ArtistController createArtistVenueUseCase(ViewManagerModel viewManagerModel, ArtistViewModel artistViewModel, ArtistVenueDataAccess userDataAcessObject) {

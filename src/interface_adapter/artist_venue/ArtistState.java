@@ -1,9 +1,6 @@
 package interface_adapter.artist_venue;
 
-import interface_adapter.show_concerts.ShowConcertsState;
-
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class ArtistState {
 
@@ -25,6 +22,10 @@ public class ArtistState {
         return artistShows;
     }
 
+    public String getArtistShowsError(){
+        return onTourOrNotError;
+    }
+
     public void setArtistShows(LinkedHashMap<String, String> artistShows){
 
         this.artistShows = artistShows;
@@ -35,4 +36,3 @@ public class ArtistState {
         this.onTourOrNotError = onTourOrNotError;
     }
 }
-
