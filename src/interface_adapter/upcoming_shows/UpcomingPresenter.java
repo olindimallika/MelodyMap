@@ -22,7 +22,7 @@ public class UpcomingPresenter implements UpcomingOutputBoundary {
 
     @Override
     public void prepareSuccessView(UpcomingOutputData response) {
-        // On success, display a message box in upcoming view
+        // On success, we want to switch to the show concerts view
 
         ShowConcertsState showConcertsState = showConcertsViewModel.getState();
         showConcertsState.setConcerts(response.getUpcomingConcerts());

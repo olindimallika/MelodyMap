@@ -5,7 +5,6 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-
 /**
  * The ShowConcertsViewModel class represents the view model for the user interface related to the show concerts functionality.
  * It extends the ViewModel class, providing methods to manage the state and trigger property changes for UI updates.
@@ -31,7 +30,7 @@ import java.beans.PropertyChangeSupport;
  */
 public class ShowConcertsViewModel extends ViewModel {
 
-    // Title label fro the show concerts view
+    // Title label for the show concerts view
     public final String TITLE_LABEL = "Logged In View";
 
     // The state of the show concerts view model, encapsulating information about concerts and related UI elements
@@ -78,5 +77,7 @@ public class ShowConcertsViewModel extends ViewModel {
     public ShowConcertsState getState() {
         return state;
     }
+
+
 
 }

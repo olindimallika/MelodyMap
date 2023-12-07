@@ -32,25 +32,10 @@ public class UpcomingState {
         this.postalCodeError = postalCodeError;
     }
 
-    public LinkedHashMap<String, String> getUpcomingShows(){
-        return upcomingShows;
-    }
-
-    public void setUpcomingShows(LinkedHashMap<String, String> upcomingShows) {
-        this.upcomingShows = upcomingShows;
-    }
-
     public void setUpcomingShowsError(String postalCodeError){
         this.postalCodeError = postalCodeError;
     }
 
-
-    @Override
-    public String toString() {
-        return "SignupState{" +
-                "postalCode='" + postalCode + '\'' +
-                '}';
-    }
 
 }
 

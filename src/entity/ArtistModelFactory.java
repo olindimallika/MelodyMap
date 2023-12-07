@@ -7,6 +7,7 @@ public class ArtistModelFactory implements ArtistFactory{
      */
     @Override
     public Artist create(String name) {
+
         return new ArtistModel(name);
     }
 }

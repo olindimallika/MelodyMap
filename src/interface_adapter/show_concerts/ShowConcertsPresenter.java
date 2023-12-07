@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.notify_user_tour.NotifyState;
 import interface_adapter.notify_user_tour.NotifyViewModel;
 import use_case.show_concerts.ShowConcertsOutputBoundary;
-import use_case.show_concerts.ShowConcertsOutputData;
 
 /**
  * The ShowConcertsPresenter class is responsible for presenting the results of the show concerts use case to the user interface.
@@ -25,7 +24,6 @@ import use_case.show_concerts.ShowConcertsOutputData;
  *
  * Author: Bea Castro
  */
-
 public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
 
     // The view model for the show concerts feature
@@ -54,10 +52,9 @@ public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
      * Prepares the success view for the show concerts use case by updating the state of the notify view model,
      * switching to the notify view, and notifying the view manager model of the changes.
      *
-     * @param response The output data containing information to be presented in the success view.
      */
     @Override
-    public void prepareSuccessView(ShowConcertsOutputData response) {
+    public void prepareSuccessView() {
         // On success, we want to switch to the notify view
         NotifyState notifyState = notifyViewModel.getState();
         this.notifyViewModel.setState(notifyState);
@@ -79,4 +76,6 @@ public class ShowConcertsPresenter implements ShowConcertsOutputBoundary {
         showConcertsState.setConcertsError(error);
         showConcertsViewModel.firePropertyChanged();
     }
+
+
 }

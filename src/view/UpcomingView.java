@@ -32,16 +32,20 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
 
         JLabel title = new JLabel(UpcomingViewModel.TITLE_LABEL);
         title.setFont(new Font("Arial", Font.PLAIN,15));
+        title.setForeground(Color.white);
 
         JLabel postalCodeLabel = new JLabel(UpcomingViewModel.POSTALCODE_LABEL);
         postalCodeLabel.setFont(new Font("Arial", Font.PLAIN,15));
+        postalCodeLabel.setForeground(Color.white);
 
         LabelTextPanel userPostalCode = new LabelTextPanel(postalCodeInputField);
         userPostalCode.setFont(new Font("Arial", Font.PLAIN,15));
+        userPostalCode.setOpaque(false);
 
         JPanel buttons = new JPanel();
         enter = new JButton(UpcomingViewModel.ENTER_BUTTON_LABEL);
         buttons.add(enter);
+        buttons.setOpaque(false);
 
         enter.addActionListener(
                 new ActionListener() {
@@ -78,11 +82,11 @@ public class UpcomingView extends JPanel implements ActionListener, PropertyChan
                 }
                 );
 
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 550, 10));
         this.add(title);
         this.add(postalCodeLabel);
         this.add(userPostalCode);
         this.add(buttons);
+        this.setBackground(new Color(145, 172, 200));
 
     }
 
