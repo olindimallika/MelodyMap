@@ -25,7 +25,7 @@ public class FileUserDataAccessObject implements UpcomingDataAccess, NotifyDataA
 
     private final LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
 
-    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
+    private static final String ticketmasterApiKey = "Add your key";
 
     private String favouriteArtists = "";
 
