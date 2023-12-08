@@ -23,7 +23,7 @@ public class UpcomingStrategy implements EventStrategy<List<JSONObject>> {
     @Override
     public List<JSONObject> getEvents(User user) throws IOException {
 
-        String apiKey = "GKzgIWcoAk5rfAb5VtGpaTiqsyMeBjJP";
+        String apiKey = "Add your key";
         String classification = "music";
 
         LocationFinder helper = new LocationFinder();
