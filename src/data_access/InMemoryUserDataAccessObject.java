@@ -25,7 +25,7 @@ import java.util.*;
 public class InMemoryUserDataAccessObject implements UpcomingDataAccess, NotifyDataAccess, ShowConcertsDataAccess, ArtistVenueDataAccess, ShowArtistDataAcess {
     private final LinkedHashMap<String, String> shows = new LinkedHashMap<>();
     private String favouriteArtists = "";
-    private static final String ticketmasterApiKey = "uxoAAPe38AqJZwxwxFNDw74mgWMdpJ3B";
+    private static final String ticketmasterApiKey = "Add your key";
 
     private final LinkedHashMap<String, List<String>> allShows = new LinkedHashMap<>();
 
